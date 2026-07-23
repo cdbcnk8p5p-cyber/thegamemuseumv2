@@ -57,3 +57,11 @@ dialog{background:#0b1926;color:#fff;border-color:#334a5f}.detail{background:#13
 .exhibit-games .game-card{min-width:0}.exhibit-empty{padding:28px;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
 .exhibit-pill{display:inline-flex;border-radius:999px;padding:7px 11px;font-weight:800;background:var(--surface2);border:1px solid var(--line);margin-right:6px}
 @media(max-width:800px){.exhibit-overview{grid-template-columns:1fr}.exhibit-games{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* v3.4: centred catalogue record with the physical game case as the focus */
+dialog{width:min(94vw,980px)}
+.detail-layout{display:grid;grid-template-columns:minmax(250px,390px) 1fr;gap:28px;padding:28px;align-items:center;min-height:620px}
+.detail-cover-stage{display:grid;place-items:center;min-height:540px;padding:18px;border-radius:20px;background:radial-gradient(circle at 50% 35%,#173753,#07131f 70%);border:1px solid #29465f;box-shadow:inset 0 0 55px rgba(0,0,0,.35)}
+.detail-cover-stage img{display:block;max-width:100%;max-height:560px;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 22px 28px rgba(0,0,0,.48))}
+.detail-fallback{display:grid;place-items:center;width:min(90%,320px);aspect-ratio:3/4;border-radius:16px;background:linear-gradient(145deg,#154a78,#071521);font-size:58px;font-weight:950;color:#fff}
+.detail-content{min-width:0}.detail-content h2{font-size:clamp(28px,4vw,44px);line-height:1.05;margin:8px 0 10px}.detail-subtitle{font-size:16px;color:var(--muted);margin:0 0 22px}.collection-story{margin-top:18px;padding:18px;border-radius:15px;background:var(--surface2);border:1px solid var(--line)}.collection-story h3{margin:0 0 8px}.collection-story p{margin:0;line-height:1.6}
+@media(max-width:760px){dialog{width:min(96vw,680px)}.detail-layout{grid-template-columns:1fr;padding:18px;gap:18px;min-height:0}.detail-cover-stage{min-height:0;padding:16px}.detail-cover-stage img{max-height:62vh}.detail-content h2{text-align:center}.detail-content>.eyebrow,.detail-subtitle{display:block;text-align:center}}

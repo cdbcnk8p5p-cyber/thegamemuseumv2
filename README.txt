@@ -10,7 +10,7 @@ NEW IN 3.3
 
 UPLOAD TO GITHUB PAGES
 1. Extract this ZIP.
-2. Open the the-game-museum-v3.3 folder.
+2. Open the the-game-museum-v3.4 folder.
 3. Upload every file and the assets folder to the root of the existing GitHub repository.
 4. Replace the old files when prompted.
 5. Wait a minute, then refresh the live site.
