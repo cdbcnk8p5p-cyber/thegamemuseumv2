@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Game Museum">
   <meta name="description" content="Grant's physical video game collection museum.">
-  <title>The Game Museum v3.1</title>
+  <title>The Game Museum v3.2</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon-192.png">
   <link rel="apple-touch-icon" href="./icon-192.png">
@@ -26,9 +26,10 @@
 </header>
 
 <aside id="drawer" class="drawer">
-  <div class="drawer-head"><span>🏛️</span><div><strong>The Game Museum</strong><small>Version 3.1</small></div></div>
+  <div class="drawer-head"><span>🏛️</span><div><strong>The Game Museum</strong><small>Version 3.2</small></div></div>
   <button data-page="home">🏛️ Museum Hall</button>
   <button data-page="collection">🎮 Collection</button>
+  <button data-page="exhibits">🏛️ Exhibits</button>
   <button data-page="cex">🛒 CEX Mode</button>
   <button data-page="wishlist">⭐ Wishlist</button>
   <button data-page="statistics">📊 Statistics</button>
@@ -89,6 +90,12 @@
     </div>
     <div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-link">Clear filters</button></div>
     <div id="collectionGrid" class="cover-grid"></div>
+  </section>
+
+  <section id="exhibits" class="page">
+    <header class="page-head reveal"><span class="eyebrow">CURATED MUSEUM WINGS</span><h1>Exhibits</h1><p>Franchise galleries update automatically whenever a matching game is added to the main collection.</p></header>
+    <div id="exhibitOverview" class="exhibit-overview"></div>
+    <div id="exhibitDetail" class="exhibit-detail"></div>
   </section>
 
   <section id="cex" class="page">
@@ -153,7 +160,7 @@
     <article class="panel reveal"><h2>Photo storage</h2><p class="muted">Uploaded photos are compressed and stored inside this browser. Export a JSON backup after adding important photos. A future cloud version can sync them between devices.</p></article>
   </section>
 </main>
-<footer class="site-footer"><strong>THE GAME MUSEUM</strong><span>v3.1 • Preserving Physical Gaming History</span></footer>
+<footer class="site-footer"><strong>THE GAME MUSEUM</strong><span>v3.2 • Preserving Physical Gaming History</span></footer>
 
 <nav class="bottom-nav">
   <button data-page="home" class="active">🏛️<span>Hall</span></button>
