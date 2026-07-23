@@ -1,4 +1,43 @@
-const STORE='theGameMuseumV3', OLD='theGameMuseumV2', THEME='museumThemeV3';
+const STORE='theGameMuseumV31', OLD='theGameMuseumV3', THEME='museumThemeV31';
+
+const COVER_ART={
+ 'spider-man 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/2651280/library_600x900_2x.jpg',
+ 'high on life':'https://cdn.cloudflare.steamstatic.com/steam/apps/1583230/library_600x900_2x.jpg',
+ 'still wakes the deep':'https://cdn.cloudflare.steamstatic.com/steam/apps/1622910/library_600x900_2x.jpg',
+ 'avatar: frontiers of pandora':'https://cdn.cloudflare.steamstatic.com/steam/apps/2840770/library_600x900_2x.jpg',
+ 'hogwarts legacy':'https://cdn.cloudflare.steamstatic.com/steam/apps/990080/library_600x900_2x.jpg',
+ 'f1 21':'https://cdn.cloudflare.steamstatic.com/steam/apps/1134570/library_600x900_2x.jpg',
+ 'f1 22':'https://cdn.cloudflare.steamstatic.com/steam/apps/1692250/library_600x900_2x.jpg',
+ 'f1 23':'https://cdn.cloudflare.steamstatic.com/steam/apps/2108330/library_600x900_2x.jpg',
+ 'f1 24':'https://cdn.cloudflare.steamstatic.com/steam/apps/2488620/library_600x900_2x.jpg',
+ 'wwe 2k23':'https://cdn.cloudflare.steamstatic.com/steam/apps/1942660/library_600x900_2x.jpg',
+ 'the last of us part i':'https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/library_600x900_2x.jpg',
+ 'saints row (2022)':'https://cdn.cloudflare.steamstatic.com/steam/apps/742420/library_600x900_2x.jpg',
+ 'bus simulator 21':'https://cdn.cloudflare.steamstatic.com/steam/apps/976590/library_600x900_2x.jpg',
+ 'call of duty: modern warfare ii':'https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/library_600x900_2x.jpg',
+ 'call of duty: modern warfare iii':'https://cdn.cloudflare.steamstatic.com/steam/apps/2519060/library_600x900_2x.jpg',
+ 'ea sports fc 24':'https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/library_600x900_2x.jpg',
+ 'ea sports fc 25':'https://cdn.cloudflare.steamstatic.com/steam/apps/2669320/library_600x900_2x.jpg',
+ 'grand theft auto v':'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/library_600x900_2x.jpg',
+ 'battlefield v':'https://cdn.cloudflare.steamstatic.com/steam/apps/1238810/library_600x900_2x.jpg',
+ 'call of duty: ghosts':'https://cdn.cloudflare.steamstatic.com/steam/apps/209160/library_600x900_2x.jpg',
+ 'call of duty: advanced warfare':'https://cdn.cloudflare.steamstatic.com/steam/apps/209650/library_600x900_2x.jpg',
+ 'call of duty: infinite warfare':'https://cdn.cloudflare.steamstatic.com/steam/apps/292730/library_600x900_2x.jpg',
+ 'call of duty: black ops iii':'https://cdn.cloudflare.steamstatic.com/steam/apps/311210/library_600x900_2x.jpg',
+ 'call of duty: wwii':'https://cdn.cloudflare.steamstatic.com/steam/apps/476600/library_600x900_2x.jpg',
+ 'batman: arkham city':'https://cdn.cloudflare.steamstatic.com/steam/apps/200260/library_600x900_2x.jpg',
+ 'call of duty 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/2630/library_600x900_2x.jpg',
+ 'call of duty 4: modern warfare':'https://cdn.cloudflare.steamstatic.com/steam/apps/7940/library_600x900_2x.jpg',
+ 'call of duty: black ops':'https://cdn.cloudflare.steamstatic.com/steam/apps/42700/library_600x900_2x.jpg',
+ 'call of duty: modern warfare 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/10180/library_600x900_2x.jpg',
+ 'call of duty: modern warfare 3':'https://cdn.cloudflare.steamstatic.com/steam/apps/115300/library_600x900_2x.jpg',
+ 'grand theft auto iv':'https://cdn.cloudflare.steamstatic.com/steam/apps/12210/library_600x900_2x.jpg',
+ 'grand theft auto: san andreas':'https://cdn.cloudflare.steamstatic.com/steam/apps/12120/library_600x900_2x.jpg',
+ 'grand theft auto: vice city':'https://cdn.cloudflare.steamstatic.com/steam/apps/12110/library_600x900_2x.jpg'
+};
+function artwork(g){return g.image||COVER_ART[norm(g.title)]||''}
+function platformClass(p){p=norm(p);if(p.includes('playstation')||/^ps[1-5]$/.test(p)||p==='psp')return'ps';if(p.includes('xbox'))return'xbox';if(p.includes('nintendo')||p.includes('switch')||p.includes('wii')||p.includes('gamecube')||p.includes('ds'))return'nintendo';if(p.includes('sega')||p.includes('dreamcast')||p.includes('saturn')||p.includes('mega drive'))return'sega';return'other'}
+
 const clone=x=>JSON.parse(JSON.stringify(x));
 let state=load(), pendingPhoto='';
 function load(){try{let raw=localStorage.getItem(STORE)||localStorage.getItem(OLD);return raw?JSON.parse(raw):clone(window.MUSEUM_SEED)}catch(e){return clone(window.MUSEUM_SEED)}}
@@ -10,7 +49,7 @@ const money=v=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).
 function toast(msg){let t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2300)}
 function countBy(items,key){let m={};items.forEach(x=>{let k=x[key]||'Uncategorised';m[k]=(m[k]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1])}
 function initials(title){return String(title).split(/\s+/).slice(0,3).map(x=>x[0]).join('').toUpperCase()}
-function cover(game,large=false){return `<div class="game-cover">${game.image?`<img src="${esc(game.image)}" alt="">`:`<div class="initials">${esc(initials(game.title))}</div>`}<span class="platform-ribbon">${esc(game.platform)}</span></div>`}
+function cover(game,large=false){let art=artwork(game);return `<div class="game-cover">${art?`<img src="${esc(art)}" alt="${esc(game.title)} cover art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="initials" style="display:none">${esc(initials(game.title))}</div>`:`<div class="initials">${esc(initials(game.title))}</div>`}</div>`}
 function go(page){$$('.page,.bottom-nav button').forEach(x=>x.classList.remove('active'));$('#'+page).classList.add('active');$$(`[data-page="${page}"]`).forEach(x=>x.classList.add('active'));closeDrawer();scrollTo({top:0,behavior:'smooth'})}
 function openDrawer(){$('#drawer').classList.add('open');$('#scrim').classList.add('show')}
 function closeDrawer(){$('#drawer').classList.remove('open');$('#scrim').classList.remove('show')}
@@ -30,14 +69,14 @@ function dashboard(){
  let latest=g[0];if(latest){$('#latestTitle').textContent=latest.title;$('#latestMeta').textContent=`${latest.platform} • ${latest.edition||'Standard'}${latest.price!=null?' • '+money(latest.price):''}`;$('#latestOpen').onclick=()=>openGame(latest.id)}
 }
 function platformFilter(){let s=$('#platformFilter'),cur=s.value,ps=[...new Set(state.games.map(x=>x.platform).filter(Boolean))].sort();s.innerHTML='<option value="">All platforms</option>'+ps.map(x=>`<option>${esc(x)}</option>`).join('');if(ps.includes(cur))s.value=cur}
-function card(g){return `<button class="game-card" data-id="${esc(g.id)}">${cover(g)}<div class="game-info"><h3>${esc(g.title)}</h3><p>${esc(g.edition||'Standard')}</p><div class="badges">${g.series?`<span class="badge">${esc(g.series)}</span>`:''}<span class="badge">${esc(g.category||'Main Collection')}</span></div></div></button>`}
+function card(g){let pc=platformClass(g.platform);return `<button class="game-card" data-id="${esc(g.id)}">${cover(g)}<div class="game-info"><div class="badges"><span class="badge platform ${pc}">${esc(g.platform)}</span><span class="badge edition">${esc(g.edition||'Standard')}</span><span class="badge category">${esc(g.category||'Main Collection')}</span>${g.series?`<span class="badge series">${esc(g.series)}</span>`:''}</div><h3>${esc(g.title)}</h3></div></button>`}
 function collection(){
  let q=norm($('#searchInput').value),p=$('#platformFilter').value,c=$('#categoryFilter').value,sort=$('#sortFilter').value;
  let arr=state.games.filter(g=>(!q||norm([g.title,g.platform,g.series,g.edition,g.category].join(' ')).includes(q))&&(!p||g.platform===p)&&(!c||g.category===c));
  arr.sort((a,b)=>sort==='platform'?String(a.platform).localeCompare(b.platform)||a.title.localeCompare(b.title):sort==='price'?(Number(b.price)||0)-(Number(a.price)||0):sort==='newest'?String(b.date||'').localeCompare(String(a.date||'')):a.title.localeCompare(b.title));
  $('#resultCount').textContent=`${arr.length} ${arr.length===1?'record':'records'}`;$('#collectionGrid').innerHTML=arr.map(card).join('')||'<article class="panel">No catalogue records found.</article>';$$('.game-card').forEach(x=>x.onclick=()=>openGame(x.dataset.id))
 }
-function openGame(id){let g=state.games.find(x=>String(x.id)===String(id));if(!g)return;$('#dialogContent').innerHTML=`<div class="detail-hero">${g.image?`<img src="${esc(g.image)}" alt="">`:''}<div class="detail-hero-copy"><span class="eyebrow">CATALOGUE RECORD</span><h2>${esc(g.title)}</h2><p>${esc(g.platform)} • ${esc(g.edition||'Standard')}</p></div></div><div class="detail-body"><div class="detail-grid"><div class="detail"><span>Series</span><strong>${esc(g.series||'—')}</strong></div><div class="detail"><span>Gallery</span><strong>${esc(g.category||'—')}</strong></div><div class="detail"><span>Shop</span><strong>${esc(g.shop||'—')}</strong></div><div class="detail"><span>Price</span><strong>${g.price==null?'—':money(g.price)}</strong></div><div class="detail"><span>Purchase date</span><strong>${esc(g.date||'—')}</strong></div><div class="detail"><span>Display copy</span><strong>${esc(g.display||'No')}</strong></div></div>${g.notes?`<article class="panel"><h3>Collection story</h3><p>${esc(g.notes)}</p></article>`:''}</div>`;$('#gameDialog').showModal()}
+function openGame(id){let g=state.games.find(x=>String(x.id)===String(id));if(!g)return;$('#dialogContent').innerHTML=`<div class="detail-hero">${artwork(g)?`<img src="${esc(artwork(g))}" alt="${esc(g.title)} cover art">`:''}<div class="detail-hero-copy"><span class="eyebrow">CATALOGUE RECORD</span><h2>${esc(g.title)}</h2><p>${esc(g.platform)} • ${esc(g.edition||'Standard')}</p></div></div><div class="detail-body"><div class="detail-grid"><div class="detail"><span>Series</span><strong>${esc(g.series||'—')}</strong></div><div class="detail"><span>Gallery</span><strong>${esc(g.category||'—')}</strong></div><div class="detail"><span>Shop</span><strong>${esc(g.shop||'—')}</strong></div><div class="detail"><span>Price</span><strong>${g.price==null?'—':money(g.price)}</strong></div><div class="detail"><span>Purchase date</span><strong>${esc(g.date||'—')}</strong></div><div class="detail"><span>Display copy</span><strong>${esc(g.display||'No')}</strong></div></div>${g.notes?`<article class="panel"><h3>Collection story</h3><p>${esc(g.notes)}</p></article>`:''}</div>`;$('#gameDialog').showModal()}
 $('#closeDialog').onclick=()=>$('#gameDialog').close();
 function wishlist(){
  let q=norm($('#wishSearch').value),pri=$('#wishPriority').value,items=(state.wishlist||[]).filter(w=>(!q||norm([w.title,w.platform,w.reason,w.order].join(' ')).includes(q))&&(!pri||norm(w.order).includes(norm(pri))));
@@ -54,7 +93,7 @@ $('#photoInput').onchange=async e=>{let f=e.target.files[0];if(!f)return;$('#pho
 function compress(file){return new Promise((res,rej)=>{let r=new FileReader;r.onerror=rej;r.onload=()=>{let im=new Image;im.onload=()=>{let max=900,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};im.src=r.result};r.readAsDataURL(file)})}
 $('#addForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);state.games.unshift({id:'GM-LOCAL-'+Date.now(),title:f.get('title'),platform:f.get('platform'),edition:f.get('edition')||'Standard',series:f.get('series')||'',shop:f.get('shop')||'',price:f.get('price')?Number(f.get('price')):null,date:f.get('date')||'',category:f.get('category')||'Main Collection',status:'Owned',display:f.get('category')==='Display Gallery'?'Yes':'No',notes:f.get('notes')||'',image:pendingPhoto||f.get('image')||''});save();e.target.reset();pendingPhoto='';$('#photoName').textContent='Choose image';render();toast('Added to The Game Museum');go('home')}
 function download(name,type,text){let b=new Blob([text],{type}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-$('#exportBtn').onclick=()=>download(`the-game-museum-v3-${new Date().toISOString().slice(0,10)}.json`,'application/json',JSON.stringify(state,null,2));
+$('#exportBtn').onclick=()=>download(`the-game-museum-v3.1-${new Date().toISOString().slice(0,10)}.json`,'application/json',JSON.stringify(state,null,2));
 $('#csvBtn').onclick=()=>{let h=['ID','Game','Platform','Edition','Series','Category','Shop','Price','Purchase Date','Display Copy','Notes','Image'];let q=v=>`"${String(v??'').replaceAll('"','""')}"`;let rows=state.games.map(g=>[g.id,g.title,g.platform,g.edition,g.series,g.category,g.shop,g.price,g.date,g.display,g.notes,g.image].map(q).join(','));download(`game-museum-catalogue-${new Date().toISOString().slice(0,10)}.csv`,'text/csv;charset=utf-8',[h.join(','),...rows].join('\n'))};
 $('#importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader;r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.games))throw 0;state=x;save();render();toast('Backup imported')}catch{alert('That is not a valid Museum backup.')}};r.readAsText(f)};
 $('#resetBtn').onclick=()=>{if(confirm('Reset app changes to the original spreadsheet import?')){state=clone(window.MUSEUM_SEED);save();render();toast('Museum reset')}};
