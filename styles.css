@@ -65,3 +65,5 @@ dialog{width:min(94vw,980px)}
 .detail-fallback{display:grid;place-items:center;width:min(90%,320px);aspect-ratio:3/4;border-radius:16px;background:linear-gradient(145deg,#154a78,#071521);font-size:58px;font-weight:950;color:#fff}
 .detail-content{min-width:0}.detail-content h2{font-size:clamp(28px,4vw,44px);line-height:1.05;margin:8px 0 10px}.detail-subtitle{font-size:16px;color:var(--muted);margin:0 0 22px}.collection-story{margin-top:18px;padding:18px;border-radius:15px;background:var(--surface2);border:1px solid var(--line)}.collection-story h3{margin:0 0 8px}.collection-story p{margin:0;line-height:1.6}
 @media(max-width:760px){dialog{width:min(96vw,680px)}.detail-layout{grid-template-columns:1fr;padding:18px;gap:18px;min-height:0}.detail-cover-stage{min-height:0;padding:16px}.detail-cover-stage img{max-height:62vh}.detail-content h2{text-align:center}.detail-content>.eyebrow,.detail-subtitle{display:block;text-align:center}}
+
+/* v3.5: FC 24 and FC 25 use the supplied full-case museum images; centred detail layout retained. */

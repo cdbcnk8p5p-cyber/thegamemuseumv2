@@ -1,5 +1,5 @@
-const STORE='theGameMuseumV34', OLD='theGameMuseumV33', LEGACY='theGameMuseumV32', THEME='museumThemeV34';
-const V34_MEDIA={
+const STORE='theGameMuseumV35', OLD='theGameMuseumV34', LEGACY='theGameMuseumV33', THEME='museumThemeV35';
+const V35_MEDIA={
  'GM-0061':{image:'./assets/covers/nfs.jpg',price:50,shop:'CEX',notes:'Photographed from Grant\'s physical Xbox 360 copy. Original £50 CEX label recorded in the archive; the displayed museum cover has been cleaned and straightened.'},
  'GM-0023':{image:'./assets/covers/mafia.jpg',notes:'Photographed from Grant\'s physical Xbox Series X copy.'},
  'GM-0022':{image:'./assets/covers/gta.jpg',price:18,shop:'CEX',notes:'Photographed from Grant\'s physical Xbox Series X copy. Original £18 CEX label recorded in the archive; the displayed museum cover has been cleaned and straightened.'},
@@ -52,8 +52,8 @@ function platformClass(p){p=norm(p);if(p.includes('playstation')||/^ps[1-5]$/.te
 
 const clone=x=>JSON.parse(JSON.stringify(x));
 let state=load(), pendingPhoto='';
-function applyV34(s){s.games=(s.games||[]).map(g=>{let u=V34_MEDIA[g.id];return u?{...g,...u,notes:u.notes||g.notes}:g});return s}
-function load(){try{let raw=localStorage.getItem(STORE)||localStorage.getItem(OLD)||localStorage.getItem(LEGACY);return applyV34(raw?JSON.parse(raw):clone(window.MUSEUM_SEED))}catch(e){return applyV34(clone(window.MUSEUM_SEED))}}
+function applyV35(s){s.games=(s.games||[]).map(g=>{let u=V35_MEDIA[g.id];return u?{...g,...u,notes:u.notes||g.notes}:g});return s}
+function load(){try{let raw=localStorage.getItem(STORE)||localStorage.getItem(OLD)||localStorage.getItem(LEGACY);return applyV35(raw?JSON.parse(raw):clone(window.MUSEUM_SEED))}catch(e){return applyV35(clone(window.MUSEUM_SEED))}}
 function save(){localStorage.setItem(STORE,JSON.stringify(state))}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const norm=v=>String(v||'').trim().toLowerCase();
@@ -116,7 +116,7 @@ $('#photoInput').onchange=async e=>{let f=e.target.files[0];if(!f)return;$('#pho
 function compress(file){return new Promise((res,rej)=>{let r=new FileReader;r.onerror=rej;r.onload=()=>{let im=new Image;im.onload=()=>{let max=900,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};im.src=r.result};r.readAsDataURL(file)})}
 $('#addForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);state.games.unshift({id:'GM-LOCAL-'+Date.now(),title:f.get('title'),platform:f.get('platform'),edition:f.get('edition')||'Standard',series:f.get('series')||'',shop:f.get('shop')||'',price:f.get('price')?Number(f.get('price')):null,date:f.get('date')||'',category:f.get('category')||'Main Collection',status:'Owned',display:f.get('category')==='Display Gallery'?'Yes':'No',notes:f.get('notes')||'',image:pendingPhoto||f.get('image')||''});save();e.target.reset();pendingPhoto='';$('#photoName').textContent='Choose image';render();toast('Added to The Game Museum');go('home')}
 function download(name,type,text){let b=new Blob([text],{type}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-$('#exportBtn').onclick=()=>download(`the-game-museum-v3.4-${new Date().toISOString().slice(0,10)}.json`,'application/json',JSON.stringify(state,null,2));
+$('#exportBtn').onclick=()=>download(`the-game-museum-v3.5-${new Date().toISOString().slice(0,10)}.json`,'application/json',JSON.stringify(state,null,2));
 $('#csvBtn').onclick=()=>{let h=['ID','Game','Platform','Edition','Series','Category','Shop','Price','Purchase Date','Display Copy','Notes','Image'];let q=v=>`"${String(v??'').replaceAll('"','""')}"`;let rows=state.games.map(g=>[g.id,g.title,g.platform,g.edition,g.series,g.category,g.shop,g.price,g.date,g.display,g.notes,g.image].map(q).join(','));download(`game-museum-catalogue-${new Date().toISOString().slice(0,10)}.csv`,'text/csv;charset=utf-8',[h.join(','),...rows].join('\n'))};
 $('#importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader;r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.games))throw 0;state=x;save();render();toast('Backup imported')}catch{alert('That is not a valid Museum backup.')}};r.readAsText(f)};
 $('#resetBtn').onclick=()=>{if(confirm('Reset app changes to the original spreadsheet import?')){state=clone(window.MUSEUM_SEED);save();render();toast('Museum reset')}};
