@@ -1,14 +1,173 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0d2239"><meta name="apple-mobile-web-app-capable" content="yes"><title>The Game Museum</title><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css"><link rel="apple-touch-icon" href="./icon-192.png"></head>
-<body><header><div><small>GRANT'S COLLECTION</small><h1>The Game Museum</h1><p>Preserving Physical Gaming History</p></div><button id="theme">◐</button></header>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#091827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Game Museum">
+  <meta name="description" content="Grant's physical video game collection museum.">
+  <title>The Game Museum</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="ambient"></div>
+<header class="topbar">
+  <button id="menuBtn" class="round-btn" aria-label="Open menu">☰</button>
+  <div class="brand">
+    <span>GRANT'S COLLECTION</span>
+    <strong>The Game Museum</strong>
+  </div>
+  <button id="themeBtn" class="round-btn" aria-label="Toggle theme">◐</button>
+</header>
+
+<aside id="drawer" class="drawer">
+  <div class="drawer-head"><span>🏛️</span><div><strong>The Game Museum</strong><small>Version 3</small></div></div>
+  <button data-page="home">🏛️ Museum Hall</button>
+  <button data-page="collection">🎮 Collection</button>
+  <button data-page="cex">🛒 CEX Mode</button>
+  <button data-page="wishlist">⭐ Wishlist</button>
+  <button data-page="statistics">📊 Statistics</button>
+  <button data-page="timeline">🕰️ Timeline</button>
+  <button data-page="add">＋ Add Acquisition</button>
+  <button data-page="backup">⚙️ Backup & Sync</button>
+</aside>
+<div id="scrim" class="scrim"></div>
+
 <main>
-<section id="home" class="page active"><div class="hero"><div><small>THE COLLECTION</small><h2><span id="total">0</span> Games Catalogued</h2><p id="headline"></p></div><b>🏛️</b></div><div class="stats"><article><span>Main collection</span><strong id="main">0</strong></article><article><span>Display pieces</span><strong id="display">0</strong></article><article><span>Wishlist</span><strong id="wish">0</strong></article><article><span>Recorded spend</span><strong id="spend">£0</strong></article></div><div class="panel"><small>LATEST ACQUISITION</small><h3>FIFA 16 — PS4</h3><p>Standard Edition • £2 • CEX</p></div><div class="panel"><small>MUSEUM PROGRESS</small><h3>Road to 250</h3><div class="progress"><i id="bar"></i></div><p id="progressText"></p></div><div class="panel"><small>PLATFORM WINGS</small><h3>Largest collections</h3><div id="topPlatforms"></div></div></section>
-<section id="collection" class="page"><div class="intro"><small>CATALOGUE</small><h2>Collection Browser</h2><p>Search by game, platform, series or edition.</p></div><div class="tools"><input id="search" placeholder="Search the museum"><select id="platform"><option value="">All platforms</option></select></div><p id="count"></p><div id="grid" class="grid"></div></section>
-<section id="cex" class="page"><div class="intro"><small>SHOPPING ASSISTANT</small><h2>CEX Mode</h2><p>Check ownership or wishlist status in seconds.</p></div><input id="cexSearch" class="big" placeholder="Type a game title…"><div id="cexResult"></div><div class="panel"><h3>Priority targets</h3><div id="cexWish"></div></div></section>
-<section id="wishlist" class="page"><div class="intro"><small>ACQUISITIONS</small><h2>Museum Wishlist</h2></div><div id="wishList"></div></section>
-<section id="stats" class="page"><div class="intro"><small>MUSEUM ANALYTICS</small><h2>Statistics</h2></div><div class="stats"><article><span>Platforms</span><strong id="platforms">0</strong></article><article><span>Series</span><strong id="series">0</strong></article><article><span>Average price</span><strong id="average">£0</strong></article><article><span>Known prices</span><strong id="known">0</strong></article></div><div class="panel"><h3>By platform</h3><div id="platformChart"></div></div><div class="panel"><h3>Largest series</h3><div id="seriesChart"></div></div></section>
-<section id="add" class="page"><div class="intro"><small>NEW ACQUISITION</small><h2>Add a Game</h2><p>Saved locally on this device.</p></div><form id="form"><label>Game title<input name="title" required></label><label>Platform<input name="platform" required></label><label>Edition<input name="edition" value="Standard"></label><label>Series<input name="series"></label><label>Shop<input name="shop"></label><label>Price (£)<input name="price" type="number" min="0" step="0.01"></label><label>Purchase date<input name="date" type="date"></label><label>Shelf<select name="category"><option>Main Collection</option><option>Display Gallery</option></select></label><label class="wide">Notes<textarea name="notes"></textarea></label><button class="wide">Add to Museum</button></form></section>
-<section id="backup" class="page"><div class="intro"><small>MUSEUM ARCHIVE</small><h2>Backup & Settings</h2><p>The spreadsheet remains untouched.</p></div><div class="panel actions"><button id="export">Export app backup</button><label>Import app backup<input id="import" type="file" accept=".json"></label><button id="reset" class="danger">Reset to spreadsheet data</button></div></section>
+  <section id="home" class="page active">
+    <article class="hero reveal">
+      <div class="hero-copy">
+        <span class="eyebrow">PRESERVING PHYSICAL GAMING HISTORY</span>
+        <h1><span id="headlineTotal">0</span> games catalogued</h1>
+        <p id="headlineCopy"></p>
+        <button class="gold-btn" data-go="collection">Enter the collection</button>
+      </div>
+      <div class="hero-emblem">🏛️</div>
+    </article>
+
+    <div class="stat-grid reveal">
+      <article><small>Main collection</small><strong id="mainCount">0</strong><span>catalogued pieces</span></article>
+      <article><small>Display gallery</small><strong id="displayCount">0</strong><span>special editions</span></article>
+      <article><small>Wishlist</small><strong id="wishlistCount">0</strong><span>future acquisitions</span></article>
+      <article><small>Recorded spend</small><strong id="spendTotal">£0</strong><span>known purchases</span></article>
+    </div>
+
+    <article class="feature-card reveal">
+      <div class="cover-placeholder large">🎮</div>
+      <div>
+        <span class="eyebrow">LATEST CATALOGUE ENTRY</span>
+        <h2 id="latestTitle">The museum is ready</h2>
+        <p id="latestMeta"></p>
+        <button id="latestOpen" class="text-link">View catalogue record →</button>
+      </div>
+    </article>
+
+    <article class="panel reveal">
+      <div class="section-title"><div><span class="eyebrow">MUSEUM PROGRESS</span><h2>Road to 250</h2></div><strong id="progressPercent">0%</strong></div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <p id="progressText" class="muted"></p>
+    </article>
+
+    <article class="panel reveal">
+      <div class="section-title"><div><span class="eyebrow">COLLECTION WINGS</span><h2>Largest platforms</h2></div></div>
+      <div id="topPlatforms" class="bars"></div>
+    </article>
+  </section>
+
+  <section id="collection" class="page">
+    <header class="page-head reveal"><span class="eyebrow">THE GRAND CATALOGUE</span><h1>Collection</h1><p>Browse every preserved game, display piece and annual series entry.</p></header>
+    <div class="filters reveal">
+      <input id="searchInput" type="search" placeholder="Search titles, series or editions">
+      <select id="platformFilter"><option value="">All platforms</option></select>
+      <select id="categoryFilter"><option value="">All galleries</option><option>Main Collection</option><option>Display Gallery</option></select>
+      <select id="sortFilter"><option value="title">A–Z</option><option value="newest">Newest entries</option><option value="platform">Platform</option><option value="price">Highest price</option></select>
+    </div>
+    <div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-link">Clear filters</button></div>
+    <div id="collectionGrid" class="cover-grid"></div>
+  </section>
+
+  <section id="cex" class="page">
+    <header class="page-head reveal"><span class="eyebrow">ONE-HANDED SHOPPING ASSISTANT</span><h1>CEX Mode</h1><p>Check ownership and wishlist status in seconds.</p></header>
+    <input id="cexSearch" class="mega-search reveal" type="search" placeholder="Scan by typing a title…">
+    <div id="cexResult"></div>
+    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">PRIORITY TARGETS</span><h2>Next acquisitions</h2></div></div><div id="cexWishlist" class="wish-mini"></div></article>
+  </section>
+
+  <section id="wishlist" class="page">
+    <header class="page-head reveal"><span class="eyebrow">FUTURE ACQUISITIONS</span><h1>Wishlist</h1><p>Now arranged into neat platform galleries.</p></header>
+    <div class="filters reveal">
+      <input id="wishSearch" type="search" placeholder="Search wishlist">
+      <select id="wishPriority"><option value="">All priorities</option><option>Priority</option><option>Lower Priority</option><option>Holy Grail</option></select>
+    </div>
+    <div id="wishlistGroups" class="platform-groups"></div>
+  </section>
+
+  <section id="statistics" class="page">
+    <header class="page-head reveal"><span class="eyebrow">LIVE MUSEUM ANALYTICS</span><h1>Statistics</h1><p>Automatically recalculated from the catalogue saved on this device.</p></header>
+    <div class="stat-grid reveal">
+      <article><small>Platforms</small><strong id="platformTotal">0</strong><span>collection wings</span></article>
+      <article><small>Series</small><strong id="seriesTotal">0</strong><span>tracked franchises</span></article>
+      <article><small>Average price</small><strong id="averagePrice">£0</strong><span>known prices</span></article>
+      <article><small>Known purchases</small><strong id="knownPrices">0</strong><span>priced entries</span></article>
+    </div>
+    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">PLATFORM DISTRIBUTION</span><h2>Collection by platform</h2></div></div><div id="platformDonut" class="donut-wrap"></div><div id="platformChart" class="bars"></div></article>
+    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">LEGACY SERIES</span><h2>Largest franchises</h2></div></div><div id="seriesChart" class="bars"></div></article>
+  </section>
+
+  <section id="timeline" class="page">
+    <header class="page-head reveal"><span class="eyebrow">MUSEUM HISTORY</span><h1>Acquisition Timeline</h1><p>The story of the collection, one addition at a time.</p></header>
+    <div id="timelineList" class="timeline"></div>
+  </section>
+
+  <section id="add" class="page">
+    <header class="page-head reveal"><span class="eyebrow">NEW CATALOGUE RECORD</span><h1>Add Acquisition</h1><p>Add artwork by URL or upload a photo of your own copy.</p></header>
+    <form id="addForm" class="form-card reveal">
+      <label>Game title<input name="title" required></label>
+      <label>Platform<input name="platform" required></label>
+      <label>Edition<input name="edition" value="Standard"></label>
+      <label>Series<input name="series"></label>
+      <label>Shop<input name="shop"></label>
+      <label>Price (£)<input name="price" type="number" min="0" step="0.01"></label>
+      <label>Purchase date<input name="date" type="date"></label>
+      <label>Gallery<select name="category"><option>Main Collection</option><option>Display Gallery</option></select></label>
+      <label class="wide">Cover image URL<input name="image" type="url" placeholder="https://…"></label>
+      <label class="wide upload-label">Or upload a photo<input id="photoInput" name="photo" type="file" accept="image/*"><span id="photoName">Choose image</span></label>
+      <label class="wide">Collection notes<textarea name="notes" placeholder="Condition, story, replacement copy, shelf position…"></textarea></label>
+      <button class="gold-btn wide" type="submit">Preserve in the museum</button>
+    </form>
+  </section>
+
+  <section id="backup" class="page">
+    <header class="page-head reveal"><span class="eyebrow">ARCHIVE CONTROL</span><h1>Backup & Sync</h1><p>Your spreadsheet remains the master archive. These tools make app updates easier.</p></header>
+    <article class="panel action-stack reveal">
+      <button id="exportBtn" class="gold-btn">Export full app backup (JSON)</button>
+      <button id="csvBtn" class="navy-btn">Export spreadsheet-ready CSV</button>
+      <label class="file-btn">Import app backup<input id="importFile" type="file" accept=".json"></label>
+      <button id="resetBtn" class="danger-btn">Reset to original import</button>
+    </article>
+    <article class="panel reveal"><h2>Photo storage</h2><p class="muted">Uploaded photos are compressed and stored inside this browser. Export a JSON backup after adding important photos. A future cloud version can sync them between devices.</p></article>
+  </section>
 </main>
-<nav><button data-page="home" class="active">🏛️<span>Home</span></button><button data-page="collection">🎮<span>Collection</span></button><button data-page="cex">🛒<span>CEX</span></button><button data-page="wishlist">⭐<span>Wishlist</span></button><button data-page="stats">📊<span>Stats</span></button><button data-page="add">＋<span>Add</span></button><button data-page="backup">⚙️<span>Backup</span></button></nav>
-<dialog id="dialog"><button id="close">×</button><div id="detail"></div></dialog><script src="./data.js"></script><script src="./app.js"></script></body></html>
+
+<nav class="bottom-nav">
+  <button data-page="home" class="active">🏛️<span>Hall</span></button>
+  <button data-page="collection">🎮<span>Games</span></button>
+  <button data-page="cex">🛒<span>CEX</span></button>
+  <button data-page="wishlist">⭐<span>Wishlist</span></button>
+  <button data-page="statistics">📊<span>Stats</span></button>
+</nav>
+
+<dialog id="gameDialog">
+  <button id="closeDialog" class="dialog-close">×</button>
+  <div id="dialogContent"></div>
+</dialog>
+<div id="toast" class="toast"></div>
+<script src="./data.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

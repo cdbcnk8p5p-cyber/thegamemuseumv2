@@ -1,11 +1,13 @@
 {
   "name": "The Game Museum",
   "short_name": "Game Museum",
+  "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#edf2f7",
-  "theme_color": "#0d2239",
+  "background_color": "#eaf0f5",
+  "theme_color": "#091827",
+  "description": "Grant's premium physical video game collection museum.",
   "icons": [
     {
       "src": "./icon-192.png",
