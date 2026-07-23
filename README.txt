@@ -15,3 +15,5 @@ UPLOAD TO GITHUB PAGES
 4. Replace the old files when prompted.
 5. Wait a minute, then refresh the live site.
 6. If an older cached version appears, refresh once more or close and reopen the installed app.
+
+FC 24 and FC 25 case correction: full Xbox Series X / Xbox One case details preserved; CEX stickers and hands removed.
