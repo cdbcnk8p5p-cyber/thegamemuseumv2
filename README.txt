@@ -1,25 +1,18 @@
-THE GAME MUSEUM — VERSION 3.2
+THE GAME MUSEUM — VERSION 3.3
 
-NEW IN 3.2
-- Dark museum collection layout based on the approved design
-- Real game cover artwork for supported catalogue titles
-- Cover upload and URL support remains available for every record
-- Platform badge moved into the footer tag row
-- PlayStation tags are blue
-- Xbox tags are green
-- Nintendo tags are red
-- Sega tags are black
-- Visible v3.2 footer and updated offline cache
+NEW IN 3.3
+- Five photographed games now use clean, front-facing museum cover images.
+- Need for Speed: Most Wanted has the approved sticker-free restoration.
+- Mafia: The Old Country, GTA V, EA Sports FC 25 and EA Sports FC 24 now use matching clean display crops.
+- Original CEX prices remain stored in the catalogue records even though stickers are hidden from display.
+- Formula One, FIFA / EA Sports FC and Grand Theft Auto exhibits remain automatic.
+- Updated local storage migration, export name, footer, manifest and offline cache.
 
-UPLOAD
+UPLOAD TO GITHUB PAGES
 1. Extract this ZIP.
-2. Open the the-game-museum-v3.2 folder.
-3. Upload all files inside it to the existing GitHub repository.
-4. Commit directly to main.
-5. Wait for GitHub Pages deployment and hard-refresh the site.
+2. Open the the-game-museum-v3.3 folder.
+3. Upload every file and the assets folder to the root of the existing GitHub repository.
+4. Replace the old files when prompted.
+5. Wait a minute, then refresh the live site.
 
-IMPORTANT
-Some covers use an online artwork source, so they require an internet connection the first time. Any title without a mapped cover keeps the clean initials fallback until you add its cover URL or upload a photo.
-
-
-Version 3.2 adds automatic Formula One, FIFA/EA Sports FC and Grand Theft Auto exhibits, plus five photographed collection covers.
+The app keeps existing Version 3.2 browser data and upgrades it automatically.
