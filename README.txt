@@ -7,11 +7,6 @@ LATEST COVER FIX
 - The offline cache has been refreshed so GitHub Pages and installed app versions receive the fix.
 - Existing collection data and browser storage are preserved.
 
-PS1 COVER FIX
-- GTA 2, Tomb Raider and Tomb Raider III now use the supplied PS1 cover artwork.
-- PS1 jewel-case cards display the whole square/landscape cover instead of zoom-cropping it into a modern 3:4 case shape.
-- Tomb Raider cover quality has been refreshed from the higher-resolution supplied image.
-
 UPLOAD TO GITHUB PAGES
 1. Extract this ZIP.
 2. Upload every file and the complete assets folder to the root of the existing GitHub repository.

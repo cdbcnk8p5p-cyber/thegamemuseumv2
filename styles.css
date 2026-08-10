@@ -67,3 +67,7 @@ dialog{width:min(94vw,980px)}
 @media(max-width:760px){dialog{width:min(96vw,680px)}.detail-layout{grid-template-columns:1fr;padding:18px;gap:18px;min-height:0}.detail-cover-stage{min-height:0;padding:16px}.detail-cover-stage img{max-height:62vh}.detail-content h2{text-align:center}.detail-content>.eyebrow,.detail-subtitle{display:block;text-align:center}}
 
 /* v3.5: FC 24 and FC 25 use the supplied full-case museum images; centred detail layout retained. */
+
+/* PS1 jewel-case covers: preserve the full square/landscape artwork instead of zoom-cropping it like modern cases. */
+.game-cover.ps1-jewel{aspect-ratio:1/1;background:linear-gradient(145deg,#0d2236,#071521);padding:8px}
+.game-cover.ps1-jewel img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}

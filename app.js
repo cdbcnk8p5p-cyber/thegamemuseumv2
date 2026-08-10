@@ -63,7 +63,7 @@ const money=v=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).
 function toast(msg){let t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2300)}
 function countBy(items,key){let m={};items.forEach(x=>{let k=x[key]||'Uncategorised';m[k]=(m[k]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1])}
 function initials(title){return String(title).split(/\s+/).slice(0,3).map(x=>x[0]).join('').toUpperCase()}
-function cover(game,large=false){let art=artwork(game);return `<div class="game-cover">${art?`<img src="${esc(art)}" alt="${esc(game.title)} cover art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="initials" style="display:none">${esc(initials(game.title))}</div>`:`<div class="initials">${esc(initials(game.title))}</div>`}</div>`}
+function cover(game,large=false){let art=artwork(game),jewel=norm(game.platform)==='ps1'?' ps1-jewel':'';return `<div class="game-cover${jewel}">${art?`<img src="${esc(art)}" alt="${esc(game.title)} cover art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="initials" style="display:none">${esc(initials(game.title))}</div>`:`<div class="initials">${esc(initials(game.title))}</div>`}</div>`}
 function go(page){$$('.page,.bottom-nav button').forEach(x=>x.classList.remove('active'));$('#'+page).classList.add('active');$$(`[data-page="${page}"]`).forEach(x=>x.classList.add('active'));closeDrawer();scrollTo({top:0,behavior:'smooth'})}
 function openDrawer(){$('#drawer').classList.add('open');$('#scrim').classList.add('show')}
 function closeDrawer(){$('#drawer').classList.remove('open');$('#scrim').classList.remove('show')}

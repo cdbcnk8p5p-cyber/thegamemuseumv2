@@ -15,27 +15,4 @@
       localStorage.setItem(key, JSON.stringify(saved));
     } catch (_) {}
   });
-
-  // PS1 PAL jewel cases are much squarer than modern DVD/Blu-ray cases.
-  // Keep the whole cover visible instead of zoom-cropping it into the normal 3:4 card frame.
-  const style = document.createElement('style');
-  style.textContent = `
-    .game-card[data-id="GM-0132"] .game-cover,
-    .game-card[data-id="GM-0133"] .game-cover,
-    .game-card[data-id="GM-0134"] .game-cover {
-      aspect-ratio: 1 / 1;
-      padding: 8px;
-      background: linear-gradient(145deg,#0d2236,#071521);
-    }
-    .game-card[data-id="GM-0132"] .game-cover img,
-    .game-card[data-id="GM-0133"] .game-cover img,
-    .game-card[data-id="GM-0134"] .game-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain !important;
-      object-position: center !important;
-      display: block;
-    }
-  `;
-  document.head.appendChild(style);
 })();
