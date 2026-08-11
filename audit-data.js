@@ -1,17 +1,70 @@
 // Museum audit overrides. Loaded after data.js and before app.js.
 (() => {
   const updates = {"GM-0132":{"shop":"CEX","date":"","price":18,"image":"./assets/covers/grand-theft-auto-2-ps1.jpg","archiveImage":"./assets/archive/grand-theft-auto-2-ps1-original.jpg","notes":"Bought from CEX for £18. Clean cover used for the museum display; original collection photo preserved in the archive."},"GM-0133":{"shop":"Cash Converters, Blackpool","date":"","price":2.25,"image":"./assets/covers/tomb-raider-ps1.jpg","archiveImage":"./assets/archive/tomb-raider-ps1-original.jpg","notes":"Bought from Cash Converters in Blackpool for £2.25. Purchase date unknown. Clean cover used for the museum display; original collection photo preserved in the archive."},"GM-0134":{"shop":"Cash Converters, Blackpool","date":"","price":1.25,"image":"./assets/covers/tomb-raider-iii-ps1.jpg","archiveImage":"./assets/archive/tomb-raider-iii-ps1-original.jpg","notes":"Bought from Cash Converters in Blackpool for £1.25. Purchase date unknown. Clean cover used for the museum display; original collection photo preserved in the archive."}};
+
+  const fifa21 = {id:'GM-0162',title:'FIFA 21',platform:'PS5',edition:'Standard',category:'Main Collection',series:'FIFA / EA Sports FC',status:'Owned',display:'No',shop:'',date:'',price:null,notes:'Added during generation-crossover collection audit.'};
+
+  const generationWishlist = [
+    {order:'Generation',platform:'PS2',title:'FIFA 08',type:'Generation Crossover',reason:'PS2 counterpart to the PS3 generation-transition release',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'FIFA 09',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'FIFA 10',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'FIFA 11',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'FIFA 12',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'FIFA 13',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
+    {order:'Generation',platform:'PS3',title:'FIFA 14',type:'Generation Crossover',reason:'Middle-generation counterpart to owned PS4 copy',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'FIFA 14',type:'Generation Crossover',reason:'Earlier-generation counterpart to owned PS4 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'FIFA 21',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS3',title:'PES 2015',type:'Generation Crossover',reason:'PS3 counterpart to owned PS4 copy',status:'Missing'},
+    {order:'Generation',platform:'PS3',title:'PES 2017',type:'Generation Crossover',reason:'PS3 counterpart to owned PS4 copy',status:'Missing'},
+    {order:'Generation',platform:'PS3',title:'Battlefield 4',type:'Generation Crossover',reason:'PS3 counterpart to owned PS4 copy',status:'Missing'},
+    {order:'Generation',platform:'PS2',title:'The Simpsons Game',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
+    {order:'Generation',platform:'PS3',title:'WWE SmackDown vs. Raw 2008',type:'Generation Crossover',reason:'PS3 counterpart to owned PS2 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'F1 21',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'F1 22',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'F1 23',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'F1 24',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'Hogwarts Legacy',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'WWE 2K23',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'PS4',title:'Saints Row (2022)',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
+    {order:'Generation',platform:'Xbox 360',title:'Call of Duty: Ghosts',type:'Generation Crossover',reason:'Xbox 360 counterpart to owned Xbox One copy',status:'Missing'},
+    {order:'Generation',platform:'Xbox 360',title:'Call of Duty: Advanced Warfare',type:'Generation Crossover',reason:'Xbox 360 counterpart to owned Xbox One copy',status:'Missing'},
+    {order:'Generation',platform:'Xbox 360',title:'Call of Duty: Black Ops III',type:'Generation Crossover',reason:'Xbox 360 counterpart to owned Xbox One copy',status:'Missing'},
+    {order:'Generation',platform:'Xbox One',title:'Far Cry 4',type:'Generation Crossover',reason:'Xbox One counterpart to owned Xbox 360 copy',status:'Missing'},
+    {order:'Generation',platform:'Xbox One',title:'Grand Theft Auto V',type:'Generation Crossover',reason:'Fills the Xbox 360 to Series X GTA V generation run',status:'Missing'},
+    {order:'Generation',platform:'PS5',title:'Grand Theft Auto V',type:'Generation Crossover',reason:'Completes the physical PlayStation GTA V generation run',status:'Missing'}
+  ];
+
   const patchGames = games => (games || []).forEach(g => {
     const u = updates[g.id];
     if (u) Object.assign(g, u);
   });
-  patchGames(window.MUSEUM_SEED && window.MUSEUM_SEED.games);
+
+  const ensureGame = games => {
+    if (!Array.isArray(games)) return;
+    if (!games.some(g => g.id === fifa21.id || (g.title === fifa21.title && g.platform === fifa21.platform && g.category === fifa21.category))) games.push({...fifa21});
+  };
+
+  const ensureWishlist = wishlist => {
+    if (!Array.isArray(wishlist)) return;
+    generationWishlist.forEach(item => {
+      if (!wishlist.some(w => w.platform === item.platform && w.title === item.title)) wishlist.push({...item});
+    });
+  };
+
+  if (window.MUSEUM_SEED) {
+    patchGames(window.MUSEUM_SEED.games);
+    ensureGame(window.MUSEUM_SEED.games);
+    ensureWishlist(window.MUSEUM_SEED.wishlist);
+  }
+
   ['theGameMuseumV352','theGameMuseumV35','theGameMuseumV34'].forEach(key => {
     try {
       const raw = localStorage.getItem(key);
       if (!raw) return;
       const saved = JSON.parse(raw);
       patchGames(saved.games);
+      ensureGame(saved.games);
+      ensureWishlist(saved.wishlist);
       localStorage.setItem(key, JSON.stringify(saved));
     } catch (_) {}
   });
