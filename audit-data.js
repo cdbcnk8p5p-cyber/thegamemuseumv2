@@ -18,9 +18,6 @@
     {order:'Generation',platform:'PS3',title:'PES 2017',type:'Generation Crossover',reason:'PS3 counterpart to owned PS4 copy',status:'Missing'},
     {order:'Generation',platform:'PS3',title:'Battlefield 4',type:'Generation Crossover',reason:'PS3 counterpart to owned PS4 copy',status:'Missing'},
     {order:'Generation',platform:'PS2',title:'The Simpsons Game',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
-    {order:'Generation',platform:'PS2',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Generation',platform:'PS2',title:'The Simpsons Game',type:'Generation Crossover',reason:'PS2 counterpart to owned PS3 copy',status:'Missing'},
-    {order:'Generation',platform:'PS2',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
     {order:'Generation',platform:'PS3',title:'WWE SmackDown vs. Raw 2008',type:'Generation Crossover',reason:'PS3 counterpart to owned PS2 copy',status:'Missing'},
     {order:'Generation',platform:'PS4',title:'F1 21',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
     {order:'Generation',platform:'PS4',title:'F1 22',type:'Generation Crossover',reason:'PS4 counterpart to owned PS5 copy',status:'Missing'},
@@ -73,7 +70,7 @@
     {order:'Simpsons',platform:'Nintendo GameCube',title:'The Simpsons: Hit & Run',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
     {order:'Simpsons',platform:'PS2',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
     {order:'Simpsons',platform:'Xbox 360',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Nintendo Wii',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
+    {order:'Simpsons',platform:'Wii',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
     {order:'Simpsons',platform:'PSP',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
     {order:'Simpsons',platform:'Nintendo DS',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'}
   ];
