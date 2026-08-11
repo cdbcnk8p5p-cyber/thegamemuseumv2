@@ -30,8 +30,7 @@
     {order:'Generation',platform:'Xbox 360',title:'Call of Duty: Advanced Warfare',type:'Generation Crossover',reason:'Xbox 360 counterpart to owned Xbox One copy',status:'Missing'},
     {order:'Generation',platform:'Xbox 360',title:'Call of Duty: Black Ops III',type:'Generation Crossover',reason:'Xbox 360 counterpart to owned Xbox One copy',status:'Missing'},
     {order:'Generation',platform:'Xbox One',title:'Far Cry 4',type:'Generation Crossover',reason:'Xbox One counterpart to owned Xbox 360 copy',status:'Missing'},
-    {order:'Generation',platform:'Xbox One',title:'Grand Theft Auto V',type:'Generation Crossover',reason:'Fills the Xbox 360 to Series X GTA V generation run',status:'Missing'},
-    {order:'Generation',platform:'PS5',title:'Grand Theft Auto V',type:'Generation Crossover',reason:'Completes the physical PlayStation GTA V generation run',status:'Missing'}
+    {order:'Generation',platform:'Xbox 360',title:'Grand Theft Auto V',type:'Generation Crossover',reason:'Missing GTA V physical generation copy',status:'Missing'}
   ];
 
   const simpsonsWishlist = [
@@ -69,6 +68,14 @@
     }
   };
 
+  const cleanGtaWishlist = wishlist => {
+    if (!Array.isArray(wishlist)) return;
+    for (let i = wishlist.length - 1; i >= 0; i--) {
+      const w = wishlist[i];
+      if (w.title === 'Grand Theft Auto V' && (w.platform === 'PS5' || w.platform === 'Xbox One')) wishlist.splice(i, 1);
+    }
+  };
+
   const ensureWishlistItems = (wishlist, items) => {
     if (!Array.isArray(wishlist)) return;
     items.forEach(item => {
@@ -80,6 +87,7 @@
     patchGames(window.MUSEUM_SEED.games);
     ensureGame(window.MUSEUM_SEED.games);
     cleanSimpsonsWishlist(window.MUSEUM_SEED.wishlist);
+    cleanGtaWishlist(window.MUSEUM_SEED.wishlist);
     ensureWishlistItems(window.MUSEUM_SEED.wishlist, generationWishlist);
     ensureWishlistItems(window.MUSEUM_SEED.wishlist, simpsonsWishlist);
   }
@@ -92,6 +100,7 @@
       patchGames(saved.games);
       ensureGame(saved.games);
       cleanSimpsonsWishlist(saved.wishlist);
+      cleanGtaWishlist(saved.wishlist);
       ensureWishlistItems(saved.wishlist, generationWishlist);
       ensureWishlistItems(saved.wishlist, simpsonsWishlist);
       localStorage.setItem(key, JSON.stringify(saved));
