@@ -35,45 +35,21 @@
   ];
 
   const simpsonsWishlist = [
-    {order:'Simpsons',platform:'NES',title:'The Simpsons: Bart vs. the Space Mutants',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Sega Master System',title:'The Simpsons: Bart vs. the Space Mutants',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Mega Drive',title:'The Simpsons: Bart vs. the Space Mutants',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Gear',title:'The Simpsons: Bart vs. the Space Mutants',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy',title:"Bart Simpson's Escape from Camp Deadly",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'NES',title:'The Simpsons: Bart vs. the World',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Sega Master System',title:'The Simpsons: Bart vs. the World',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'NES',title:"Krusty's Fun House",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'SNES',title:"Krusty's Fun House",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Mega Drive',title:"Krusty's Fun House",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Sega Master System',title:"Krusty's Fun House",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Gear',title:"Krusty's Fun House",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy',title:"Krusty's Fun House",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy',title:'The Simpsons: Bart vs. the Juggernauts',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'NES',title:'The Simpsons: Bartman Meets Radioactive Man',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Gear',title:'The Simpsons: Bartman Meets Radioactive Man',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'SNES',title:"The Simpsons: Bart's Nightmare",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Mega Drive',title:"The Simpsons: Bart's Nightmare",type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy',title:'The Simpsons: Itchy & Scratchy in Miniature Golf Madness',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy',title:'The Simpsons: Bart & the Beanstalk',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'SNES',title:'Virtual Bart',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Mega Drive',title:'Virtual Bart',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'SNES',title:'The Itchy & Scratchy Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Mega Drive',title:'The Itchy & Scratchy Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy Color',title:'The Simpsons: Night of the Living Treehouse of Horror',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'PS1',title:'The Simpsons Wrestling',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'PS2',title:'The Simpsons Road Rage',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Xbox Original',title:'The Simpsons Road Rage',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Nintendo GameCube',title:'The Simpsons Road Rage',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Game Boy Advance',title:'The Simpsons Road Rage',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'PS2',title:'The Simpsons Skateboarding',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Xbox Original',title:'The Simpsons: Hit & Run',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Nintendo GameCube',title:'The Simpsons: Hit & Run',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'PS2',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Xbox 360',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Wii',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'PSP',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'},
-    {order:'Simpsons',platform:'Nintendo DS',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Physical Simpsons platform variant',status:'Missing'}
+    {order:'Simpsons',platform:'PS2',title:'The Simpsons Road Rage',type:'Simpsons Collection',reason:'Keep as a specific Simpsons collection target',status:'Missing'},
+    {order:'Simpsons',platform:'Xbox 360',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Different physical platform case for The Simpsons Game',status:'Missing'},
+    {order:'Simpsons',platform:'Wii',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Different physical platform case for The Simpsons Game',status:'Missing'},
+    {order:'Simpsons',platform:'PSP',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Different physical platform case for The Simpsons Game',status:'Missing'},
+    {order:'Simpsons',platform:'Nintendo DS',title:'The Simpsons Game',type:'Simpsons Collection',reason:'Different physical platform case for The Simpsons Game',status:'Missing'}
   ];
+
+  const allowedSimpsons = new Set([
+    'PS2|The Simpsons Road Rage',
+    'PS2|The Simpsons Game',
+    'Xbox 360|The Simpsons Game',
+    'Wii|The Simpsons Game',
+    'PSP|The Simpsons Game',
+    'Nintendo DS|The Simpsons Game'
+  ]);
 
   const patchGames = games => (games || []).forEach(g => {
     const u = updates[g.id];
@@ -83,6 +59,14 @@
   const ensureGame = games => {
     if (!Array.isArray(games)) return;
     if (!games.some(g => g.id === fifa21.id || (g.title === fifa21.title && g.platform === fifa21.platform && g.category === fifa21.category))) games.push({...fifa21});
+  };
+
+  const cleanSimpsonsWishlist = wishlist => {
+    if (!Array.isArray(wishlist)) return;
+    for (let i = wishlist.length - 1; i >= 0; i--) {
+      const w = wishlist[i];
+      if (w.type === 'Simpsons Collection' && !allowedSimpsons.has(`${w.platform}|${w.title}`)) wishlist.splice(i, 1);
+    }
   };
 
   const ensureWishlistItems = (wishlist, items) => {
@@ -95,6 +79,7 @@
   if (window.MUSEUM_SEED) {
     patchGames(window.MUSEUM_SEED.games);
     ensureGame(window.MUSEUM_SEED.games);
+    cleanSimpsonsWishlist(window.MUSEUM_SEED.wishlist);
     ensureWishlistItems(window.MUSEUM_SEED.wishlist, generationWishlist);
     ensureWishlistItems(window.MUSEUM_SEED.wishlist, simpsonsWishlist);
   }
@@ -106,6 +91,7 @@
       const saved = JSON.parse(raw);
       patchGames(saved.games);
       ensureGame(saved.games);
+      cleanSimpsonsWishlist(saved.wishlist);
       ensureWishlistItems(saved.wishlist, generationWishlist);
       ensureWishlistItems(saved.wishlist, simpsonsWishlist);
       localStorage.setItem(key, JSON.stringify(saved));
