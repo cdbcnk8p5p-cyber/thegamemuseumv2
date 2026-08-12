@@ -18,14 +18,6 @@
       else data.games.push({...a});
     });
 
-    // The dashboard uses games[0] as Latest Acquisition. Keep the Celtic FC Edition
-    // at the front because it is the chosen featured acquisition from 12 Aug 2026.
-    const latestIndex = data.games.findIndex(g => g.id === 'GM-0165' || (g.title === 'eFootball PES 2020' && g.platform === 'PS4'));
-    if (latestIndex > 0) {
-      const [latest] = data.games.splice(latestIndex, 1);
-      data.games.unshift(latest);
-    }
-
     if (Array.isArray(data.wishlist)) {
       for (let i = data.wishlist.length - 1; i >= 0; i--) {
         const w = data.wishlist[i];
@@ -44,4 +36,22 @@
       localStorage.setItem(key, JSON.stringify(data));
     } catch (_) {}
   });
+
+  // app.js chooses games[0] for the Hall feature and can put older seed games
+  // back at the front while loading. Override the Hall card after app.js renders.
+  const forceLatestFeature = () => {
+    const featured = additions.find(g => g.id === 'GM-0165');
+    const cover = document.querySelector('#latestCover');
+    const title = document.querySelector('#latestTitle');
+    const meta = document.querySelector('#latestMeta');
+    const open = document.querySelector('#latestOpen');
+    if (!featured || !cover || !title || !meta || !open) return;
+    cover.innerHTML = `<img src="${featured.image}" alt="${featured.title} cover art">`;
+    title.textContent = featured.title;
+    meta.textContent = `${featured.platform} • ${featured.edition} • £18.00`;
+    open.onclick = () => { if (typeof openGame === 'function') openGame(featured.id); };
+  };
+  setTimeout(forceLatestFeature, 0);
+  setTimeout(forceLatestFeature, 150);
+  setTimeout(forceLatestFeature, 750);
 })();
