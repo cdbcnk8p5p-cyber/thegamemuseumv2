@@ -18,165 +18,36 @@
 <div class="ambient"></div>
 <header class="topbar">
   <button id="menuBtn" class="round-btn" aria-label="Open menu">☰</button>
-  <div class="brand">
-    <span>GRANT'S COLLECTION</span>
-    <strong>The Game Museum</strong>
-  </div>
+  <div class="brand"><span>GRANT'S COLLECTION</span><strong>The Game Museum</strong></div>
   <button id="themeBtn" class="round-btn" aria-label="Toggle theme">◐</button>
 </header>
-
 <aside id="drawer" class="drawer">
   <div class="drawer-head"><span>🏛️</span><div><strong>The Game Museum</strong><small>Version 3.5.3</small></div></div>
-  <button data-page="home">🏛️ Museum Hall</button>
-  <button data-page="collection">🎮 Collection</button>
-  <button data-page="exhibits">🏛️ Exhibits</button>
-  <button data-page="cex">🛒 CEX Mode</button>
-  <button data-page="wishlist">⭐ Wishlist</button>
-  <button data-page="statistics">📊 Statistics</button>
-  <button data-page="timeline">🕰️ Timeline</button>
-  <button data-page="add">＋ Add Acquisition</button>
-  <button data-page="backup">⚙️ Backup & Sync</button>
+  <button data-page="home">🏛️ Museum Hall</button><button data-page="collection">🎮 Collection</button><button data-page="exhibits">🏛️ Exhibits</button><button data-page="cex">🛒 CEX Mode</button><button data-page="wishlist">⭐ Wishlist</button><button data-page="statistics">📊 Statistics</button><button data-page="timeline">🕰️ Timeline</button><button data-page="add">＋ Add Acquisition</button><button data-page="backup">⚙️ Backup & Sync</button>
 </aside>
 <div id="scrim" class="scrim"></div>
-
 <main>
   <section id="home" class="page active">
-    <article class="hero reveal">
-      <div class="hero-copy">
-        <span class="eyebrow">PRESERVING PHYSICAL GAMING HISTORY</span>
-        <h1><span id="headlineTotal">0</span> games catalogued</h1>
-        <p id="headlineCopy"></p>
-        <button class="gold-btn" data-go="collection">Enter the collection</button>
-      </div>
-      <div class="hero-emblem">🏛️</div>
-    </article>
-
-    <div class="stat-grid reveal">
-      <article><small>Main collection</small><strong id="mainCount">0</strong><span>catalogued pieces</span></article>
-      <article><small>Display gallery</small><strong id="displayCount">0</strong><span>special editions</span></article>
-      <article><small>Wishlist</small><strong id="wishlistCount">0</strong><span>future acquisitions</span></article>
-      <article><small>Recorded spend</small><strong id="spendTotal">£0</strong><span>known purchases</span></article>
-    </div>
-
-    <article class="feature-card reveal">
-      <div id="latestCover" class="cover-placeholder large latest-cover" aria-label="Latest catalogue entry cover">🎮</div>
-      <div>
-        <span class="eyebrow">LATEST CATALOGUE ENTRY</span>
-        <h2 id="latestTitle">The museum is ready</h2>
-        <p id="latestMeta"></p>
-        <button id="latestOpen" class="text-link">View catalogue record →</button>
-      </div>
-    </article>
-
-    <article class="panel reveal">
-      <div class="section-title"><div><span class="eyebrow">MUSEUM PROGRESS</span><h2>Road to 250</h2></div><strong id="progressPercent">0%</strong></div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <p id="progressText" class="muted"></p>
-    </article>
-
-    <article class="panel reveal">
-      <div class="section-title"><div><span class="eyebrow">COLLECTION WINGS</span><h2>Largest platforms</h2></div></div>
-      <div id="topPlatforms" class="bars"></div>
-    </article>
+    <article class="hero reveal"><div class="hero-copy"><span class="eyebrow">PRESERVING PHYSICAL GAMING HISTORY</span><h1><span id="headlineTotal">0</span> games catalogued</h1><p id="headlineCopy"></p><button class="gold-btn" data-go="collection">Enter the collection</button></div><div class="hero-emblem">🏛️</div></article>
+    <div class="stat-grid reveal"><article><small>Main collection</small><strong id="mainCount">0</strong><span>catalogued pieces</span></article><article><small>Display gallery</small><strong id="displayCount">0</strong><span>special editions</span></article><article><small>Wishlist</small><strong id="wishlistCount">0</strong><span>future acquisitions</span></article><article><small>Recorded spend</small><strong id="spendTotal">£0</strong><span>known purchases</span></article></div>
+    <article class="feature-card reveal"><div id="latestCover" class="cover-placeholder large latest-cover" aria-label="Latest catalogue entry cover">🎮</div><div><span class="eyebrow">LATEST CATALOGUE ENTRY</span><h2 id="latestTitle">The museum is ready</h2><p id="latestMeta"></p><button id="latestOpen" class="text-link">View catalogue record →</button></div></article>
+    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">MUSEUM PROGRESS</span><h2>Road to 250</h2></div><strong id="progressPercent">0%</strong></div><div class="progress"><div id="progressBar"></div></div><p id="progressText" class="muted"></p></article>
+    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">COLLECTION WINGS</span><h2>Largest platforms</h2></div></div><div id="topPlatforms" class="bars"></div></article>
   </section>
-
-  <section id="collection" class="page">
-    <header class="page-head reveal"><span class="eyebrow">THE GRAND CATALOGUE</span><h1>Collection</h1><p>Browse every preserved game, display piece and annual series entry.</p></header>
-    <div class="filters reveal">
-      <input id="searchInput" type="search" placeholder="Search titles, series or editions">
-      <select id="platformFilter"><option value="">All platforms</option></select>
-      <select id="categoryFilter"><option value="">All galleries</option><option>Main Collection</option><option>Display Gallery</option></select>
-      <select id="sortFilter"><option value="title">A–Z</option><option value="newest">Newest entries</option><option value="platform">Platform</option><option value="price">Highest price</option></select>
-    </div>
-    <div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-link">Clear filters</button></div>
-    <div id="collectionGrid" class="cover-grid"></div>
-  </section>
-
-  <section id="exhibits" class="page">
-    <header class="page-head reveal"><span class="eyebrow">CURATED MUSEUM WINGS</span><h1>Exhibits</h1><p>Franchise galleries update automatically whenever a matching game is added to the main collection.</p></header>
-    <div id="exhibitOverview" class="exhibit-overview"></div>
-    <div id="exhibitDetail" class="exhibit-detail"></div>
-  </section>
-
-  <section id="cex" class="page">
-    <header class="page-head reveal"><span class="eyebrow">ONE-HANDED SHOPPING ASSISTANT</span><h1>CEX Mode</h1><p>Check ownership and wishlist status in seconds.</p></header>
-    <input id="cexSearch" class="mega-search reveal" type="search" placeholder="Scan by typing a title…">
-    <div id="cexResult"></div>
-    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">PRIORITY TARGETS</span><h2>Next acquisitions</h2></div></div><div id="cexWishlist" class="wish-mini"></div></article>
-  </section>
-
-  <section id="wishlist" class="page">
-    <header class="page-head reveal"><span class="eyebrow">FUTURE ACQUISITIONS</span><h1>Wishlist</h1><p>Now arranged into neat platform galleries.</p></header>
-    <div class="filters reveal">
-      <input id="wishSearch" type="search" placeholder="Search wishlist">
-      <select id="wishPriority"><option value="">All priorities</option><option>Priority</option><option>Lower Priority</option><option>Holy Grail</option></select>
-    </div>
-    <div id="wishlistGroups" class="platform-groups"></div>
-  </section>
-
-  <section id="statistics" class="page">
-    <header class="page-head reveal"><span class="eyebrow">LIVE MUSEUM ANALYTICS</span><h1>Statistics</h1><p>Automatically recalculated from the catalogue saved on this device.</p></header>
-    <div class="stat-grid reveal">
-      <article><small>Platforms</small><strong id="platformTotal">0</strong><span>collection wings</span></article>
-      <article><small>Series</small><strong id="seriesTotal">0</strong><span>tracked franchises</span></article>
-      <article><small>Average price</small><strong id="averagePrice">£0</strong><span>known prices</span></article>
-      <article><small>Known purchases</small><strong id="knownPrices">0</strong><span>priced entries</span></article>
-    </div>
-    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">PLATFORM DISTRIBUTION</span><h2>Collection by platform</h2></div></div><div id="platformDonut" class="donut-wrap"></div><div id="platformChart" class="bars"></div></article>
-    <article class="panel reveal"><div class="section-title"><div><span class="eyebrow">LEGACY SERIES</span><h2>Largest franchises</h2></div></div><div id="seriesChart" class="bars"></div></article>
-  </section>
-
-  <section id="timeline" class="page">
-    <header class="page-head reveal"><span class="eyebrow">MUSEUM HISTORY</span><h1>Acquisition Timeline</h1><p>The story of the collection, one addition at a time.</p></header>
-    <div id="timelineList" class="timeline"></div>
-  </section>
-
-  <section id="add" class="page">
-    <header class="page-head reveal"><span class="eyebrow">NEW CATALOGUE RECORD</span><h1>Add Acquisition</h1><p>Add artwork by URL or upload a photo of your own copy.</p></header>
-    <form id="addForm" class="form-card reveal">
-      <label>Game title<input name="title" required></label>
-      <label>Platform<input name="platform" required></label>
-      <label>Edition<input name="edition" value="Standard"></label>
-      <label>Series<input name="series"></label>
-      <label>Shop<input name="shop"></label>
-      <label>Price (£)<input name="price" type="number" min="0" step="0.01"></label>
-      <label>Purchase date<input name="date" type="date"></label>
-      <label>Gallery<select name="category"><option>Main Collection</option><option>Display Gallery</option></select></label>
-      <label class="wide">Cover image URL<input name="image" type="url" placeholder="https://…"></label>
-      <label class="wide upload-label">Or upload a photo<input id="photoInput" name="photo" type="file" accept="image/*"><span id="photoName">Choose image</span></label>
-      <label class="wide">Collection notes<textarea name="notes" placeholder="Condition, story, replacement copy, shelf position…"></textarea></label>
-      <button class="gold-btn wide" type="submit">Preserve in the museum</button>
-    </form>
-  </section>
-
-  <section id="backup" class="page">
-    <header class="page-head reveal"><span class="eyebrow">ARCHIVE CONTROL</span><h1>Backup & Sync</h1><p>Your spreadsheet remains the master archive. These tools make app updates easier.</p></header>
-    <article class="panel action-stack reveal">
-      <button id="exportBtn" class="gold-btn">Export full app backup (JSON)</button>
-      <button id="csvBtn" class="navy-btn">Export spreadsheet-ready CSV</button>
-      <label class="file-btn">Import app backup<input id="importFile" type="file" accept=".json"></label>
-      <button id="resetBtn" class="danger-btn">Reset to original import</button>
-    </article>
-    <article class="panel reveal"><h2>Photo storage</h2><p class="muted">Uploaded photos are compressed and stored inside this browser. Export a JSON backup after adding important photos. A future cloud version can sync them between devices.</p></article>
-  </section>
+  <section id="collection" class="page"><header class="page-head reveal"><span class="eyebrow">THE GRAND CATALOGUE</span><h1>Collection</h1><p>Browse every preserved game, display piece and annual series entry.</p></header><div class="filters reveal"><input id="searchInput" type="search" placeholder="Search titles, series or editions"><select id="platformFilter"><option value="">All platforms</option></select><select id="categoryFilter"><option value="">All galleries</option><option>Main Collection</option><option>Display Gallery</option></select><select id="sortFilter"><option value="title">A–Z</option><option value="newest">Newest entries</option><option value="platform">Platform</option><option value="price">Highest price</option></select></div><div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-link">Clear filters</button></div><div id="collectionGrid" class="cover-grid"></div></section>
+  <section id="exhibits" class="page"><header class="page-head reveal"><span class="eyebrow">CURATED MUSEUM WINGS</span><h1>Exhibits</h1><p>Franchise galleries update automatically whenever a matching game is added to the main collection.</p></header><div id="exhibitOverview" class="exhibit-overview"></div><div id="exhibitDetail" class="exhibit-detail"></div></section>
+  <section id="cex" class="page"><header class="page-head reveal"><span class="eyebrow">ONE-HANDED SHOPPING ASSISTANT</span><h1>CEX Mode</h1><p>Check ownership and wishlist status in seconds.</p></header><input id="cexSearch" class="mega-search reveal" type="search" placeholder="Scan by typing a title…"><div id="cexResult"></div><article class="panel reveal"><div class="section-title"><div><span class="eyebrow">PRIORITY TARGETS</span><h2>Next acquisitions</h2></div></div><div id="cexWishlist" class="wish-mini"></div></article></section>
+  <section id="wishlist" class="page"><header class="page-head reveal"><span class="eyebrow">FUTURE ACQUISITIONS</span><h1>Wishlist</h1><p>Now arranged into neat platform galleries.</p></header><div class="filters reveal"><input id="wishSearch" type="search" placeholder="Search wishlist"><select id="wishPriority"><option value="">All priorities</option><option>Priority</option><option>Lower Priority</option><option>Holy Grail</option></select></div><div id="wishlistGroups" class="platform-groups"></div></section>
+  <section id="statistics" class="page"><header class="page-head reveal"><span class="eyebrow">LIVE MUSEUM ANALYTICS</span><h1>Statistics</h1><p>Automatically recalculated from the catalogue saved on this device.</p></header><div class="stat-grid reveal"><article><small>Platforms</small><strong id="platformTotal">0</strong><span>collection wings</span></article><article><small>Series</small><strong id="seriesTotal">0</strong><span>tracked franchises</span></article><article><small>Average price</small><strong id="averagePrice">£0</strong><span>known prices</span></article><article><small>Known purchases</small><strong id="knownPrices">0</strong><span>priced entries</span></article></div><article class="panel reveal"><div class="section-title"><div><span class="eyebrow">PLATFORM DISTRIBUTION</span><h2>Collection by platform</h2></div></div><div id="platformDonut" class="donut-wrap"></div><div id="platformChart" class="bars"></div></article><article class="panel reveal"><div class="section-title"><div><span class="eyebrow">LEGACY SERIES</span><h2>Largest franchises</h2></div></div><div id="seriesChart" class="bars"></div></article></section>
+  <section id="timeline" class="page"><header class="page-head reveal"><span class="eyebrow">MUSEUM HISTORY</span><h1>Acquisition Timeline</h1><p>The story of the collection, one addition at a time.</p></header><div id="timelineList" class="timeline"></div></section>
+  <section id="add" class="page"><header class="page-head reveal"><span class="eyebrow">NEW CATALOGUE RECORD</span><h1>Add Acquisition</h1><p>Add artwork by URL or upload a photo of your own copy.</p></header><form id="addForm" class="form-card reveal"><label>Game title<input name="title" required></label><label>Platform<input name="platform" required></label><label>Edition<input name="edition" value="Standard"></label><label>Series<input name="series"></label><label>Shop<input name="shop"></label><label>Price (£)<input name="price" type="number" min="0" step="0.01"></label><label>Purchase date<input name="date" type="date"></label><label>Gallery<select name="category"><option>Main Collection</option><option>Display Gallery</option></select></label><label class="wide">Cover image URL<input name="image" type="url" placeholder="https://…"></label><label class="wide upload-label">Or upload a photo<input id="photoInput" name="photo" type="file" accept="image/*"><span id="photoName">Choose image</span></label><label class="wide">Collection notes<textarea name="notes" placeholder="Condition, story, replacement copy, shelf position…"></textarea></label><button class="gold-btn wide" type="submit">Preserve in the museum</button></form></section>
+  <section id="backup" class="page"><header class="page-head reveal"><span class="eyebrow">ARCHIVE CONTROL</span><h1>Backup & Sync</h1><p>Your spreadsheet remains the master archive. These tools make app updates easier.</p></header><article class="panel action-stack reveal"><button id="exportBtn" class="gold-btn">Export full app backup (JSON)</button><button id="csvBtn" class="navy-btn">Export spreadsheet-ready CSV</button><label class="file-btn">Import app backup<input id="importFile" type="file" accept=".json"></label><button id="resetBtn" class="danger-btn">Reset to original import</button></article><article class="panel reveal"><h2>Photo storage</h2><p class="muted">Uploaded photos are compressed and stored inside this browser. Export a JSON backup after adding important photos. A future cloud version can sync them between devices.</p></article></section>
 </main>
 <footer class="site-footer"><strong>THE GAME MUSEUM</strong><span>v3.5.3 • Preserving Physical Gaming History</span></footer>
-
-<nav class="bottom-nav">
-  <button data-page="home" class="active">🏛️<span>Hall</span></button>
-  <button data-page="collection">🎮<span>Games</span></button>
-  <button data-page="cex">🛒<span>CEX</span></button>
-  <button data-page="wishlist">⭐<span>Wishlist</span></button>
-  <button data-page="statistics">📊<span>Stats</span></button>
-</nav>
-
-<dialog id="gameDialog">
-  <button id="closeDialog" class="dialog-close">×</button>
-  <div id="dialogContent"></div>
-</dialog>
-<div id="toast" class="toast"></div>
+<nav class="bottom-nav"><button data-page="home" class="active">🏛️<span>Hall</span></button><button data-page="collection">🎮<span>Games</span></button><button data-page="cex">🛒<span>CEX</span></button><button data-page="wishlist">⭐<span>Wishlist</span></button><button data-page="statistics">📊<span>Stats</span></button></nav>
+<dialog id="gameDialog"><button id="closeDialog" class="dialog-close">×</button><div id="dialogContent"></div></dialog><div id="toast" class="toast"></div>
 <script src="./data.js"></script>
-<script src="./haul-update-2026-08-12.js"></script>
+<script src="./haul-update-2026-08-12.js?v=2"></script>
 <script src="./app.js"></script>
 </body>
 </html>
