@@ -7,37 +7,34 @@
     {id:'GM-0166',title:'FIFA 15',platform:'PS4',edition:'Standard',category:'Main Collection',series:'FIFA / EA Sports FC',status:'Owned',display:'No',shop:'CEX',date:'',price:0.50,image:'./assets/covers/fifa-15-ps4.webp',archiveImage:'./assets/archive/fifa-15-ps4-original.jpg',notes:'Existing collection copy discovered uncatalogued. Bought from CEX for £0.50; exact branch and purchase date unknown.'}
   ];
 
-  const removeTargets = new Set([
-    'PS2|FIFA 08',
-    'PS4|Hogwarts Legacy'
-  ]);
+  const removeTargets = new Set(['PS2|FIFA 08','PS4|Hogwarts Legacy']);
 
   const apply = data => {
     if (!data) return;
     data.games ||= [];
-
     additions.forEach(a => {
-      const existing = data.games.find(g =>
-        g.title === a.title &&
-        g.platform === a.platform &&
-        g.category === a.category
-      );
+      const existing = data.games.find(g => g.title === a.title && g.platform === a.platform && g.category === a.category);
       if (existing) Object.assign(existing, a);
       else data.games.push({...a});
     });
 
+    // The dashboard uses games[0] as Latest Acquisition. Keep the Celtic FC Edition
+    // at the front because it is the chosen featured acquisition from 12 Aug 2026.
+    const latestIndex = data.games.findIndex(g => g.id === 'GM-0165' || (g.title === 'eFootball PES 2020' && g.platform === 'PS4'));
+    if (latestIndex > 0) {
+      const [latest] = data.games.splice(latestIndex, 1);
+      data.games.unshift(latest);
+    }
+
     if (Array.isArray(data.wishlist)) {
       for (let i = data.wishlist.length - 1; i >= 0; i--) {
         const w = data.wishlist[i];
-        if (removeTargets.has(`${w.platform}|${w.title}`)) {
-          data.wishlist.splice(i, 1);
-        }
+        if (removeTargets.has(`${w.platform}|${w.title}`)) data.wishlist.splice(i, 1);
       }
     }
   };
 
   apply(window.MUSEUM_SEED);
-
   ['theGameMuseumV352','theGameMuseumV35','theGameMuseumV34'].forEach(key => {
     try {
       const raw = localStorage.getItem(key);
