@@ -7,7 +7,6 @@
   box-shadow: none !important;
 }
 
-.game-cover img,
 .latest-cover img {
   width: 100%;
   height: 100%;
@@ -19,7 +18,7 @@
   box-shadow: none !important;
 }
 
-/* Collection cards: no outline around the artwork at all. The Museum border begins only at the info panel. */
+/* Collection cards: the artwork uses its real aspect ratio so the info panel always sits directly underneath it. */
 .game-card {
   overflow: visible !important;
   border: 0 !important;
@@ -27,12 +26,33 @@
   background: transparent !important;
   box-shadow: none !important;
 }
-.game-card .game-cover {
+
+.game-card .game-cover:has(img) {
+  aspect-ratio: auto !important;
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.game-card .game-cover:has(img) img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
   border: 0 !important;
   border-radius: 0 !important;
-  overflow: hidden !important;
+  box-shadow: none !important;
 }
+
+/* Cards without artwork retain the standard placeholder frame. */
+.game-card .game-cover:not(:has(img)) {
+  aspect-ratio: 3 / 4;
+}
+
 .game-card .game-info {
+  margin-top: 0 !important;
   background: var(--surface) !important;
   border: 1px solid var(--line) !important;
   border-top: 1px solid var(--line) !important;
@@ -40,10 +60,12 @@
   box-shadow: var(--shadow);
 }
 
-/* PS1 jewel cases keep their squarer aspect-ratio frame while using the same borderless artwork style. */
-.game-cover.ps1-jewel,
-.game-cover.ps1-jewel img {
-  border: 0 !important;
-  border-radius: 0 !important;
+/* PS1 jewel-case artwork also follows its supplied image ratio, with no gap before the info panel. */
+.game-card .game-cover.ps1-jewel:has(img) {
+  aspect-ratio: auto !important;
+}
+.game-card .game-cover.ps1-jewel:has(img) img {
+  width: 100% !important;
+  height: auto !important;
   object-fit: contain !important;
 }
