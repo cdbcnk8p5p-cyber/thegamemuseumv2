@@ -1,7 +1,9 @@
-/* Universal cover-art fit rules: preserve the whole supplied image regardless of aspect ratio. */
+/* Universal cover-art rules: show the whole supplied image with clean square artwork edges. */
 .game-cover,
 .latest-cover {
-  background: linear-gradient(145deg,var(--navy2),var(--navy));
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .game-cover img,
@@ -11,9 +13,21 @@
   object-fit: contain !important;
   object-position: center center !important;
   display: block;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
-/* Keep PS1 jewel cases using their own squarer frame while still showing the whole image. */
+/* Collection cards keep their information panel styling, but artwork itself stays square-edged. */
+.game-card {
+  overflow: hidden;
+}
+.game-card .game-cover {
+  border-radius: 0 !important;
+}
+
+/* PS1 jewel cases keep their squarer aspect-ratio frame while using the same clean image style. */
+.game-cover.ps1-jewel,
 .game-cover.ps1-jewel img {
+  border-radius: 0 !important;
   object-fit: contain !important;
 }
