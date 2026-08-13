@@ -2,6 +2,7 @@
 .game-cover,
 .latest-cover {
   background: transparent !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
@@ -13,29 +14,36 @@
   object-fit: contain !important;
   object-position: center center !important;
   display: block;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-/* Collection cards: square artwork at the top, rounded Museum styling only at the bottom. */
+/* Collection cards: no outline around the artwork at all. The Museum border begins only at the info panel. */
 .game-card {
   overflow: visible !important;
+  border: 0 !important;
   border-radius: 0 0 16px 16px !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 .game-card .game-cover {
+  border: 0 !important;
   border-radius: 0 !important;
   overflow: hidden !important;
 }
-.game-card .game-cover img {
-  border-radius: 0 !important;
-}
 .game-card .game-info {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-top: 1px solid var(--line) !important;
   border-radius: 0 0 16px 16px !important;
+  box-shadow: var(--shadow);
 }
 
-/* PS1 jewel cases keep their squarer aspect-ratio frame while using the same clean image style. */
+/* PS1 jewel cases keep their squarer aspect-ratio frame while using the same borderless artwork style. */
 .game-cover.ps1-jewel,
 .game-cover.ps1-jewel img {
+  border: 0 !important;
   border-radius: 0 !important;
   object-fit: contain !important;
 }
