@@ -18,9 +18,9 @@
   box-shadow: none !important;
 }
 
-/* Collection grid: cards stretch within each row so mixed cover shapes share a common artwork baseline. */
-.games-grid {
-  align-items: stretch !important;
+/* Each catalogue card sizes to its own artwork; rows do not stretch shorter cards. */
+.cover-grid {
+  align-items: start !important;
 }
 
 .game-card {
@@ -29,43 +29,43 @@
   border-radius: 0 0 16px 16px !important;
   background: transparent !important;
   box-shadow: none !important;
-  display: flex !important;
-  flex-direction: column !important;
+  display: block !important;
+  align-self: start !important;
 }
 
-/* Artwork keeps its complete image and is centred in the row's shared artwork area. */
+/* Real cover artwork uses its natural aspect ratio. The info panel follows immediately after it. */
 .game-card .game-cover:has(img) {
   aspect-ratio: auto !important;
-  display: flex !important;
-  align-items: flex-end !important;
-  justify-content: center !important;
+  display: block !important;
+  width: 100% !important;
   height: auto !important;
   min-height: 0 !important;
   overflow: visible !important;
-  flex: 1 1 auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .game-card .game-cover:has(img) img {
   width: 100% !important;
   height: auto !important;
-  max-height: 100% !important;
   object-fit: contain !important;
-  object-position: center bottom !important;
+  object-position: center center !important;
   display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-/* Cards without artwork retain the standard placeholder frame and participate in the same row height. */
+/* Cards without artwork retain the standard placeholder frame. */
 .game-card .game-cover:not(:has(img)) {
   aspect-ratio: 3 / 4;
-  flex: 1 1 auto !important;
+  margin: 0 !important;
 }
 
 .game-card .game-info {
-  margin-top: 0 !important;
-  flex: 0 0 auto !important;
+  margin: 0 !important;
   background: var(--surface) !important;
   border: 1px solid var(--line) !important;
   border-top: 1px solid var(--line) !important;
@@ -73,13 +73,12 @@
   box-shadow: var(--shadow);
 }
 
-/* PS1 jewel-case artwork keeps its supplied ratio; the shared flex row aligns its info panel with its neighbour. */
-.game-card .game-cover.ps1-jewel:has(img) {
-  aspect-ratio: auto !important;
-}
+/* PS1 jewel-case artwork follows the supplied image ratio with the same zero-gap rule. */
+.game-card .game-cover.ps1-jewel:has(img),
 .game-card .game-cover.ps1-jewel:has(img) img {
+  aspect-ratio: auto !important;
   width: 100% !important;
   height: auto !important;
+  margin: 0 !important;
   object-fit: contain !important;
-  object-position: center bottom !important;
 }
