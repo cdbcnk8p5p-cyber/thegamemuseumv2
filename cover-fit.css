@@ -18,41 +18,54 @@
   box-shadow: none !important;
 }
 
-/* Collection cards: the artwork uses its real aspect ratio so the info panel always sits directly underneath it. */
+/* Collection grid: cards stretch within each row so mixed cover shapes share a common artwork baseline. */
+.games-grid {
+  align-items: stretch !important;
+}
+
 .game-card {
   overflow: visible !important;
   border: 0 !important;
   border-radius: 0 0 16px 16px !important;
   background: transparent !important;
   box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
+/* Artwork keeps its complete image and is centred in the row's shared artwork area. */
 .game-card .game-cover:has(img) {
   aspect-ratio: auto !important;
-  display: block !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
   height: auto !important;
   min-height: 0 !important;
   overflow: visible !important;
+  flex: 1 1 auto !important;
 }
 
 .game-card .game-cover:has(img) img {
   width: 100% !important;
   height: auto !important;
+  max-height: 100% !important;
   object-fit: contain !important;
-  object-position: center center !important;
+  object-position: center bottom !important;
   display: block !important;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-/* Cards without artwork retain the standard placeholder frame. */
+/* Cards without artwork retain the standard placeholder frame and participate in the same row height. */
 .game-card .game-cover:not(:has(img)) {
   aspect-ratio: 3 / 4;
+  flex: 1 1 auto !important;
 }
 
 .game-card .game-info {
   margin-top: 0 !important;
+  flex: 0 0 auto !important;
   background: var(--surface) !important;
   border: 1px solid var(--line) !important;
   border-top: 1px solid var(--line) !important;
@@ -60,7 +73,7 @@
   box-shadow: var(--shadow);
 }
 
-/* PS1 jewel-case artwork also follows its supplied image ratio, with no gap before the info panel. */
+/* PS1 jewel-case artwork keeps its supplied ratio; the shared flex row aligns its info panel with its neighbour. */
 .game-card .game-cover.ps1-jewel:has(img) {
   aspect-ratio: auto !important;
 }
@@ -68,4 +81,5 @@
   width: 100% !important;
   height: auto !important;
   object-fit: contain !important;
+  object-position: center bottom !important;
 }
