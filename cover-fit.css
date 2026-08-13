@@ -1,0 +1,19 @@
+/* Universal cover-art fit rules: preserve the whole supplied image regardless of aspect ratio. */
+.game-cover,
+.latest-cover {
+  background: linear-gradient(145deg,var(--navy2),var(--navy));
+}
+
+.game-cover img,
+.latest-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block;
+}
+
+/* Keep PS1 jewel cases using their own squarer frame while still showing the whole image. */
+.game-cover.ps1-jewel img {
+  object-fit: contain !important;
+}
