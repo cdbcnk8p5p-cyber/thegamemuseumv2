@@ -19,68 +19,66 @@
   ];
 
   const aliases = new Map([
-    ['ds', 'Nintendo DS'],
-    ['nintendo ds', 'Nintendo DS'],
-    ['switch', 'Nintendo Switch'],
-    ['nintendo switch', 'Nintendo Switch'],
-    ['wii', 'Nintendo Wii'],
-    ['nintendo wii', 'Nintendo Wii'],
-    ['mega drive', 'Sega Mega Drive'],
-    ['sega mega drive', 'Sega Mega Drive'],
-    ['ps1', 'PlayStation 1'],
-    ['playstation', 'PlayStation 1'],
-    ['playstation 1', 'PlayStation 1'],
-    ['ps2', 'PlayStation 2'],
-    ['playstation 2', 'PlayStation 2'],
-    ['ps3', 'PlayStation 3'],
-    ['playstation 3', 'PlayStation 3'],
-    ['ps4', 'PlayStation 4'],
-    ['playstation 4', 'PlayStation 4'],
-    ['ps5', 'PlayStation 5'],
-    ['playstation 5', 'PlayStation 5'],
-    ['psp', 'PlayStation Portable'],
-    ['playstation portable', 'PlayStation Portable'],
-    ['ps vita', 'PlayStation Vita'],
-    ['psvita', 'PlayStation Vita'],
-    ['playstation vita', 'PlayStation Vita'],
-    ['xbox', 'Xbox Original'],
-    ['original xbox', 'Xbox Original'],
-    ['xbox original', 'Xbox Original'],
+    ['ds', 'Nintendo DS'], ['nintendo ds', 'Nintendo DS'],
+    ['switch', 'Nintendo Switch'], ['nintendo switch', 'Nintendo Switch'],
+    ['wii', 'Nintendo Wii'], ['nintendo wii', 'Nintendo Wii'],
+    ['mega drive', 'Sega Mega Drive'], ['sega mega drive', 'Sega Mega Drive'],
+    ['ps1', 'PlayStation 1'], ['playstation', 'PlayStation 1'], ['playstation 1', 'PlayStation 1'],
+    ['ps2', 'PlayStation 2'], ['playstation 2', 'PlayStation 2'],
+    ['ps3', 'PlayStation 3'], ['playstation 3', 'PlayStation 3'],
+    ['ps4', 'PlayStation 4'], ['playstation 4', 'PlayStation 4'],
+    ['ps5', 'PlayStation 5'], ['playstation 5', 'PlayStation 5'],
+    ['psp', 'PlayStation Portable'], ['playstation portable', 'PlayStation Portable'],
+    ['ps vita', 'PlayStation Vita'], ['psvita', 'PlayStation Vita'], ['playstation vita', 'PlayStation Vita'],
+    ['xbox', 'Xbox Original'], ['original xbox', 'Xbox Original'], ['xbox original', 'Xbox Original'],
     ['xbox 360', 'Xbox 360'],
     ['xbox one', 'Xbox One'],
-    ['xbox series x', 'Xbox Series X/S'],
-    ['xbox series s', 'Xbox Series X/S'],
-    ['xbox series x/s', 'Xbox Series X/S'],
-    ['xbox series s/x', 'Xbox Series X/S']
+    ['xbox series x', 'Xbox Series X/S'], ['xbox series s', 'Xbox Series X/S'],
+    ['xbox series x/s', 'Xbox Series X/S'], ['xbox series s/x', 'Xbox Series X/S']
   ]);
 
   const canonical = value => {
     const raw = String(value || '').trim();
-    if (!raw) return raw;
-    return aliases.get(raw.toLowerCase()) || raw;
+    return raw ? (aliases.get(raw.toLowerCase()) || raw) : raw;
+  };
+
+  const dedupe = (items, keyFn) => {
+    const map = new Map();
+    items.forEach(item => map.set(keyFn(item), item));
+    return [...map.values()];
   };
 
   const normaliseData = data => {
     if (!data || typeof data !== 'object') return false;
     let changed = false;
-    for (const key of ['games', 'wishlist']) {
-      if (!Array.isArray(data[key])) continue;
-      data[key].forEach(item => {
-        if (!item || !item.platform) return;
+
+    if (Array.isArray(data.games)) {
+      data.games.forEach(item => {
+        if (!item?.platform) return;
         const next = canonical(item.platform);
-        if (next !== item.platform) {
-          item.platform = next;
-          changed = true;
-        }
+        if (next !== item.platform) { item.platform = next; changed = true; }
       });
+      const before = data.games.length;
+      data.games = dedupe(data.games, g => g?.id || `${g?.title || ''}|${g?.platform || ''}|${g?.category || ''}`);
+      if (data.games.length !== before) changed = true;
     }
+
+    if (Array.isArray(data.wishlist)) {
+      data.wishlist.forEach(item => {
+        if (!item?.platform) return;
+        const next = canonical(item.platform);
+        if (next !== item.platform) { item.platform = next; changed = true; }
+      });
+      const before = data.wishlist.length;
+      data.wishlist = dedupe(data.wishlist, w => `${w?.platform || ''}|${w?.title || ''}`);
+      if (data.wishlist.length !== before) changed = true;
+    }
+
     return changed;
   };
 
-  // Normalise the built-in seed before app.js reads it.
   if (window.MUSEUM_SEED) normaliseData(window.MUSEUM_SEED);
 
-  // Normalise any existing on-device museum data so old abbreviations disappear everywhere.
   ['theGameMuseumV352', 'theGameMuseumV35', 'theGameMuseumV34'].forEach(key => {
     try {
       const raw = localStorage.getItem(key);
@@ -98,15 +96,13 @@
   const tidyPlatformFilter = select => {
     if (!select) return;
     const all = [...select.options].find(o => o.value === '');
-    const options = [...select.options].filter(o => o.value !== '');
-    const sorted = options.sort((a, b) => {
-      const ar = rank(a.value), br = rank(b.value);
-      return ar - br || a.textContent.localeCompare(b.textContent);
-    });
+    const selected = select.value;
+    const sorted = [...select.options]
+      .filter(o => o.value !== '')
+      .sort((a, b) => rank(a.value) - rank(b.value) || a.textContent.localeCompare(b.textContent));
     const current = [...select.options].filter(o => o.value !== '').map(o => o.value).join('|');
     const desired = sorted.map(o => o.value).join('|');
     if (current === desired) return;
-    const selected = select.value;
     select.replaceChildren(...(all ? [all] : []), ...sorted);
     if ([...select.options].some(o => o.value === selected)) select.value = selected;
   };
