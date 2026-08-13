@@ -17,12 +17,21 @@
   box-shadow: none !important;
 }
 
-/* Collection cards keep their information panel styling, but artwork itself stays square-edged. */
+/* The card itself may stay styled, but it must not clip the square cover artwork. */
 .game-card {
-  overflow: hidden;
+  overflow: visible !important;
 }
 .game-card .game-cover {
   border-radius: 0 !important;
+  overflow: hidden !important;
+}
+.game-card .game-cover img {
+  border-radius: 0 !important;
+}
+
+/* Keep the information section visually attached to the cover. */
+.game-card .game-info {
+  border-radius: 0 0 16px 16px;
 }
 
 /* PS1 jewel cases keep their squarer aspect-ratio frame while using the same clean image style. */
