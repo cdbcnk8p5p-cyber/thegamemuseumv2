@@ -68,6 +68,67 @@ dialog{width:min(94vw,980px)}
 
 /* v3.5: FC 24 and FC 25 use the supplied full-case museum images; centred detail layout retained. */
 
-/* PS1 jewel-case covers: preserve the full square/landscape artwork instead of zoom-cropping it like modern cases. */
-.game-cover.ps1-jewel{aspect-ratio:1/1;background:linear-gradient(145deg,#0d2236,#071521);padding:8px}
-.game-cover.ps1-jewel img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+/* v3.5.4 — universal natural cover sizing.
+   Artwork keeps its original aspect ratio; no crop/frame; information panel attaches directly below. */
+.game-card{
+  border:0;
+  border-radius:0;
+  overflow:visible;
+  background:transparent;
+  box-shadow:none;
+  align-self:start;
+}
+.game-card:hover{transform:translateY(-4px);border-color:transparent;box-shadow:none}
+.game-cover{
+  aspect-ratio:auto;
+  height:auto;
+  min-height:0;
+  overflow:visible;
+  background:transparent;
+  border:0;
+  display:block;
+}
+.game-cover img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-width:100%;
+  object-fit:contain;
+  object-position:center;
+  border:0;
+  border-radius:0;
+  margin:0;
+}
+.game-cover .initials{
+  display:grid;
+  place-items:center;
+  width:100%;
+  aspect-ratio:3/4;
+  background:linear-gradient(145deg,#123d64,#071521);
+}
+.game-info{
+  margin:0;
+  padding:10px 11px 12px;
+  background:#0b1926;
+  border:1px solid #334a5f;
+  border-top:1px solid #334a5f;
+  border-radius:0 0 12px 12px;
+}
+/* Hall/latest cover also shows the full source image rather than cropping it. */
+.latest-cover{
+  aspect-ratio:auto;
+  height:auto;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.latest-cover img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  object-position:center;
+  border:0;
+  border-radius:0;
+}
