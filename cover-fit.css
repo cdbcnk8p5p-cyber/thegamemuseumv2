@@ -17,9 +17,10 @@
   box-shadow: none !important;
 }
 
-/* The card itself may stay styled, but it must not clip the square cover artwork. */
+/* Collection cards: square artwork at the top, rounded Museum styling only at the bottom. */
 .game-card {
   overflow: visible !important;
+  border-radius: 0 0 16px 16px !important;
 }
 .game-card .game-cover {
   border-radius: 0 !important;
@@ -28,10 +29,8 @@
 .game-card .game-cover img {
   border-radius: 0 !important;
 }
-
-/* Keep the information section visually attached to the cover. */
 .game-card .game-info {
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 16px 16px !important;
 }
 
 /* PS1 jewel cases keep their squarer aspect-ratio frame while using the same clean image style. */
