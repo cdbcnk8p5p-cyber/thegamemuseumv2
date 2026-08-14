@@ -13,6 +13,7 @@
   <link rel="icon" href="./icon-192.png">
   <link rel="apple-touch-icon" href="./icon-192.png">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./wishlist-gallery.css?v=1">
 </head>
 <body>
 <div class="ambient"></div>
@@ -106,12 +107,15 @@
   </section>
 
   <section id="wishlist" class="page">
-    <header class="page-head reveal"><span class="eyebrow">FUTURE ACQUISITIONS</span><h1>Wishlist</h1><p>Now arranged into neat platform galleries.</p></header>
-    <div class="filters reveal">
-      <input id="wishSearch" type="search" placeholder="Search wishlist">
-      <select id="wishPriority"><option value="">All priorities</option><option>Priority</option><option>Lower Priority</option><option>Holy Grail</option></select>
+    <header class="page-head reveal"><span class="eyebrow">FUTURE ACQUISITIONS</span><h1>Wishlist</h1><p>Browse future acquisitions as a cover gallery, then narrow the shelf by platform and console.</p></header>
+    <div class="filters reveal wishlist-filter-shelf">
+      <input id="wishSearch" class="wishlist-filter-search" type="search" placeholder="Search wishlist">
+      <label class="wishlist-filter-control"><span>Platform</span><select id="wishFamilyFilter"><option value="">All platforms</option></select></label>
+      <label class="wishlist-filter-control"><span>Console</span><select id="wishConsoleFilter" disabled><option value="">All consoles</option></select></label>
+      <label class="wishlist-filter-control wishlist-filter-type"><span>Wishlist type</span><select id="wishPriority"><option value="">All priorities</option></select></label>
     </div>
-    <div id="wishlistGroups" class="platform-groups"></div>
+    <div class="results-line"><span id="wishResultCount"></span><button id="wishClearFilters" class="text-link">Clear filters</button></div>
+    <div id="wishlistGroups" class="cover-grid wishlist-cover-grid"></div>
   </section>
 
   <section id="statistics" class="page">
@@ -179,7 +183,9 @@
 <script src="./haul-update-2026-08-12.js"></script>
 <script src="./nintendo-ds-update.js"></script>
 <script src="./nintendo-sega-update.js?v=1"></script>
+<script src="./wishlist-covers.js?v=1"></script>
 <script src="./filter-order.js?v=2"></script>
 <script src="./app.js"></script>
+<script src="./wishlist-gallery.js?v=1"></script>
 </body>
 </html>

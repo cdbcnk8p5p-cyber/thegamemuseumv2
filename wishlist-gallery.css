@@ -1,0 +1,33 @@
+/* Wishlist gallery — mirrors the Collection filter shelf and cover-card layout. */
+#wishlist .wishlist-filter-shelf{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+  padding:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+#wishlist .wishlist-filter-search{grid-column:1/-1;}
+#wishlist .wishlist-filter-control{display:grid;gap:6px;min-width:0;}
+#wishlist .wishlist-filter-control>span{
+  padding-left:3px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+#wishlist .wishlist-filter-control select{min-width:0;padding:12px 10px;border-radius:12px;font-size:14px;}
+#wishlist .wishlist-filter-control select:disabled{opacity:.55;}
+#wishlist .wishlist-filter-type{grid-column:1/-1;}
+#wishlist .wishlist-cover-grid{margin-top:12px;align-items:start;}
+#wishlist .wishlist-game-card{cursor:default;}
+#wishlist .wishlist-card-meta{display:block!important;margin-top:5px!important;color:#b9cbd8!important;font-size:10px!important;line-height:1.35;}
+#wishlist .wishlist-reason{margin-top:8px;color:#8fa6ba;font-size:10px;line-height:1.4;}
+body:not(.dark) #wishlist .wishlist-card-meta{color:#778899!important;}
+body:not(.dark) #wishlist .wishlist-reason{color:#718191;}
+@media(max-width:350px){
+  #wishlist .wishlist-filter-shelf{grid-template-columns:1fr!important;}
+  #wishlist .wishlist-filter-search,#wishlist .wishlist-filter-type{grid-column:1!important;}
+}
