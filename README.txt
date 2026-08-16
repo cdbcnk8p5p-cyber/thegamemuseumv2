@@ -22,3 +22,6 @@ NEW IN THIS UPDATE
 - Cover files are stored in assets/covers so they can be reused when a wishlist game is purchased; only an archive photo and purchase details need to be added later.
 
 No wishlist targets are added or removed by this update; it adds artwork and changes presentation/filtering only.
+
+Charlie cover update
+- Replaced Charlie and the Chocolate Factory (PlayStation 2) display cover with the exact user-supplied image.

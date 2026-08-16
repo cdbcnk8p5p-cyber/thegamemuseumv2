@@ -1,4 +1,4 @@
-const C='game-museum-v3-5-3-wishlist-gallery-v1',A=[
+const C='game-museum-v3-5-3-wishlist-gallery-v2-charlie',A=[
 './','./index.html','./styles.css','./app.js','./data.js','./haul-update-2026-08-12.js','./nintendo-ds-update.js','./nintendo-sega-update.js?v=1','./filter-order.js?v=2','./wishlist-covers.js?v=1','./wishlist-gallery.js?v=1','./wishlist-gallery.css?v=1','./manifest.webmanifest','./icon-192.png','./icon-512.png',
 './assets/covers/nfs.jpg','./assets/covers/mafia.jpg','./assets/covers/gta.jpg','./assets/covers/fc25.jpg','./assets/covers/fc24.jpg','./assets/covers/charlie-and-the-chocolate-factory-ps2.jpg','./assets/archive/charlie-and-the-chocolate-factory-ps2-original.jpg',
 './assets/covers/grand-theft-auto-2-ps1.jpg','./assets/covers/tomb-raider-ps1.jpg','./assets/covers/tomb-raider-iii-ps1.jpg','./assets/archive/grand-theft-auto-2-ps1-original.jpg','./assets/archive/tomb-raider-ps1-original.jpg','./assets/archive/tomb-raider-iii-ps1-original.jpg',
