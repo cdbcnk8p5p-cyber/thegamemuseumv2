@@ -105,7 +105,6 @@
       });
     });
 
-    // app.js rebuilds platformFilter during render(); keep the two-stage choices intact.
     const observer = new MutationObserver(() => {
       const selectedFamily = family.value;
       if (!selectedFamily) return;
