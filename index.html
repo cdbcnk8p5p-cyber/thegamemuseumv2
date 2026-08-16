@@ -85,7 +85,8 @@
     <header class="page-head reveal"><span class="eyebrow">THE GRAND CATALOGUE</span><h1>Collection</h1><p>Browse every preserved game, display piece and annual series entry.</p></header>
     <div class="filters reveal">
       <input id="searchInput" type="search" placeholder="Search titles, series or editions">
-      <select id="platformFilter"><option value="">All platforms</option></select>
+      <select id="familyFilter"><option value="">All platform families</option></select>
+      <select id="platformFilter"><option value="">All consoles</option></select>
       <select id="categoryFilter"><option value="">All galleries</option><option>Main Collection</option><option>Display Gallery</option></select>
       <select id="sortFilter"><option value="title">A–Z</option><option value="newest">Newest entries</option><option value="platform">Platform</option><option value="price">Highest price</option></select>
     </div>
@@ -180,11 +181,13 @@
 </dialog>
 <div id="toast" class="toast"></div>
 <script src="./data.js"></script>
-<script src="./haul-update-2026-08-12.js"></script>
+<script src="./platform-standard.js?v=1"></script>
+<script src="./haul-update-2026-08-12.js?v=2"></script>
 <script src="./nintendo-ds-update.js"></script>
 <script src="./nintendo-sega-update.js?v=1"></script>
 <script src="./ps2-update.js?v=1"></script>
 <script src="./wishlist-covers.js?v=2"></script>
+<script src="./data-integrity.js?v=1"></script>
 <script src="./filter-order.js?v=2"></script>
 <script src="./app.js"></script>
 <script src="./wishlist-gallery.js?v=1"></script>
