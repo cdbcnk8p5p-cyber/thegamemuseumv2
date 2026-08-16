@@ -1,25 +1,52 @@
-// The Game Museum — Collection platform family -> console filter.
-// Keeps the existing app renderer intact while restoring the two-stage filter UI.
+// The Game Museum — Collection platform family -> console filter + card price display.
+// Loaded after app.js so it can safely enhance the live collection renderer.
 (() => {
-  const FAMILY_ORDER = ['Nintendo', 'Sega', 'PlayStation', 'Xbox', 'Other'];
-
-  const familyOf = platform => {
-    const p = String(platform || '').trim();
-    if (p.startsWith('Nintendo ')) return 'Nintendo';
-    if (p.startsWith('Sega ')) return 'Sega';
-    if (p.startsWith('PlayStation ')) return 'PlayStation';
-    if (p.startsWith('Xbox ')) return 'Xbox';
-    return 'Other';
-  };
+  const FAMILY_ORDER = ['Nintendo', 'Sega', 'PlayStation', 'Xbox'];
 
   const canonical = value => typeof window.MUSEUM_CANONICAL_PLATFORM === 'function'
     ? window.MUSEUM_CANONICAL_PLATFORM(value)
     : String(value || '').trim();
 
+  const familyOf = platform => {
+    const p = canonical(platform).toLowerCase();
+    if (p.includes('nintendo')) return 'Nintendo';
+    if (p.includes('sega')) return 'Sega';
+    if (p.includes('playstation')) return 'PlayStation';
+    if (p.includes('xbox')) return 'Xbox';
+    return '';
+  };
+
   const rankPlatform = name => {
     const order = window.MUSEUM_PLATFORM_ORDER || [];
-    const i = order.indexOf(name);
+    const canonicalName = canonical(name);
+    const i = order.indexOf(canonicalName);
     return i === -1 ? order.length : i;
+  };
+
+  const patchCardPrices = () => {
+    try {
+      if (typeof card !== 'function' || card.__museumPricePatched) return;
+      const baseCard = card;
+      const gbp = new Intl.NumberFormat('en-GB', {style:'currency', currency:'GBP'});
+      const patched = function(g) {
+        const html = baseCard(g);
+        const hasPrice = !(g?.price === null || g?.price === undefined || g?.price === '');
+        const value = hasPrice ? gbp.format(Number(g.price) || 0) : 'Not recorded';
+        return html.replace(
+          '</h3></div></button>',
+          `</h3><div class="game-card-price"><span>Price</span><strong>${value}</strong></div></div></button>`
+        );
+      };
+      patched.__museumPricePatched = true;
+      card = patched;
+
+      if (!document.getElementById('museum-card-price-style')) {
+        const style = document.createElement('style');
+        style.id = 'museum-card-price-style';
+        style.textContent = '.game-card-price{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}.game-card-price span{font-size:10px;color:var(--muted);font-weight:700}.game-card-price strong{font-size:12px;color:var(--ink);font-weight:900;text-align:right}';
+        document.head.appendChild(style);
+      }
+    } catch (_) {}
   };
 
   const uniquePlatforms = () => {
@@ -36,19 +63,21 @@
     const grid = document.getElementById('collectionGrid');
     if (!grid) return 0;
     let count = 0;
-    grid.querySelectorAll('.game-card').forEach(card => {
+    grid.querySelectorAll('.game-card').forEach(cardEl => {
       let show = true;
       try {
-        const game = state.games.find(g => String(g.id) === String(card.dataset.id));
-        show = !!game && familyOf(canonical(game.platform)) === family;
+        const game = state.games.find(g => String(g.id) === String(cardEl.dataset.id));
+        show = !!game && familyOf(game.platform) === family;
       } catch (_) {}
-      card.hidden = !show;
+      cardEl.hidden = !show;
       if (show) count++;
     });
     return count;
   };
 
   const setup = () => {
+    patchCardPrices();
+
     const family = document.getElementById('familyFilter');
     const consoleSelect = document.getElementById('platformFilter');
     const resultCount = document.getElementById('resultCount');
@@ -65,7 +94,7 @@
     };
 
     const populateConsoles = (resetInvalid = true) => {
-      const current = consoleSelect.value;
+      const current = canonical(consoleSelect.value);
       const selectedFamily = family.value;
       const choices = platforms.filter(p => !selectedFamily || familyOf(p) === selectedFamily);
       consoleSelect.innerHTML = '<option value="">All consoles</option>' +
@@ -80,13 +109,14 @@
     };
 
     const rerender = () => {
+      patchCardPrices();
       try { if (typeof collection === 'function') collection(); } catch (_) {}
       queueMicrotask(applyFamily);
     };
 
     populateFamilies();
     populateConsoles(false);
-    applyFamily();
+    rerender();
 
     family.addEventListener('input', () => {
       populateConsoles(true);
@@ -105,11 +135,12 @@
       });
     });
 
+    // app.js rebuilds platformFilter during render(); keep the family-scoped console list intact.
     const observer = new MutationObserver(() => {
       const selectedFamily = family.value;
       if (!selectedFamily) return;
       const allowed = new Set(platforms.filter(p => familyOf(p) === selectedFamily));
-      const hasOutside = [...consoleSelect.options].some(o => o.value && !allowed.has(o.value));
+      const hasOutside = [...consoleSelect.options].some(o => o.value && !allowed.has(canonical(o.value)));
       if (hasOutside) populateConsoles(false);
     });
     observer.observe(consoleSelect, { childList:true });
