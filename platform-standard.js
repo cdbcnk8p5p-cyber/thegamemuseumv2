@@ -15,8 +15,8 @@
     'Xbox Original',
     'Xbox 360',
     'Xbox One',
-    'Xbox Cross Generation',
-    'Xbox Series X/S'
+    'Xbox Series X/S',
+    'Xbox Cross Generation'
   ];
 
   const aliases = new Map([
