@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const clean=v=>String(v??'').trim().replace(/\s+/g,' ');
   const normal=v=>clean(v).toLowerCase();
   const canonicalPlatform=v=>{
+    if(typeof window.MUSEUM_CANONICAL_PLATFORM==='function')return window.MUSEUM_CANONICAL_PLATFORM(v);
     const p=normal(v);
     const map={
       'ps1':'PlayStation 1','playstation 1':'PlayStation 1',
@@ -46,24 +47,25 @@ window.addEventListener('DOMContentLoaded',()=>{
     }
   }catch(_){}
 
-  const alpha=(a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'});
   const family=document.getElementById('familyFilter');
   const consoleSelect=document.getElementById('platformFilter');
   const gallery=document.getElementById('categoryFilter');
   const sort=document.getElementById('sortFilter');
+  const platformOrder=window.MUSEUM_PLATFORM_ORDER||[];
+  const familyOrder=['Nintendo','Sega','PlayStation','Xbox','Other'];
 
-  function alphabetiseSelect(select,keepFirst=true){
+  function orderSelect(select,ranker){
     if(!select)return;
     const current=select.value;
     const options=[...select.options];
-    const first=keepFirst?options.shift():null;
-    options.sort((a,b)=>alpha(a.textContent,b.textContent));
-    select.replaceChildren(...(first?[first]:[]),...options);
+    const first=options.find(o=>o.value==='');
+    const rest=options.filter(o=>o.value!=='').sort((a,b)=>ranker(a.value)-ranker(b.value)||a.textContent.localeCompare(b.textContent,undefined,{numeric:true,sensitivity:'base'}));
+    select.replaceChildren(...(first?[first]:[]),...rest);
     if([...select.options].some(o=>o.value===current))select.value=current;
   }
 
-  alphabetiseSelect(family,true);
-  alphabetiseSelect(consoleSelect,true);
+  orderSelect(family,name=>{const i=familyOrder.indexOf(name);return i===-1?familyOrder.length:i});
+  orderSelect(consoleSelect,name=>{const canonical=canonicalPlatform(name),i=platformOrder.indexOf(canonical);return i===-1?platformOrder.length:i});
 
   if(gallery){
     const current=gallery.value;
@@ -73,11 +75,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   if(sort){
     const current=sort.value;
-    sort.innerHTML='<option value="title">A–Z</option><option value="price">Highest price</option><option value="newest">Newest entries</option>';
+    sort.innerHTML='<option value="title">A–Z</option><option value="platform">Platform</option><option value="newest">Newest entries</option><option value="price">Highest price</option>';
     if([...sort.options].some(o=>o.value===current))sort.value=current;
-  }
-
-  if(family&&consoleSelect){
-    family.addEventListener('input',()=>setTimeout(()=>alphabetiseSelect(consoleSelect,true),0));
   }
 });
