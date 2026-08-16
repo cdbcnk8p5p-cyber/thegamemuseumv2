@@ -1,27 +1,16 @@
-THE GAME MUSEUM — WISHLIST GALLERY UPDATE
-14 August 2026
+THE GAME MUSEUM — PLAYSTATION 2 CUMULATIVE UPDATE
 
-Upload the CONTENTS of this folder into the root of the GitHub repository and replace matching files.
+Built from the latest working Wishlist Gallery + Charlie cover package.
 
-This is a cumulative update based on the last working Nintendo + Sega build. It preserves:
-- Nintendo DS artwork/archive update
-- Nintendo Switch / Wii / Sega Mega Drive artwork/archive update
-- natural full-cover layout (no crop/frame)
-- collection Platform -> Console filters
-- alphabetical filter ordering
-- duplicate-data safety layer and FIFA 08 PS3 ownership correction
-- latest NFS Most Wanted and Little Friends cover replacements
+Adds/updates:
+- 26 owned PlayStation 2 games with clean Museum cover art and physical-copy archive photographs.
+- 3 genuinely new owned catalogue records: F1 06, Grand Theft Auto III, and Grand Theft Auto: Vice City Stories.
+- Verified acquisition details where visible/known (CEX prices and F1 06 from Forgotten Worlds, Stewarton).
+- Naming cleanup for Club Football: Celtic, FIFA Football 2002–2005, and RS3: Racing Simulation Three.
+- Club Football 2005 added as a new PlayStation 2 wishlist target using the supplied cover.
+- Service worker cache bumped so new artwork refreshes on the Home Screen app.
 
-NEW IN THIS UPDATE
-- Adds all 36 supplied wishlist cover images.
-- Wishlist is now a cover-card gallery matching the Collection style.
-- Wishlist defaults to All platforms.
-- Platform family filter -> Console filter.
-- Wishlist type filter retained in a cleaner form.
-- Search, result count and Clear filters included.
-- Cover files are stored in assets/covers so they can be reused when a wishlist game is purchased; only an archive photo and purchase details need to be added later.
+UPLOAD
+Upload the CONTENTS of this folder into the GitHub repository root and replace matching files. Existing repository files not present in this folder should be left in place.
 
-No wishlist targets are added or removed by this update; it adds artwork and changes presentation/filtering only.
-
-Charlie cover update
-- Replaced Charlie and the Chocolate Factory (PlayStation 2) display cover with the exact user-supplied image.
+This package is cumulative: it retains the current collection filters, duplicate protection, FIFA 08 PS3 repair, Nintendo DS/Switch/Wii/Mega Drive updates, wishlist gallery, existing wishlist covers, and Charlie cover update.

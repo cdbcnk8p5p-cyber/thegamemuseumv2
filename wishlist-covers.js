@@ -1,4 +1,4 @@
-// Wishlist cover library — 36 platform-specific covers supplied 14 Aug 2026.
+// Wishlist cover library — platform-specific covers supplied through the PS2 catalogue update, 17 Aug 2026.
 (() => {
   const canonicalPlatform = value => {
     const raw=String(value||'').trim();
@@ -24,6 +24,7 @@
     {platform:'Nintendo Wii',titles:['The Simpsons Game'],image:'./assets/covers/the-simpsons-game-nintendo-wii.jpg'},
     {platform:'PlayStation 1',titles:['Grand Theft Auto'],image:'./assets/covers/grand-theft-auto-ps1.webp'},
     {platform:'PlayStation 1',titles:['F1 2000'],image:'./assets/covers/f1-2000-ps1.jpg'},
+    {platform:'PlayStation 2',titles:['Club Football 2005'],image:'./assets/covers/club-football-2005-ps2.jpg',edition:'Standard'},
     {platform:'PlayStation 2',titles:['FIFA 09'],image:'./assets/covers/fifa-09-ps2.webp'},
     {platform:'PlayStation 2',titles:['FIFA 10'],image:'./assets/covers/fifa-10-ps2.webp'},
     {platform:'PlayStation 2',titles:['FIFA 11'],image:'./assets/covers/fifa-11-ps2.webp'},
