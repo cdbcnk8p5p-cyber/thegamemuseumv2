@@ -15,6 +15,7 @@
     'Xbox Original',
     'Xbox 360',
     'Xbox One',
+    'Xbox Cross Generation',
     'Xbox Series X/S'
   ];
 
@@ -33,6 +34,7 @@
     ['xbox', 'Xbox Original'], ['original xbox', 'Xbox Original'], ['xbox original', 'Xbox Original'],
     ['xbox 360', 'Xbox 360'],
     ['xbox one', 'Xbox One'],
+    ['xbox cross generation', 'Xbox Cross Generation'], ['xbox cross-generation', 'Xbox Cross Generation'], ['xbox cross gen', 'Xbox Cross Generation'], ['xbox cross-gen', 'Xbox Cross Generation'],
     ['xbox series x', 'Xbox Series X/S'], ['xbox series s', 'Xbox Series X/S'],
     ['xbox series x/s', 'Xbox Series X/S'], ['xbox series s/x', 'Xbox Series X/S']
   ]);
@@ -79,14 +81,16 @@
 
   if (window.MUSEUM_SEED) normaliseData(window.MUSEUM_SEED);
 
-  ['theGameMuseumV352', 'theGameMuseumV35', 'theGameMuseumV34'].forEach(key => {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key || !key.startsWith('theGameMuseumV')) continue;
     try {
       const raw = localStorage.getItem(key);
-      if (!raw) return;
+      if (!raw) continue;
       const data = JSON.parse(raw);
       if (normaliseData(data)) localStorage.setItem(key, JSON.stringify(data));
     } catch (_) {}
-  });
+  }
 
   const rank = name => {
     const i = PLATFORM_ORDER.indexOf(name);
