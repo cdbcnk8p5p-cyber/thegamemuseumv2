@@ -1,25 +1,36 @@
 // The Game Museum — authoritative Collection filters + price cards.
-// Loaded after app.js so it can replace the legacy single-platform filter safely.
+// Loaded after app.js. This file deliberately renders last so the legacy single-platform
+// listener cannot leave the Cross Generation shelf empty.
 (() => {
   const FAMILY_ORDER = ['Nintendo', 'Sega', 'PlayStation', 'Xbox'];
   const CROSS = 'Xbox Cross Generation';
-  const titleKey = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
-  const CROSS_TITLES = new Set([
-    'call of duty black ops cold war',
-    'call of duty black ops 6',
-    'call of duty black ops 7',
-    'call of duty modern warfare ii',
-    'call of duty modern warfare iii',
-    'call of duty vanguard',
-    'ea sports fc 24',
-    'ea sports fc 25'
-  ]);
+  const CROSS_IDS = new Set(['GM-0015','GM-0016','GM-0017','GM-0018','GM-0019','GM-0020','GM-0021','GM-XCG-COLD-WAR']);
+
+  const titleKey = value => String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+
+  const crossTitleKey = key => {
+    if (!key) return false;
+    if (key.includes('black ops cold war')) return true;
+    if (key === 'call of duty black ops 6' || key === 'black ops 6') return true;
+    if (key === 'call of duty black ops 7' || key === 'black ops 7') return true;
+    if (key.startsWith('call of duty modern warfare ii') && !key.includes('modern warfare iii')) return true;
+    if (key.startsWith('call of duty modern warfare iii')) return true;
+    if (key === 'call of duty vanguard' || key === 'call of duty vanguard standard') return true;
+    if (key.startsWith('ea sports fc 24') || key === 'fc 24' || key === 'fc24') return true;
+    if (key.startsWith('ea sports fc 25') || key === 'fc 25' || key === 'fc25') return true;
+    return false;
+  };
 
   const canonical = value => typeof window.MUSEUM_CANONICAL_PLATFORM === 'function'
     ? window.MUSEUM_CANONICAL_PLATFORM(value)
     : String(value || '').trim();
-  const isCrossTitle = game => CROSS_TITLES.has(titleKey(game?.title));
-  const effectivePlatform = game => isCrossTitle(game) ? CROSS : canonical(game?.platform);
+
+  const isCrossGame = game => CROSS_IDS.has(String(game?.id || '')) || crossTitleKey(titleKey(game?.title));
+  const effectivePlatform = game => isCrossGame(game) ? CROSS : canonical(game?.platform);
 
   const familyOf = platform => {
     const name = canonical(platform);
@@ -41,25 +52,32 @@
     try {
       if (typeof state === 'undefined' || !Array.isArray(state.games)) return;
       let changed = false;
-      let coldWar = state.games.find(g => titleKey(g?.title) === 'call of duty black ops cold war');
 
-      state.games.forEach(game => {
-        if (!isCrossTitle(game)) return;
-        if (game.platform !== CROSS) { game.platform = CROSS; changed = true; }
-      });
-
+      let coldWar = state.games.find(g => String(g?.id || '') === 'GM-XCG-COLD-WAR' || titleKey(g?.title).includes('black ops cold war'));
       if (!coldWar) {
-        state.games.push({
-          id:'GM-XCG-COLD-WAR', title:'Call of Duty: Black Ops Cold War', platform:CROSS,
-          edition:'Standard', category:'Main Collection', series:'Call of Duty', status:'Owned', display:'No',
+        coldWar = {
+          id:'GM-XCG-COLD-WAR',
+          title:'Call of Duty: Black Ops Cold War',
+          platform:CROSS,
+          edition:'Standard',
+          category:'Main Collection',
+          series:'Call of Duty',
+          status:'Owned',
+          display:'No',
           shop:'', date:'', price:null,
           notes:'Owned physical copy. Recategorised as Xbox Cross Generation; purchase details not recorded.'
-        });
-        changed = true;
-      } else if (coldWar.platform !== CROSS) {
-        coldWar.platform = CROSS;
+        };
+        state.games.push(coldWar);
         changed = true;
       }
+
+      state.games.forEach(game => {
+        if (!isCrossGame(game)) return;
+        if (game.platform !== CROSS) {
+          game.platform = CROSS;
+          changed = true;
+        }
+      });
 
       const seen = new Set();
       const before = state.games.length;
@@ -135,18 +153,20 @@
     function renderCollection(){
       ensureCrossGeneration();
       patchCardPrices();
+
       const q = norm(search.value);
       const fam = family.value;
-      const p = canonical(consoleSelect.value);
+      const selected = canonical(consoleSelect.value);
       const c = gallery.value;
       const sortMode = sort.value;
 
       let arr = state.games.filter(g => {
         const gp = effectivePlatform(g);
         const hay = norm([g.title,gp,g.series,g.edition,g.category].join(' '));
+        const platformMatch = !selected || (selected === CROSS ? isCrossGame(g) : gp === selected);
         return (!q || hay.includes(q)) &&
           (!fam || familyOf(gp) === fam) &&
-          (!p || gp === p) &&
+          platformMatch &&
           (!c || g.category === c);
       });
 
@@ -159,13 +179,13 @@
 
       if (resultCount) resultCount.textContent = `${arr.length} ${arr.length === 1 ? 'record' : 'records'}`;
       grid.innerHTML = arr.map(g => {
-        if (isCrossTitle(g) && g.platform !== CROSS) g.platform = CROSS;
+        if (isCrossGame(g)) g.platform = CROSS;
         return card(g);
       }).join('') || '<article class="panel">No catalogue records found.</article>';
       $$('.game-card').forEach(x => x.onclick = () => openGame(x.dataset.id));
     }
 
-    // Replace the legacy functions so future render() calls use the two-stage filter too.
+    // Keep future render() calls aligned with the new system.
     try { collection = renderCollection; } catch (_) {}
     try { platformFilter = () => populateConsoles(false); } catch (_) {}
 
@@ -173,11 +193,25 @@
     populateConsoles(false);
     renderCollection();
 
-    family.addEventListener('input', () => { populateConsoles(true); renderCollection(); });
-    consoleSelect.addEventListener('input', renderCollection);
-    search.addEventListener('input', renderCollection);
-    gallery.addEventListener('input', renderCollection);
-    sort.addEventListener('input', renderCollection);
+    const renderLast = () => {
+      // The legacy app.js listener was registered first. Render again after the event stack
+      // so this authoritative renderer is always the final one visible to the user.
+      setTimeout(() => {
+        ensureCrossGeneration();
+        populateConsoles(false);
+        renderCollection();
+      }, 0);
+    };
+
+    family.addEventListener('input', () => { populateConsoles(true); renderLast(); });
+    family.addEventListener('change', () => { populateConsoles(true); renderLast(); });
+    consoleSelect.addEventListener('input', renderLast);
+    consoleSelect.addEventListener('change', renderLast);
+    search.addEventListener('input', renderLast);
+    gallery.addEventListener('input', renderLast);
+    gallery.addEventListener('change', renderLast);
+    sort.addEventListener('input', renderLast);
+    sort.addEventListener('change', renderLast);
 
     const clear = document.getElementById('clearFilters');
     if (clear) clear.onclick = () => {
@@ -186,10 +220,9 @@
       gallery.value = '';
       sort.value = 'title';
       populateConsoles(true);
-      renderCollection();
+      renderLast();
     };
 
-    // If an older listener rebuilds the console select first, immediately restore the authoritative list.
     let restoring = false;
     const observer = new MutationObserver(() => {
       if (restoring) return;
@@ -197,14 +230,18 @@
       const values = [...consoleSelect.options].filter(o => o.value).map(o => canonical(o.value));
       if (allowed.join('|') !== values.join('|')) {
         restoring = true;
+        const selectedBefore = canonical(consoleSelect.value);
         populateConsoles(false);
+        if (allowed.includes(selectedBefore)) consoleSelect.value = selectedBefore;
         restoring = false;
+        renderLast();
       }
     });
     observer.observe(consoleSelect, {childList:true});
 
-    setTimeout(() => { populateFamilies(); populateConsoles(false); renderCollection(); }, 100);
-    setTimeout(() => { populateFamilies(); populateConsoles(false); renderCollection(); }, 700);
+    // Re-assert after all DOMContentLoaded work and any saved-state migrations finish.
+    setTimeout(() => { ensureCrossGeneration(); populateFamilies(); populateConsoles(false); renderCollection(); }, 100);
+    setTimeout(() => { ensureCrossGeneration(); populateFamilies(); populateConsoles(false); renderCollection(); }, 800);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
