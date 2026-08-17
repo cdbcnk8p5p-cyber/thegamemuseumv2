@@ -1,19 +1,9 @@
-// The Game Museum — Collection platform family -> console filter + card price display.
-// Loaded after app.js so it can safely enhance the live collection renderer.
+// The Game Museum — authoritative Collection filters + price cards.
+// Loaded after app.js so it can replace the legacy single-platform filter safely.
 (() => {
   const FAMILY_ORDER = ['Nintendo', 'Sega', 'PlayStation', 'Xbox'];
   const CROSS = 'Xbox Cross Generation';
-
-  const canonical = value => typeof window.MUSEUM_CANONICAL_PLATFORM === 'function'
-    ? window.MUSEUM_CANONICAL_PLATFORM(value)
-    : String(value || '').trim();
-
-  const titleKey = value => String(value || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim()
-    .replace(/\s+/g, ' ');
-
+  const titleKey = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
   const CROSS_TITLES = new Set([
     'call of duty black ops cold war',
     'call of duty black ops 6',
@@ -24,6 +14,12 @@
     'ea sports fc 24',
     'ea sports fc 25'
   ]);
+
+  const canonical = value => typeof window.MUSEUM_CANONICAL_PLATFORM === 'function'
+    ? window.MUSEUM_CANONICAL_PLATFORM(value)
+    : String(value || '').trim();
+  const isCrossTitle = game => CROSS_TITLES.has(titleKey(game?.title));
+  const effectivePlatform = game => isCrossTitle(game) ? CROSS : canonical(game?.platform);
 
   const familyOf = platform => {
     const name = canonical(platform);
@@ -37,41 +33,26 @@
 
   const rankPlatform = name => {
     const order = window.MUSEUM_PLATFORM_ORDER || [];
-    const canonicalName = canonical(name);
-    const i = order.indexOf(canonicalName);
+    const i = order.indexOf(canonical(name));
     return i === -1 ? order.length : i;
   };
 
-  const ensureCrossGeneration = () => {
+  function ensureCrossGeneration(){
     try {
-      if (typeof state === 'undefined' || !Array.isArray(state.games)) return false;
+      if (typeof state === 'undefined' || !Array.isArray(state.games)) return;
       let changed = false;
-      let coldWar = null;
+      let coldWar = state.games.find(g => titleKey(g?.title) === 'call of duty black ops cold war');
 
       state.games.forEach(game => {
-        if (!game) return;
-        const key = titleKey(game.title);
-        if (key === 'call of duty black ops cold war') coldWar = game;
-        if (!CROSS_TITLES.has(key)) return;
-        if (game.platform !== CROSS) {
-          game.platform = CROSS;
-          changed = true;
-        }
+        if (!isCrossTitle(game)) return;
+        if (game.platform !== CROSS) { game.platform = CROSS; changed = true; }
       });
 
       if (!coldWar) {
         state.games.push({
-          id:'GM-XCG-COLD-WAR',
-          title:'Call of Duty: Black Ops Cold War',
-          platform:CROSS,
-          edition:'Standard',
-          category:'Main Collection',
-          series:'Call of Duty',
-          status:'Owned',
-          display:'No',
-          shop:'',
-          date:'',
-          price:null,
+          id:'GM-XCG-COLD-WAR', title:'Call of Duty: Black Ops Cold War', platform:CROSS,
+          edition:'Standard', category:'Main Collection', series:'Call of Duty', status:'Owned', display:'No',
+          shop:'', date:'', price:null,
           notes:'Owned physical copy. Recategorised as Xbox Cross Generation; purchase details not recorded.'
         });
         changed = true;
@@ -83,37 +64,29 @@
       const seen = new Set();
       const before = state.games.length;
       state.games = state.games.filter(game => {
-        const key = [titleKey(game?.title), canonical(game?.platform).toLowerCase(), String(game?.edition || 'Standard').toLowerCase(), String(game?.category || 'Main Collection').toLowerCase()].join('|');
+        const key = [titleKey(game?.title), effectivePlatform(game).toLowerCase(), String(game?.edition || 'Standard').toLowerCase(), String(game?.category || 'Main Collection').toLowerCase()].join('|');
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
       });
       if (state.games.length !== before) changed = true;
-
       if (changed && typeof save === 'function') save();
-      return changed;
-    } catch (_) {
-      return false;
-    }
-  };
+    } catch (_) {}
+  }
 
-  const patchCardPrices = () => {
+  function patchCardPrices(){
     try {
       if (typeof card !== 'function' || card.__museumPricePatched) return;
       const baseCard = card;
       const gbp = new Intl.NumberFormat('en-GB', {style:'currency', currency:'GBP'});
-      const patched = function(g) {
+      const patched = function(g){
         const html = baseCard(g);
         const hasPrice = !(g?.price === null || g?.price === undefined || g?.price === '');
         const value = hasPrice ? gbp.format(Number(g.price) || 0) : 'Not recorded';
-        return html.replace(
-          '</h3></div></button>',
-          `</h3><div class="game-card-price"><span>Price</span><strong>${value}</strong></div></div></button>`
-        );
+        return html.replace('</h3></div></button>', `</h3><div class="game-card-price"><span>Price</span><strong>${value}</strong></div></div></button>`);
       };
       patched.__museumPricePatched = true;
       card = patched;
-
       if (!document.getElementById('museum-card-price-style')) {
         const style = document.createElement('style');
         style.id = 'museum-card-price-style';
@@ -121,127 +94,118 @@
         document.head.appendChild(style);
       }
     } catch (_) {}
-  };
+  }
 
-  const uniquePlatforms = () => {
-    try {
-      return [...new Set((state?.games || []).map(g => canonical(g?.platform)).filter(Boolean))]
-        .sort((a, b) => rankPlatform(a) - rankPlatform(b) || a.localeCompare(b, undefined, {numeric:true, sensitivity:'base'}));
-    } catch (_) {
-      return [];
-    }
-  };
-
-  const visibleCountForFamily = family => {
-    if (!family) return null;
-    const grid = document.getElementById('collectionGrid');
-    if (!grid) return 0;
-    let count = 0;
-    grid.querySelectorAll('.game-card').forEach(cardEl => {
-      let show = true;
-      try {
-        const game = state.games.find(g => String(g.id) === String(cardEl.dataset.id));
-        show = !!game && familyOf(game.platform) === family;
-      } catch (_) {}
-      cardEl.hidden = !show;
-      if (show) count++;
-    });
-    return count;
-  };
-
-  const setup = () => {
+  function setup(){
     ensureCrossGeneration();
     patchCardPrices();
 
     const family = document.getElementById('familyFilter');
     const consoleSelect = document.getElementById('platformFilter');
+    const search = document.getElementById('searchInput');
+    const gallery = document.getElementById('categoryFilter');
+    const sort = document.getElementById('sortFilter');
     const resultCount = document.getElementById('resultCount');
-    if (!family || !consoleSelect) return;
+    const grid = document.getElementById('collectionGrid');
+    if (!family || !consoleSelect || !search || !gallery || !sort || !grid) return;
 
-    const scrubOther = () => {
-      [...family.options].forEach(option => {
-        if (String(option.value).toLowerCase() === 'other' || String(option.textContent).trim().toLowerCase() === 'other') option.remove();
-      });
-      if (family.value === 'Other') family.value = '';
+    const currentPlatforms = () => {
+      ensureCrossGeneration();
+      return [...new Set((state?.games || []).map(effectivePlatform).filter(Boolean))]
+        .sort((a,b) => rankPlatform(a) - rankPlatform(b) || a.localeCompare(b, undefined, {numeric:true,sensitivity:'base'}));
     };
 
-    const populateFamilies = () => {
-      ensureCrossGeneration();
-      const platforms = uniquePlatforms();
+    function populateFamilies(){
+      const current = family.value;
+      const platforms = currentPlatforms();
       const families = FAMILY_ORDER.filter(name => platforms.some(p => familyOf(p) === name));
-      const current = family.value === 'Other' ? '' : family.value;
-      family.innerHTML = '<option value="">All platform families</option>' +
-        families.map(name => `<option value="${name}">${name}</option>`).join('');
+      family.innerHTML = '<option value="">All platform families</option>' + families.map(name => `<option value="${name}">${name}</option>`).join('');
       if (families.includes(current)) family.value = current;
-      scrubOther();
-    };
+    }
 
-    const populateConsoles = (resetInvalid = true) => {
-      ensureCrossGeneration();
-      const platforms = uniquePlatforms();
+    function populateConsoles(resetInvalid=true){
       const current = canonical(consoleSelect.value);
       const selectedFamily = family.value;
-      const choices = platforms
-        .filter(p => !selectedFamily || familyOf(p) === selectedFamily)
-        .sort((a,b) => rankPlatform(a) - rankPlatform(b) || a.localeCompare(b, undefined, {numeric:true,sensitivity:'base'}));
-      consoleSelect.innerHTML = '<option value="">All consoles</option>' +
-        choices.map(p => `<option value="${p}">${p}</option>`).join('');
+      const choices = currentPlatforms().filter(p => !selectedFamily || familyOf(p) === selectedFamily);
+      consoleSelect.innerHTML = '<option value="">All consoles</option>' + choices.map(p => `<option value="${p}">${p}</option>`).join('');
       if (choices.includes(current)) consoleSelect.value = current;
       else if (resetInvalid) consoleSelect.value = '';
-    };
+    }
 
-    const applyFamily = () => {
-      const count = visibleCountForFamily(family.value);
-      if (count !== null && resultCount) resultCount.textContent = `${count} ${count === 1 ? 'record' : 'records'}`;
-    };
-
-    const rerender = () => {
+    function renderCollection(){
       ensureCrossGeneration();
       patchCardPrices();
-      try { if (typeof collection === 'function') collection(); } catch (_) {}
-      queueMicrotask(applyFamily);
-    };
+      const q = norm(search.value);
+      const fam = family.value;
+      const p = canonical(consoleSelect.value);
+      const c = gallery.value;
+      const sortMode = sort.value;
+
+      let arr = state.games.filter(g => {
+        const gp = effectivePlatform(g);
+        const hay = norm([g.title,gp,g.series,g.edition,g.category].join(' '));
+        return (!q || hay.includes(q)) &&
+          (!fam || familyOf(gp) === fam) &&
+          (!p || gp === p) &&
+          (!c || g.category === c);
+      });
+
+      arr.sort((a,b) => {
+        if (sortMode === 'platform') return effectivePlatform(a).localeCompare(effectivePlatform(b)) || a.title.localeCompare(b.title);
+        if (sortMode === 'price') return (Number(b.price)||0) - (Number(a.price)||0);
+        if (sortMode === 'newest') return String(b.date||'').localeCompare(String(a.date||''));
+        return a.title.localeCompare(b.title);
+      });
+
+      if (resultCount) resultCount.textContent = `${arr.length} ${arr.length === 1 ? 'record' : 'records'}`;
+      grid.innerHTML = arr.map(g => {
+        if (isCrossTitle(g) && g.platform !== CROSS) g.platform = CROSS;
+        return card(g);
+      }).join('') || '<article class="panel">No catalogue records found.</article>';
+      $$('.game-card').forEach(x => x.onclick = () => openGame(x.dataset.id));
+    }
+
+    // Replace the legacy functions so future render() calls use the two-stage filter too.
+    try { collection = renderCollection; } catch (_) {}
+    try { platformFilter = () => populateConsoles(false); } catch (_) {}
 
     populateFamilies();
     populateConsoles(false);
-    rerender();
+    renderCollection();
 
-    family.addEventListener('input', () => {
-      populateConsoles(true);
-      rerender();
-    });
+    family.addEventListener('input', () => { populateConsoles(true); renderCollection(); });
+    consoleSelect.addEventListener('input', renderCollection);
+    search.addEventListener('input', renderCollection);
+    gallery.addEventListener('input', renderCollection);
+    sort.addEventListener('input', renderCollection);
 
-    ['searchInput', 'platformFilter', 'categoryFilter', 'sortFilter'].forEach(id => {
-      document.getElementById(id)?.addEventListener('input', () => queueMicrotask(applyFamily));
-    });
-
-    document.getElementById('clearFilters')?.addEventListener('click', () => {
+    const clear = document.getElementById('clearFilters');
+    if (clear) clear.onclick = () => {
+      search.value = '';
       family.value = '';
-      queueMicrotask(() => {
-        populateConsoles(true);
-        rerender();
-      });
+      gallery.value = '';
+      sort.value = 'title';
+      populateConsoles(true);
+      renderCollection();
+    };
+
+    // If an older listener rebuilds the console select first, immediately restore the authoritative list.
+    let restoring = false;
+    const observer = new MutationObserver(() => {
+      if (restoring) return;
+      const allowed = currentPlatforms().filter(p => !family.value || familyOf(p) === family.value);
+      const values = [...consoleSelect.options].filter(o => o.value).map(o => canonical(o.value));
+      if (allowed.join('|') !== values.join('|')) {
+        restoring = true;
+        populateConsoles(false);
+        restoring = false;
+      }
     });
+    observer.observe(consoleSelect, {childList:true});
 
-    // app.js or an older cached helper may rebuild the selects. Keep this filter authoritative.
-    const familyObserver = new MutationObserver(() => scrubOther());
-    familyObserver.observe(family, {childList:true});
-
-    const consoleObserver = new MutationObserver(() => {
-      const selectedFamily = family.value;
-      if (!selectedFamily) return;
-      const platforms = uniquePlatforms();
-      const allowed = new Set(platforms.filter(p => familyOf(p) === selectedFamily));
-      const hasOutside = [...consoleSelect.options].some(o => o.value && !allowed.has(canonical(o.value)));
-      const missingAllowed = [...allowed].some(p => ![...consoleSelect.options].some(o => canonical(o.value) === p));
-      if (hasOutside || missingAllowed) populateConsoles(false);
-    });
-    consoleObserver.observe(consoleSelect, { childList:true });
-
-    // Re-assert once late-running scripts have finished and saved-state migrations settle.
-    setTimeout(() => { ensureCrossGeneration(); populateFamilies(); populateConsoles(false); rerender(); }, 50);
-    setTimeout(() => { ensureCrossGeneration(); populateFamilies(); populateConsoles(false); rerender(); }, 500);
-  };
+    setTimeout(() => { populateFamilies(); populateConsoles(false); renderCollection(); }, 100);
+    setTimeout(() => { populateFamilies(); populateConsoles(false); renderCollection(); }, 700);
+  }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
   else setup();
