@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v1';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v2';
 const CORE=[
   './',
   './index.html',
