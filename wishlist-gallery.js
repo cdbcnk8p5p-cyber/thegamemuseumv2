@@ -4,6 +4,7 @@
   const lower=v=>clean(v).toLowerCase();
   const alpha=(a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true,sensitivity:'base'});
   const canonical=v=>{
+    if(typeof window.MUSEUM_CANONICAL_PLATFORM==='function')return window.MUSEUM_CANONICAL_PLATFORM(v);
     const p=lower(v);
     const map={
       'ds':'Nintendo DS','nintendo ds':'Nintendo DS',
@@ -19,7 +20,8 @@
       'ps vita':'PlayStation Vita','playstation vita':'PlayStation Vita',
       'xbox':'Xbox Original','xbox original':'Xbox Original',
       'xbox 360':'Xbox 360','xbox one':'Xbox One',
-      'xbox series x':'Xbox Series X/S','xbox series x/s':'Xbox Series X/S'
+      'xbox series x':'Xbox Series X/S','xbox series x/s':'Xbox Series X/S',
+      'xbox cross generation':'Xbox Cross Generation','xbox cross-generation':'Xbox Cross Generation'
     };
     return map[p]||clean(v);
   };
@@ -27,9 +29,9 @@
     Nintendo:['Nintendo DS','Nintendo Switch','Nintendo Wii'],
     PlayStation:['PlayStation 1','PlayStation 2','PlayStation 3','PlayStation 4','PlayStation 5','PlayStation Portable','PlayStation Vita'],
     Sega:['Sega Mega Drive'],
-    Xbox:['Xbox Original','Xbox 360','Xbox One','Xbox Series X/S']
+    Xbox:['Xbox Original','Xbox 360','Xbox One','Xbox Series X/S','Xbox Cross Generation']
   };
-  const familyFor=p=>Object.keys(families).find(f=>families[f].includes(canonical(p)))||'Other';
+  const familyFor=p=>Object.keys(families).find(f=>families[f].includes(canonical(p)))||'';
   const coverHtml=w=>{
     const image=w.image||'';
     return `<div class="game-cover">${image?`<img src="${esc(image)}" alt="${esc(w.title)} cover art" loading="lazy"><div class="initials" style="display:none">${esc(initials(w.title))}</div>`:`<div class="initials">${esc(initials(w.title))}</div>`}</div>`;
@@ -88,7 +90,9 @@
       select.disabled=true;
       return;
     }
-    const available=[...new Set((state.wishlist||[]).filter(w=>lower(w.status)!=='purchased'&&familyFor(w.platform)===selectedFamily).map(w=>canonical(w.platform)))].sort(alpha);
+    const order=window.MUSEUM_PLATFORM_ORDER||[];
+    const rank=p=>{const i=order.indexOf(p);return i===-1?order.length:i};
+    const available=[...new Set((state.wishlist||[]).filter(w=>lower(w.status)!=='purchased'&&familyFor(w.platform)===selectedFamily).map(w=>canonical(w.platform)))].sort((a,b)=>rank(a)-rank(b)||alpha(a,b));
     select.disabled=false;
     select.innerHTML=`<option value="">All ${selectedFamily} consoles</option>`+available.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
     if(available.includes(previous))select.value=previous;
@@ -102,7 +106,9 @@
     const clear=document.getElementById('wishClearFilters');
     if(!family||!consoleSelect||!type||!search)return;
 
-    const presentFamilies=[...new Set((state.wishlist||[]).filter(w=>lower(w.status)!=='purchased').map(w=>familyFor(w.platform)))].sort(alpha);
+    const familyOrder=['Nintendo','Sega','PlayStation','Xbox'];
+    const presentSet=new Set((state.wishlist||[]).filter(w=>lower(w.status)!=='purchased').map(w=>familyFor(w.platform)).filter(Boolean));
+    const presentFamilies=familyOrder.filter(f=>presentSet.has(f));
     family.innerHTML='<option value="">All platforms</option>'+presentFamilies.map(f=>`<option value="${esc(f)}">${esc(f)}</option>`).join('');
 
     const preferred=['Priority Acquisition','Shelf Completion','Generation Crossover','Simpsons Collection'];
