@@ -1,4 +1,4 @@
-// Museum-wide platform naming and ordering standard.
+// Museum-wide platform naming, ordering, Collection shelf selector and service-worker handoff.
 (() => {
   const PLATFORM_ORDER = [
     'Nintendo DS',
@@ -116,6 +116,104 @@
     const observer = new MutationObserver(() => tidyPlatformFilter(select));
     observer.observe(select, { childList: true });
     queueMicrotask(() => tidyPlatformFilter(select));
+  }
+
+  function installShelfServiceWorkerRedirect() {
+    try {
+      if (!('serviceWorker' in navigator) || typeof ServiceWorkerContainer === 'undefined') return;
+      const proto = ServiceWorkerContainer.prototype;
+      const currentRegister = proto.register;
+      if (!currentRegister || currentRegister.__museumShelfRedirect) return;
+      const wrapped = function(scriptURL, options) {
+        const raw = String(scriptURL || '');
+        const next = /(^|\/)sw\.js(?:[?#].*)?$/.test(raw) ? './sw-shelf-tabs.js' : scriptURL;
+        return currentRegister.call(this, next, options);
+      };
+      wrapped.__museumShelfRedirect = true;
+      proto.register = wrapped;
+    } catch (_) {}
+  }
+
+  function setupShelfSelector() {
+    const collectionPage = document.getElementById('collection');
+    const filters = collectionPage?.querySelector('.filters');
+    const gallery = document.getElementById('categoryFilter');
+    if (!collectionPage || !filters || !gallery || document.getElementById('shelfSelector')) return;
+
+    const selector = document.createElement('div');
+    selector.id = 'shelfSelector';
+    selector.className = 'shelf-selector reveal';
+    selector.setAttribute('role', 'group');
+    selector.setAttribute('aria-label', 'Choose collection shelf');
+
+    const shelves = [
+      { value: 'Main Collection', icon: '🎮', label: 'Main Shelf' },
+      { value: 'Display Gallery', icon: '🏆', label: 'Display Shelf' },
+      { value: '', icon: '🏛️', label: 'All Games' }
+    ];
+
+    shelves.forEach(({value, icon, label}) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'shelf-tab';
+      button.dataset.shelf = value;
+      button.setAttribute('aria-pressed', 'false');
+      button.innerHTML = `<span class="shelf-tab-icon" aria-hidden="true">${icon}</span><span>${label}</span>`;
+      selector.appendChild(button);
+    });
+
+    filters.before(selector);
+    gallery.style.display = 'none';
+    gallery.setAttribute('aria-hidden', 'true');
+    gallery.tabIndex = -1;
+
+    if (!document.getElementById('museum-shelf-selector-style')) {
+      const style = document.createElement('style');
+      style.id = 'museum-shelf-selector-style';
+      style.textContent = `
+        .shelf-selector{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px;padding:6px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+        .shelf-tab{min-width:0;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:13px;padding:11px 8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:900;cursor:pointer;transition:.18s}
+        .shelf-tab:hover{background:var(--surface2);color:var(--ink)}
+        .shelf-tab[aria-pressed="true"]{background:linear-gradient(135deg,var(--navy),var(--navy2));border-color:rgba(215,170,56,.45);color:#fff;box-shadow:0 7px 18px rgba(9,24,39,.18)}
+        .shelf-tab[aria-pressed="true"] .shelf-tab-icon{filter:none}
+        .shelf-tab-icon{font-size:15px;line-height:1}
+        @media(max-width:390px){.shelf-tab{gap:4px;padding:10px 4px;font-size:10px}.shelf-tab-icon{font-size:14px}}
+      `;
+      document.head.appendChild(style);
+    }
+
+    const buttons = [...selector.querySelectorAll('.shelf-tab')];
+    const sync = () => {
+      const value = gallery.value;
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.shelf === value)));
+    };
+    const choose = value => {
+      gallery.value = value;
+      sync();
+      gallery.dispatchEvent(new Event('input', {bubbles:true}));
+    };
+
+    buttons.forEach(button => button.addEventListener('click', () => choose(button.dataset.shelf)));
+    gallery.addEventListener('input', sync);
+    gallery.addEventListener('change', sync);
+
+    const clear = document.getElementById('clearFilters');
+    if (clear) clear.addEventListener('click', () => setTimeout(sync, 0));
+
+    if (!['Main Collection', 'Display Gallery', ''].includes(gallery.value)) gallery.value = 'Main Collection';
+    sync();
+  }
+
+  installShelfServiceWorkerRedirect();
+
+  const scheduleShelfSetup = () => setTimeout(setupShelfSelector, 0);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleShelfSetup);
+  else scheduleShelfSetup();
+
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => {
+      setTimeout(() => navigator.serviceWorker.register('./sw-shelf-tabs.js').catch(() => {}), 1200);
+    }, {once:true});
   }
 
   window.MUSEUM_PLATFORM_ORDER = PLATFORM_ORDER;
