@@ -1,4 +1,4 @@
-const C='game-museum-v3-5-3-cross-gen-v2',A=[
+const C='game-museum-v3-5-3-cross-gen-v4',A=[
 './','./index.html','./styles.css','./app.js','./data.js','./platform-standard.js?v=1','./haul-update-2026-08-12.js?v=2','./nintendo-ds-update.js','./nintendo-sega-update.js?v=1','./ps2-update.js?v=1','./data-integrity.js?v=1','./filter-order.js?v=3','./collection-platform-filter.js?v=2','./wishlist-covers.js?v=2','./wishlist-gallery.js?v=1','./wishlist-gallery.css?v=1','./manifest.webmanifest','./icon-192.png','./icon-512.png',
 './assets/covers/nfs.jpg','./assets/covers/mafia.jpg','./assets/covers/gta.jpg','./assets/covers/fc25.jpg','./assets/covers/fc24.jpg','./assets/covers/charlie-and-the-chocolate-factory-ps2.jpg','./assets/archive/charlie-and-the-chocolate-factory-ps2-original.jpg',
 './assets/covers/grand-theft-auto-2-ps1.jpg','./assets/covers/tomb-raider-ps1.jpg','./assets/covers/tomb-raider-iii-ps1.jpg','./assets/archive/grand-theft-auto-2-ps1-original.jpg','./assets/archive/tomb-raider-ps1-original.jpg','./assets/archive/tomb-raider-iii-ps1-original.jpg',
