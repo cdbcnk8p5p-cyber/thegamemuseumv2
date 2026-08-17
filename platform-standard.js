@@ -217,6 +217,46 @@
       searchOwner.after(row);
     }
 
+    const familyForPlatform = value => {
+      const p = canonical(value).toLowerCase();
+      if (p.includes('nintendo')) return 'Nintendo';
+      if (p.includes('playstation')) return 'PlayStation';
+      if (p.includes('sega')) return 'Sega';
+      if (p.includes('xbox')) return 'Xbox';
+      return '';
+    };
+    const palette = {
+      Nintendo: {background:'#d71920', border:'#ff565b'},
+      PlayStation: {background:'#0758c7', border:'#3d8cff'},
+      Sega: {background:'#111111', border:'#4c5965'},
+      Xbox: {background:'#16811e', border:'#4dbb54'}
+    };
+    const applySelectColour = (element, familyName, fallbackBackground='#0b1926', fallbackBorder='#294158') => {
+      const colours = palette[familyName];
+      element.style.background = colours?.background || fallbackBackground;
+      element.style.borderColor = colours?.border || fallbackBorder;
+      element.style.color = '#fff';
+      element.style.fontWeight = colours ? '850' : '600';
+      element.style.boxShadow = colours ? `inset 0 0 0 1px ${colours.border}33` : 'none';
+    };
+    const syncFilterColours = () => {
+      const selectedFamily = family.value || familyForPlatform(consoleSelect.value);
+      applySelectColour(family, family.value ? family.value : selectedFamily);
+      applySelectColour(consoleSelect, selectedFamily);
+      applySelectColour(sort, '', '#34485d', '#536a80');
+    };
+
+    family.addEventListener('input', () => setTimeout(syncFilterColours, 0));
+    family.addEventListener('change', () => setTimeout(syncFilterColours, 0));
+    consoleSelect.addEventListener('input', syncFilterColours);
+    consoleSelect.addEventListener('change', syncFilterColours);
+    sort.addEventListener('input', syncFilterColours);
+    sort.addEventListener('change', syncFilterColours);
+    new MutationObserver(() => setTimeout(syncFilterColours, 0)).observe(consoleSelect, {childList:true});
+    new MutationObserver(() => setTimeout(syncFilterColours, 0)).observe(family, {childList:true});
+    setTimeout(syncFilterColours, 0);
+    setTimeout(syncFilterColours, 250);
+
     if (!document.getElementById('museum-shelf-selector-style')) {
       const style = document.createElement('style');
       style.id = 'museum-shelf-selector-style';
@@ -230,7 +270,7 @@
         #collection .filters>label,#collection .filters>#searchInput{width:100%;min-width:0}
         .museum-filter-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;align-items:end}
         .museum-filter-controls>label,.museum-filter-controls>select{min-width:0;width:100%;margin:0}
-        .museum-filter-controls select{width:100%}
+        .museum-filter-controls select{width:100%;transition:background .18s,border-color .18s,box-shadow .18s;color-scheme:dark}
         @media(max-width:620px){.museum-filter-controls{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.museum-filter-controls label{font-size:9px}.museum-filter-controls select{padding:12px 8px;font-size:14px}.shelf-tab{gap:5px;padding:10px 5px;font-size:11px}}
         @media(max-width:390px){.shelf-tab{gap:4px;padding:10px 4px;font-size:10px}.shelf-tab-icon{font-size:14px}.museum-filter-controls{gap:6px}.museum-filter-controls select{padding:11px 6px;font-size:13px}}
       `;
