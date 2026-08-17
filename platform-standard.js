@@ -138,34 +138,84 @@
     const collectionPage = document.getElementById('collection');
     const filters = collectionPage?.querySelector('.filters');
     const gallery = document.getElementById('categoryFilter');
-    if (!collectionPage || !filters || !gallery || document.getElementById('shelfSelector')) return;
+    const search = document.getElementById('searchInput');
+    const family = document.getElementById('familyFilter');
+    const consoleSelect = document.getElementById('platformFilter');
+    const sort = document.getElementById('sortFilter');
+    if (!collectionPage || !filters || !gallery || !search || !family || !consoleSelect || !sort) return;
 
-    const selector = document.createElement('div');
-    selector.id = 'shelfSelector';
-    selector.className = 'shelf-selector reveal';
-    selector.setAttribute('role', 'group');
-    selector.setAttribute('aria-label', 'Choose collection shelf');
+    if (!document.getElementById('shelfSelector')) {
+      const selector = document.createElement('div');
+      selector.id = 'shelfSelector';
+      selector.className = 'shelf-selector reveal';
+      selector.setAttribute('role', 'group');
+      selector.setAttribute('aria-label', 'Choose collection shelf');
 
-    const shelves = [
-      { value: 'Main Collection', icon: '🎮', label: 'Main Shelf' },
-      { value: 'Display Gallery', icon: '🏆', label: 'Display Shelf' },
-      { value: '', icon: '🏛️', label: 'All Games' }
-    ];
+      const shelves = [
+        { value: 'Main Collection', icon: '🎮', label: 'Main Shelf' },
+        { value: 'Display Gallery', icon: '🏆', label: 'Display Shelf' },
+        { value: '', icon: '🏛️', label: 'All Games' }
+      ];
 
-    shelves.forEach(({value, icon, label}) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'shelf-tab';
-      button.dataset.shelf = value;
-      button.setAttribute('aria-pressed', 'false');
-      button.innerHTML = `<span class="shelf-tab-icon" aria-hidden="true">${icon}</span><span>${label}</span>`;
-      selector.appendChild(button);
-    });
+      shelves.forEach(({value, icon, label}) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'shelf-tab';
+        button.dataset.shelf = value;
+        button.setAttribute('aria-pressed', 'false');
+        button.innerHTML = `<span class="shelf-tab-icon" aria-hidden="true">${icon}</span><span>${label}</span>`;
+        selector.appendChild(button);
+      });
 
-    filters.before(selector);
-    gallery.style.display = 'none';
+      filters.before(selector);
+
+      const buttons = [...selector.querySelectorAll('.shelf-tab')];
+      const sync = () => {
+        const value = gallery.value;
+        buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.shelf === value)));
+      };
+      const choose = value => {
+        gallery.value = value;
+        sync();
+        gallery.dispatchEvent(new Event('input', {bubbles:true}));
+      };
+
+      buttons.forEach(button => button.addEventListener('click', () => choose(button.dataset.shelf)));
+      gallery.addEventListener('input', sync);
+      gallery.addEventListener('change', sync);
+      const clear = document.getElementById('clearFilters');
+      if (clear) clear.addEventListener('click', () => setTimeout(sync, 0));
+      if (!['Main Collection', 'Display Gallery', ''].includes(gallery.value)) gallery.value = 'Main Collection';
+      sync();
+    }
+
+    // Remove the old Gallery control as a visible filter, including a label/wrapper if another layer added one.
+    const galleryContainer = gallery.closest('label');
+    if (galleryContainer && galleryContainer !== filters) galleryContainer.style.display = 'none';
+    else gallery.style.display = 'none';
     gallery.setAttribute('aria-hidden', 'true');
     gallery.tabIndex = -1;
+
+    // Rebuild the visible filter card into a clean search row + three controls.
+    if (!document.getElementById('museumFilterControls')) {
+      const owner = element => {
+        const label = element.closest('label');
+        return label && filters.contains(label) ? label : element;
+      };
+      const searchOwner = owner(search);
+      const familyOwner = owner(family);
+      const consoleOwner = owner(consoleSelect);
+      const sortOwner = owner(sort);
+
+      const row = document.createElement('div');
+      row.id = 'museumFilterControls';
+      row.className = 'museum-filter-controls';
+
+      // Keep the search at the top and put Platform, Console and Sort together beneath it.
+      filters.prepend(searchOwner);
+      row.append(familyOwner, consoleOwner, sortOwner);
+      searchOwner.after(row);
+    }
 
     if (!document.getElementById('museum-shelf-selector-style')) {
       const style = document.createElement('style');
@@ -175,33 +225,17 @@
         .shelf-tab{min-width:0;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:13px;padding:11px 8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:900;cursor:pointer;transition:.18s}
         .shelf-tab:hover{background:var(--surface2);color:var(--ink)}
         .shelf-tab[aria-pressed="true"]{background:linear-gradient(135deg,var(--navy),var(--navy2));border-color:rgba(215,170,56,.45);color:#fff;box-shadow:0 7px 18px rgba(9,24,39,.18)}
-        .shelf-tab[aria-pressed="true"] .shelf-tab-icon{filter:none}
         .shelf-tab-icon{font-size:15px;line-height:1}
-        @media(max-width:390px){.shelf-tab{gap:4px;padding:10px 4px;font-size:10px}.shelf-tab-icon{font-size:14px}}
+        #collection .filters{display:flex!important;flex-direction:column!important;gap:14px!important}
+        #collection .filters>label,#collection .filters>#searchInput{width:100%;min-width:0}
+        .museum-filter-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;align-items:end}
+        .museum-filter-controls>label,.museum-filter-controls>select{min-width:0;width:100%;margin:0}
+        .museum-filter-controls select{width:100%}
+        @media(max-width:620px){.museum-filter-controls{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.museum-filter-controls label{font-size:9px}.museum-filter-controls select{padding:12px 8px;font-size:14px}.shelf-tab{gap:5px;padding:10px 5px;font-size:11px}}
+        @media(max-width:390px){.shelf-tab{gap:4px;padding:10px 4px;font-size:10px}.shelf-tab-icon{font-size:14px}.museum-filter-controls{gap:6px}.museum-filter-controls select{padding:11px 6px;font-size:13px}}
       `;
       document.head.appendChild(style);
     }
-
-    const buttons = [...selector.querySelectorAll('.shelf-tab')];
-    const sync = () => {
-      const value = gallery.value;
-      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.shelf === value)));
-    };
-    const choose = value => {
-      gallery.value = value;
-      sync();
-      gallery.dispatchEvent(new Event('input', {bubbles:true}));
-    };
-
-    buttons.forEach(button => button.addEventListener('click', () => choose(button.dataset.shelf)));
-    gallery.addEventListener('input', sync);
-    gallery.addEventListener('change', sync);
-
-    const clear = document.getElementById('clearFilters');
-    if (clear) clear.addEventListener('click', () => setTimeout(sync, 0));
-
-    if (!['Main Collection', 'Display Gallery', ''].includes(gallery.value)) gallery.value = 'Main Collection';
-    sync();
   }
 
   installShelfServiceWorkerRedirect();
