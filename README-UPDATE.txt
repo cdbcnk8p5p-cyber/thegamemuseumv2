@@ -1,27 +1,41 @@
-THE GAME MUSEUM — PS3 + DISPLAY GAMES UPDATE
+THE GAME MUSEUM — PS4 MAIN SHELF UPDATE
 
-Upload the CONTENTS of this ZIP to the repository root, preserving the folders.
+Upload the CONTENTS of this ZIP to the root of the GitHub repository, preserving the assets/covers and assets/archive folders.
 
-This package is incremental for images: it contains ONLY the new PS3/display images supplied in this batch. Existing Museum images are intentionally not duplicated.
+This is a cumulative-code / incremental-image update:
+- collection-platform-filter.js contains all previous PS3/Display/Cross-Generation/filter/sorting/totals behaviour plus this PS4 batch.
+- sw.js preserves the existing offline cache list, adds the new PS4 assets, and bumps the cache version.
+- Only images supplied in the PS4 round are included. No previous Nintendo, PS2, PS3, wishlist or other existing images are repeated.
 
-Changes included:
-- 24 PS3 Main Shelf games receive exact user-supplied covers/archive photos and purchase data where known.
-- Adds F1 2014, F1 Race Stars and 2014 FIFA World Cup Brazil as owned PS3 Main Shelf records.
-- 2014 FIFA World Cup Brazil is included in the FIFA / EA Sports FC exhibit. FIFA Street is explicitly kept in that exhibit too.
-- Adds/updates Display Games: GTA V Steelbook PS3, F1 2016 Steelbook PS4, FIFA 16 Deluxe PS4, GTA III Platinum PS2, The Last of Us Steelbook PS3, F1 2017 Special Edition PS4 and F1 2019 Legends Edition PS4.
-- Existing display-only NFS Most Wanted and other display records remain Display Games and are not counted in Main Shelf Total.
-- Collection filter is now Main Shelf / Display Games / All Games, defaulting to Main Shelf.
-- Homepage totals are Main Shelf Total / Display Games Total / All Games Total.
-- Main Shelf + Display Games = All Games; no display record is counted in both.
-- Price cards, Cross Generation, Add Acquisition platform dropdowns, Highest/Lowest Price and Oldest/Newest sorting are preserved. Unknown prices stay excluded from price sorting.
-- Service worker cache bumped to force the update.
+PS4 BATCH
+- 24 Main Shelf records
+- 24 exact user-supplied clean covers
+- 24 physical-copy archive photos
+- 48 new image files total
 
-Purchase details used from this batch:
-Forgotten Worlds, Stewarton: Batman Arkham City £2; F1 2012 £2; F1 2016 Steelbook £8.
-CEX: F1 2013 Complete £15; F1 2014 £8; F1 Race Stars £3; FIFA 12 £0.50; 2014 FIFA World Cup Brazil £5; GTA Episodes from Liberty City £8; L.A. Noire £2.50; PDC Darts Pro Tour £15; The Simpsons Game £22; The Last of Us £5; F1 2017 Special £5; F1 2019 Legends £8.
-Cash Converters: GTA IV £4.99; Red Dead Redemption £4.
-All unspecified shops/prices/dates remain unknown. FIFA 13 remains unknown (no price sticker).
+Known CEX prices recorded:
+- F1 2015: £5.00
+- F1 2016: £6.00
+- F1 2018: £5.00
+- F1 2020: £15.00
+- FIFA 14: £2.50
+- FIFA 16: £2.00
+- FIFA 17: £0.50
+- FIFA 20: £2.50
+- L.A. Noire: £15.00
+- Marvel's Spider-Man: £10.00
+- The Last of Us Remastered: £10.00
+- The Last of Us Part II: £18.00
 
-IMAGE RULE: all supplied images are copied byte-for-byte. No generated, repainted, redrawn or reconstructed artwork is included.
+All other purchase prices/shops/dates in this batch remain unrecorded unless already explicitly supplied in this round.
 
-After upload, fully close/reopen the Museum (or refresh twice) so the new service worker takes control.
+Important collection rules preserved:
+- Main Shelf and Display Games remain separate and are not double-counted.
+- F1 2016 Standard (PS4) is Main Shelf; the F1 2016 Steelbook remains Display Games.
+- FIFA 16 Standard (PS4) is Main Shelf; the FIFA 16 Deluxe Edition remains Display Games.
+- FIFA titles remain in the FIFA / EA Sports FC exhibit.
+- PES 2015 and PES 2017 use the separate PES series.
+- GTA V PS4 remains a separate platform copy in the Grand Theft Auto exhibit.
+- Exact supplied cover files are copied/renamed only; no generated or reconstructed artwork is used.
+
+After GitHub Pages rebuilds, fully close/reopen the installed Museum if needed so the new service-worker cache activates.
