@@ -2,17 +2,19 @@
 // Loaded after app.js so it can safely enhance the live collection renderer.
 (() => {
   const FAMILY_ORDER = ['Nintendo', 'Sega', 'PlayStation', 'Xbox'];
+  const CROSS = 'Xbox Cross Generation';
 
   const canonical = value => typeof window.MUSEUM_CANONICAL_PLATFORM === 'function'
     ? window.MUSEUM_CANONICAL_PLATFORM(value)
     : String(value || '').trim();
 
   const familyOf = platform => {
-    const p = canonical(platform).toLowerCase();
+    const name = canonical(platform);
+    const p = name.toLowerCase();
+    if (name === CROSS || p.includes('xbox')) return 'Xbox';
     if (p.includes('nintendo')) return 'Nintendo';
     if (p.includes('sega')) return 'Sega';
     if (p.includes('playstation')) return 'PlayStation';
-    if (p.includes('xbox')) return 'Xbox';
     return '';
   };
 
@@ -86,17 +88,27 @@
     const platforms = uniquePlatforms();
     const families = FAMILY_ORDER.filter(name => platforms.some(p => familyOf(p) === name));
 
+    const scrubOther = () => {
+      [...family.options].forEach(option => {
+        if (String(option.value).toLowerCase() === 'other' || String(option.textContent).trim().toLowerCase() === 'other') option.remove();
+      });
+      if (family.value === 'Other') family.value = '';
+    };
+
     const populateFamilies = () => {
-      const current = family.value;
+      const current = family.value === 'Other' ? '' : family.value;
       family.innerHTML = '<option value="">All platform families</option>' +
         families.map(name => `<option value="${name}">${name}</option>`).join('');
       if (families.includes(current)) family.value = current;
+      scrubOther();
     };
 
     const populateConsoles = (resetInvalid = true) => {
       const current = canonical(consoleSelect.value);
       const selectedFamily = family.value;
-      const choices = platforms.filter(p => !selectedFamily || familyOf(p) === selectedFamily);
+      const choices = platforms
+        .filter(p => !selectedFamily || familyOf(p) === selectedFamily)
+        .sort((a,b) => rankPlatform(a) - rankPlatform(b) || a.localeCompare(b, undefined, {numeric:true,sensitivity:'base'}));
       consoleSelect.innerHTML = '<option value="">All consoles</option>' +
         choices.map(p => `<option value="${p}">${p}</option>`).join('');
       if (choices.includes(current)) consoleSelect.value = current;
@@ -119,6 +131,7 @@
     rerender();
 
     family.addEventListener('input', () => {
+      if (family.value === 'Other') family.value = 'Xbox';
       populateConsoles(true);
       rerender();
     });
@@ -135,15 +148,22 @@
       });
     });
 
-    // app.js rebuilds platformFilter during render(); keep the family-scoped console list intact.
-    const observer = new MutationObserver(() => {
+    // app.js or an older cached helper may rebuild the selects. Keep this filter authoritative.
+    const familyObserver = new MutationObserver(() => scrubOther());
+    familyObserver.observe(family, {childList:true});
+
+    const consoleObserver = new MutationObserver(() => {
       const selectedFamily = family.value;
       if (!selectedFamily) return;
       const allowed = new Set(platforms.filter(p => familyOf(p) === selectedFamily));
       const hasOutside = [...consoleSelect.options].some(o => o.value && !allowed.has(canonical(o.value)));
       if (hasOutside) populateConsoles(false);
     });
-    observer.observe(consoleSelect, { childList:true });
+    consoleObserver.observe(consoleSelect, { childList:true });
+
+    // Re-assert once late-running scripts have finished.
+    setTimeout(() => { populateFamilies(); populateConsoles(false); applyFamily(); }, 50);
+    setTimeout(() => { populateFamilies(); populateConsoles(false); applyFamily(); }, 500);
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
