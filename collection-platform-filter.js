@@ -8,6 +8,23 @@
     ? window.MUSEUM_CANONICAL_PLATFORM(value)
     : String(value || '').trim();
 
+  const titleKey = value => String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+
+  const CROSS_TITLES = new Set([
+    'call of duty black ops cold war',
+    'call of duty black ops 6',
+    'call of duty black ops 7',
+    'call of duty modern warfare ii',
+    'call of duty modern warfare iii',
+    'call of duty vanguard',
+    'ea sports fc 24',
+    'ea sports fc 25'
+  ]);
+
   const familyOf = platform => {
     const name = canonical(platform);
     const p = name.toLowerCase();
@@ -23,6 +40,61 @@
     const canonicalName = canonical(name);
     const i = order.indexOf(canonicalName);
     return i === -1 ? order.length : i;
+  };
+
+  const ensureCrossGeneration = () => {
+    try {
+      if (typeof state === 'undefined' || !Array.isArray(state.games)) return false;
+      let changed = false;
+      let coldWar = null;
+
+      state.games.forEach(game => {
+        if (!game) return;
+        const key = titleKey(game.title);
+        if (key === 'call of duty black ops cold war') coldWar = game;
+        if (!CROSS_TITLES.has(key)) return;
+        if (game.platform !== CROSS) {
+          game.platform = CROSS;
+          changed = true;
+        }
+      });
+
+      if (!coldWar) {
+        state.games.push({
+          id:'GM-XCG-COLD-WAR',
+          title:'Call of Duty: Black Ops Cold War',
+          platform:CROSS,
+          edition:'Standard',
+          category:'Main Collection',
+          series:'Call of Duty',
+          status:'Owned',
+          display:'No',
+          shop:'',
+          date:'',
+          price:null,
+          notes:'Owned physical copy. Recategorised as Xbox Cross Generation; purchase details not recorded.'
+        });
+        changed = true;
+      } else if (coldWar.platform !== CROSS) {
+        coldWar.platform = CROSS;
+        changed = true;
+      }
+
+      const seen = new Set();
+      const before = state.games.length;
+      state.games = state.games.filter(game => {
+        const key = [titleKey(game?.title), canonical(game?.platform).toLowerCase(), String(game?.edition || 'Standard').toLowerCase(), String(game?.category || 'Main Collection').toLowerCase()].join('|');
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      if (state.games.length !== before) changed = true;
+
+      if (changed && typeof save === 'function') save();
+      return changed;
+    } catch (_) {
+      return false;
+    }
   };
 
   const patchCardPrices = () => {
@@ -78,15 +150,13 @@
   };
 
   const setup = () => {
+    ensureCrossGeneration();
     patchCardPrices();
 
     const family = document.getElementById('familyFilter');
     const consoleSelect = document.getElementById('platformFilter');
     const resultCount = document.getElementById('resultCount');
     if (!family || !consoleSelect) return;
-
-    const platforms = uniquePlatforms();
-    const families = FAMILY_ORDER.filter(name => platforms.some(p => familyOf(p) === name));
 
     const scrubOther = () => {
       [...family.options].forEach(option => {
@@ -96,6 +166,9 @@
     };
 
     const populateFamilies = () => {
+      ensureCrossGeneration();
+      const platforms = uniquePlatforms();
+      const families = FAMILY_ORDER.filter(name => platforms.some(p => familyOf(p) === name));
       const current = family.value === 'Other' ? '' : family.value;
       family.innerHTML = '<option value="">All platform families</option>' +
         families.map(name => `<option value="${name}">${name}</option>`).join('');
@@ -104,6 +177,8 @@
     };
 
     const populateConsoles = (resetInvalid = true) => {
+      ensureCrossGeneration();
+      const platforms = uniquePlatforms();
       const current = canonical(consoleSelect.value);
       const selectedFamily = family.value;
       const choices = platforms
@@ -121,6 +196,7 @@
     };
 
     const rerender = () => {
+      ensureCrossGeneration();
       patchCardPrices();
       try { if (typeof collection === 'function') collection(); } catch (_) {}
       queueMicrotask(applyFamily);
@@ -131,7 +207,6 @@
     rerender();
 
     family.addEventListener('input', () => {
-      if (family.value === 'Other') family.value = 'Xbox';
       populateConsoles(true);
       rerender();
     });
@@ -155,15 +230,17 @@
     const consoleObserver = new MutationObserver(() => {
       const selectedFamily = family.value;
       if (!selectedFamily) return;
+      const platforms = uniquePlatforms();
       const allowed = new Set(platforms.filter(p => familyOf(p) === selectedFamily));
       const hasOutside = [...consoleSelect.options].some(o => o.value && !allowed.has(canonical(o.value)));
-      if (hasOutside) populateConsoles(false);
+      const missingAllowed = [...allowed].some(p => ![...consoleSelect.options].some(o => canonical(o.value) === p));
+      if (hasOutside || missingAllowed) populateConsoles(false);
     });
     consoleObserver.observe(consoleSelect, { childList:true });
 
-    // Re-assert once late-running scripts have finished.
-    setTimeout(() => { populateFamilies(); populateConsoles(false); applyFamily(); }, 50);
-    setTimeout(() => { populateFamilies(); populateConsoles(false); applyFamily(); }, 500);
+    // Re-assert once late-running scripts have finished and saved-state migrations settle.
+    setTimeout(() => { ensureCrossGeneration(); populateFamilies(); populateConsoles(false); rerender(); }, 50);
+    setTimeout(() => { ensureCrossGeneration(); populateFamilies(); populateConsoles(false); rerender(); }, 500);
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
