@@ -189,14 +189,12 @@
       sync();
     }
 
-    // Remove the old Gallery control as a visible filter, including a label/wrapper if another layer added one.
     const galleryContainer = gallery.closest('label');
     if (galleryContainer && galleryContainer !== filters) galleryContainer.style.display = 'none';
     else gallery.style.display = 'none';
     gallery.setAttribute('aria-hidden', 'true');
     gallery.tabIndex = -1;
 
-    // Rebuild the visible filter card into a clean search row + three controls.
     if (!document.getElementById('museumFilterControls')) {
       const owner = element => {
         const label = element.closest('label');
@@ -210,8 +208,6 @@
       const row = document.createElement('div');
       row.id = 'museumFilterControls';
       row.className = 'museum-filter-controls';
-
-      // Keep the search at the top and put Platform, Console and Sort together beneath it.
       filters.prepend(searchOwner);
       row.append(familyOwner, consoleOwner, sortOwner);
       searchOwner.after(row);
@@ -292,4 +288,195 @@
 
   window.MUSEUM_PLATFORM_ORDER = PLATFORM_ORDER;
   window.MUSEUM_CANONICAL_PLATFORM = canonical;
+})();
+
+// Custom colour-coded Collection pickers.
+// iOS ignores background colours on native <option> sheets, so these visible menus
+// drive the original selects underneath and keep all existing filter behaviour intact.
+(() => {
+  const PALETTE = {
+    Nintendo: {background:'#d71920', border:'#ff565b'},
+    PlayStation: {background:'#0758c7', border:'#3d8cff'},
+    Sega: {background:'#111111', border:'#4c5965'},
+    Xbox: {background:'#16811e', border:'#4dbb54'}
+  };
+  const NEUTRAL = {background:'#24384b', border:'#536a80'};
+
+  const platformFamily = value => {
+    const p = String(value || '').toLowerCase();
+    if (p.includes('nintendo')) return 'Nintendo';
+    if (p.includes('playstation')) return 'PlayStation';
+    if (p.includes('sega')) return 'Sega';
+    if (p.includes('xbox')) return 'Xbox';
+    return '';
+  };
+
+  const coloursFor = family => PALETTE[family] || NEUTRAL;
+  const closeAll = except => {
+    document.querySelectorAll('.museum-custom-select.open').forEach(control => {
+      if (control === except) return;
+      control.classList.remove('open');
+      control.querySelector('.museum-custom-select-trigger')?.setAttribute('aria-expanded','false');
+    });
+  };
+
+  function buildCustomSelect(select, kind, familySelect) {
+    if (!select || select.dataset.museumCustomSelect === 'yes') return null;
+    select.dataset.museumCustomSelect = 'yes';
+    select.classList.add('museum-native-select-hook');
+    select.style.display = 'none';
+    select.setAttribute('aria-hidden','true');
+    select.tabIndex = -1;
+
+    const control = document.createElement('div');
+    control.className = `museum-custom-select museum-custom-${kind}`;
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'museum-custom-select-trigger';
+    trigger.setAttribute('aria-haspopup','listbox');
+    trigger.setAttribute('aria-expanded','false');
+    const valueText = document.createElement('span');
+    valueText.className = 'museum-custom-select-value';
+    const arrow = document.createElement('span');
+    arrow.className = 'museum-custom-select-arrow';
+    arrow.setAttribute('aria-hidden','true');
+    arrow.textContent = '⌄';
+    trigger.append(valueText, arrow);
+
+    const menu = document.createElement('div');
+    menu.className = 'museum-custom-select-menu';
+    menu.setAttribute('role','listbox');
+    control.append(trigger, menu);
+    select.insertAdjacentElement('afterend', control);
+
+    const familyForOption = option => {
+      if (kind === 'family') return option.value || '';
+      if (!option.value) return familySelect?.value || '';
+      return platformFamily(option.value);
+    };
+    const familyForTrigger = () => {
+      if (kind === 'family') return select.value || '';
+      return familySelect?.value || platformFamily(select.value);
+    };
+    const paint = (element, family) => {
+      const c = coloursFor(family);
+      element.style.background = c.background;
+      element.style.borderColor = c.border;
+      element.style.color = '#fff';
+    };
+
+    const syncTrigger = () => {
+      const selected = select.options[select.selectedIndex] || select.options[0];
+      valueText.textContent = selected?.textContent || (kind === 'family' ? 'All platform families' : 'All consoles');
+      paint(trigger, familyForTrigger());
+      [...menu.querySelectorAll('.museum-custom-option')].forEach(button => {
+        button.classList.toggle('selected', button.dataset.value === select.value);
+        button.setAttribute('aria-selected', String(button.dataset.value === select.value));
+      });
+    };
+
+    const rebuild = () => {
+      menu.innerHTML = '';
+      [...select.options].forEach(option => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'museum-custom-option';
+        button.dataset.value = option.value;
+        button.setAttribute('role','option');
+        const label = document.createElement('span');
+        label.textContent = option.textContent;
+        const tick = document.createElement('span');
+        tick.className = 'museum-custom-option-tick';
+        tick.textContent = '✓';
+        button.append(label, tick);
+        paint(button, familyForOption(option));
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          select.value = option.value;
+          select.dispatchEvent(new Event('input',{bubbles:true}));
+          select.dispatchEvent(new Event('change',{bubbles:true}));
+          control.classList.remove('open');
+          trigger.setAttribute('aria-expanded','false');
+          setTimeout(syncTrigger,0);
+        });
+        menu.appendChild(button);
+      });
+      syncTrigger();
+    };
+
+    trigger.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const opening = !control.classList.contains('open');
+      closeAll(control);
+      control.classList.toggle('open', opening);
+      trigger.setAttribute('aria-expanded', String(opening));
+      if (opening) rebuild();
+    });
+
+    select.addEventListener('input', syncTrigger);
+    select.addEventListener('change', syncTrigger);
+    new MutationObserver(() => setTimeout(rebuild,0)).observe(select,{childList:true,subtree:true});
+    rebuild();
+    return {control,rebuild,syncTrigger};
+  }
+
+  function install() {
+    const family = document.getElementById('familyFilter');
+    const consoleSelect = document.getElementById('platformFilter');
+    const row = document.getElementById('museumFilterControls');
+    if (!family || !consoleSelect || !row) {
+      setTimeout(install,80);
+      return;
+    }
+    if (document.getElementById('museum-custom-select-style')) return;
+
+    const style = document.createElement('style');
+    style.id = 'museum-custom-select-style';
+    style.textContent = `
+      .museum-custom-select{position:relative;width:100%;min-width:0}
+      .museum-custom-select-trigger{width:100%;min-width:0;min-height:48px;border:1px solid #536a80;border-radius:14px;padding:12px 10px;display:flex;align-items:center;justify-content:space-between;gap:7px;text-align:left;font-size:14px;font-weight:850;cursor:pointer;transition:.18s;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+      .museum-custom-select-value{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .museum-custom-select-arrow{font-size:17px;line-height:1;flex:0 0 auto;transition:transform .18s}
+      .museum-custom-select.open .museum-custom-select-arrow{transform:rotate(180deg)}
+      .museum-custom-select-menu{display:none;position:absolute;z-index:180;top:calc(100% + 7px);left:0;right:0;max-height:min(330px,55vh);overflow:auto;padding:6px;background:#07131f;border:1px solid #334a5f;border-radius:14px;box-shadow:0 22px 55px rgba(0,0,0,.55);-webkit-overflow-scrolling:touch}
+      .museum-custom-select.open .museum-custom-select-menu{display:block}
+      .museum-custom-option{width:100%;border:1px solid #536a80;border-radius:10px;margin:0 0 6px;padding:11px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;text-align:left;font-size:13px;font-weight:850;cursor:pointer}
+      .museum-custom-option:last-child{margin-bottom:0}
+      .museum-custom-option-tick{opacity:0;font-weight:950}
+      .museum-custom-option.selected{box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
+      .museum-custom-option.selected .museum-custom-option-tick{opacity:1}
+      .museum-filter-controls>label .museum-native-select-hook + .museum-custom-select{margin-top:0}
+      @media(max-width:620px){.museum-custom-select-trigger{min-height:46px;padding:11px 8px;font-size:13px}.museum-custom-option{font-size:12px;padding:10px 9px}}
+      @media(max-width:390px){.museum-custom-select-trigger{padding:10px 6px;font-size:12px}.museum-custom-option{font-size:11px}}
+    `;
+    document.head.appendChild(style);
+
+    const familyCustom = buildCustomSelect(family,'family',family);
+    const consoleCustom = buildCustomSelect(consoleSelect,'console',family);
+
+    family.addEventListener('input', () => setTimeout(() => {
+      familyCustom?.syncTrigger();
+      consoleCustom?.rebuild();
+    },0));
+    family.addEventListener('change', () => setTimeout(() => {
+      familyCustom?.syncTrigger();
+      consoleCustom?.rebuild();
+    },0));
+
+    const clear = document.getElementById('clearFilters');
+    clear?.addEventListener('click', () => setTimeout(() => {
+      familyCustom?.syncTrigger();
+      consoleCustom?.rebuild();
+    },10));
+
+    document.addEventListener('click', () => closeAll());
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeAll();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(install,40));
+  else setTimeout(install,40);
 })();
