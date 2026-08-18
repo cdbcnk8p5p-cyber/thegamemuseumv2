@@ -1,0 +1,13 @@
+/* Collection stacking order: cards < filters/dropdowns < scrim < drawer. */
+#collection .shelf-selector{position:relative!important;z-index:30!important}
+#collection .filters{position:relative!important;z-index:40!important;overflow:visible!important}
+#collection .museum-filter-controls{position:relative!important;z-index:45!important;overflow:visible!important}
+#collection .museum-custom-select{position:relative!important;z-index:46!important}
+#collection .museum-custom-select.open{z-index:60!important}
+#collection .museum-custom-select-menu{z-index:70!important}
+#collection .results-line{position:relative!important;z-index:2!important}
+#collectionGrid{position:relative!important;z-index:1!important}
+
+/* The navigation overlay must always win, even while a custom filter menu is open. */
+.scrim{z-index:2900!important}
+.drawer{z-index:3000!important}
