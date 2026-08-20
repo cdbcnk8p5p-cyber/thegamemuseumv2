@@ -8,6 +8,18 @@
 #collection .results-line{position:relative!important;z-index:2!important}
 #collectionGrid{position:relative!important;z-index:1!important}
 
+/*
+ * Display Shelf only: use Safari's Grid Lanes layout so cards with naturally
+ * different cover heights pack neatly instead of leaving large empty row gaps.
+ * Main Shelf and All Games keep the existing Collection grid unchanged.
+ */
+@supports (display:grid-lanes){
+  #collection:has(#shelfSelector .shelf-tab[data-shelf="Display Gallery"][aria-pressed="true"]) #collectionGrid{
+    display:grid-lanes!important;
+    align-items:start!important;
+  }
+}
+
 /* Mobile bottom navigation stays attached to the viewport while the collection scrolls. */
 @media (max-width:719px){
   .bottom-nav{
