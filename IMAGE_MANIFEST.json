@@ -1,224 +1,99 @@
-[
-  {
-    "destination": "assets/covers/avatar-frontiers-of-pandora-ps5.jpeg",
-    "source": "C18EAA72-AF89-4119-9EE9-E98F0DAB4654.jpeg",
-    "bytes": 114992,
-    "exact_bytes": true
+{
+  "batch": "PSP + PS Vita audit",
+  "games": 9,
+  "psp_games": 7,
+  "vita_games": 2,
+  "image_files": 18,
+  "new_catalogue_count": 0,
+  "purchase_details": "Unknown for all nine; no qualifying CEX/Forgotten Worlds sticker visible.",
+  "collection_shelves": {
+    "Standard Shelf": [
+      "GM-0148",
+      "GM-0149",
+      "GM-0151",
+      "GM-0153",
+      "GM-0154",
+      "GM-0155",
+      "GM-0156"
+    ],
+    "PlayStation Platinum": [
+      "GM-0150",
+      "GM-0152"
+    ]
   },
-  {
-    "destination": "assets/archive/avatar-frontiers-of-pandora-ps5-original.jpeg",
-    "source": "F50D307F-4BB5-402E-B4F6-DF5BE4DC7FF9.jpeg",
-    "bytes": 526945,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/bus-simulator-21-gold-edition-ps5.jpeg",
-    "source": "BB7102BF-D876-4105-893C-53A0FA7C25CD.jpeg",
-    "bytes": 227546,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/bus-simulator-21-gold-edition-ps5-original.jpeg",
-    "source": "BBD14E08-39F1-41C6-86DF-7DC7241B81D2.jpeg",
-    "bytes": 488552,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/f1-2021-ps5.webp",
-    "source": "325B86F4-B0B8-4AEC-AFBA-C4F9B2092037.webp",
-    "bytes": 37914,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/f1-2021-ps5-original.jpeg",
-    "source": "C4391D2C-B7DB-476E-B8C0-4A2BDB030B27.jpeg",
-    "bytes": 507285,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/f1-22-ps5.webp",
-    "source": "36A8A74B-E07B-449D-A3ED-1967D6348FF8.webp",
-    "bytes": 30694,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/f1-22-ps5-original.jpeg",
-    "source": "2BF0AD75-304A-4143-A1AF-7CD95603FCE8.jpeg",
-    "bytes": 411706,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/f1-23-ps5.webp",
-    "source": "24A49130-5289-49EE-9E3A-7927636F68E0.webp",
-    "bytes": 33550,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/f1-23-ps5-original.jpeg",
-    "source": "384DB5DE-9A48-484A-B371-1B46E8E37662.jpeg",
-    "bytes": 416772,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/f1-24-ps5.webp",
-    "source": "A9949AE8-1142-4383-8620-77790728A184.webp",
-    "bytes": 34364,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/f1-24-ps5-original.jpeg",
-    "source": "C94D08E3-182D-45C0-93CC-0C4892EED201.jpeg",
-    "bytes": 627552,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/fifa-21-nxt-lvl-edition-ps5.jpeg",
-    "source": "1C75DFAA-E573-46D7-B47A-C99379A06323.jpeg",
-    "bytes": 70675,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/fifa-21-nxt-lvl-edition-ps5-original.jpeg",
-    "source": "26F1CC5E-094F-4588-BD17-E19763F37FBC.jpeg",
-    "bytes": 598407,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/fifa-22-ps5.webp",
-    "source": "16873EDF-1328-47A4-8BF8-D99200267968.webp",
-    "bytes": 29552,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/fifa-22-ps5-original.jpeg",
-    "source": "F339D148-91D0-4299-9C60-D14C9F361AD5.jpeg",
-    "bytes": 588124,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/fifa-23-ps5.webp",
-    "source": "574BFF23-CBFA-4488-B24B-8B272898729D.webp",
-    "bytes": 29858,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/fifa-23-ps5-original.jpeg",
-    "source": "754343FF-75B9-48E7-B595-3DEE8AB58648.jpeg",
-    "bytes": 572248,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/grand-theft-auto-v-ps5.jpeg",
-    "source": "0A5A9F0E-E244-4187-8B1E-8B0415B730D1.jpeg",
-    "bytes": 122620,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/grand-theft-auto-v-ps5-original.jpeg",
-    "source": "D74958BF-438D-48A9-A8EF-02DA3AF515AD.jpeg",
-    "bytes": 415840,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/high-on-life-ps5.jpeg",
-    "source": "71E9A6E8-17B7-4E44-AF8A-F4FC8BF6402B.jpeg",
-    "bytes": 83424,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/high-on-life-ps5-original.jpeg",
-    "source": "0E4CA3A8-5E64-4102-AA58-0778B2A8D6FB.jpeg",
-    "bytes": 472202,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/hogwarts-legacy-ps5.jpeg",
-    "source": "F64FB86D-38C8-4F43-9F42-34188892C4B3.jpeg",
-    "bytes": 57825,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/hogwarts-legacy-ps5-original.jpeg",
-    "source": "CD83FBB0-53E6-4592-968D-BE24CBBDCA29.jpeg",
-    "bytes": 335366,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/saints-row-day-one-edition-ps5.jpeg",
-    "source": "34519541-49E9-477E-B7A6-F04D1ACBBBCD.jpeg",
-    "bytes": 97891,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/saints-row-day-one-edition-ps5-original.jpeg",
-    "source": "22817637-641A-4D58-8F0C-0566D27E680C.jpeg",
-    "bytes": 598161,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/marvels-spider-man-2-ps5.jpeg",
-    "source": "F4F37A31-F669-48ED-9B1B-9AAD463BC0B4.jpeg",
-    "bytes": 89672,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/marvels-spider-man-2-ps5-original.jpeg",
-    "source": "D686FE64-285E-4ADC-AFD3-AC79C53D5319.jpeg",
-    "bytes": 503319,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/still-wakes-the-deep-ps5.jpeg",
-    "source": "44027FD1-3E6C-4669-A1C0-BC2976B595DA.jpeg",
-    "bytes": 60646,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/still-wakes-the-deep-ps5-original.jpeg",
-    "source": "03BE7732-C4EF-44BD-95CB-32C824DAC17C.jpeg",
-    "bytes": 336051,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/the-last-of-us-part-i-ps5.jpeg",
-    "source": "52043D49-2D67-46F1-9DCC-7CFB3E0680CF.jpeg",
-    "bytes": 32886,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/the-last-of-us-part-i-ps5-original.jpeg",
-    "source": "7BF1D971-7E9E-4BEB-B5BF-253B7256A840.jpeg",
-    "bytes": 545430,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/the-last-of-us-part-ii-remastered-ps5.jpeg",
-    "source": "9B27B935-DFED-455B-9A5D-74452EAA0CB3.jpeg",
-    "bytes": 33269,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/the-last-of-us-part-ii-remastered-ps5-original.jpeg",
-    "source": "C98B56D9-1487-4DE1-8ED2-DC61F40F8D43.jpeg",
-    "bytes": 469484,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/wwe-2k23-ps5.jpeg",
-    "source": "2C3A7713-3270-40F2-B69D-9AA38BD7C113.jpeg",
-    "bytes": 68186,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/archive/wwe-2k23-ps5-original.jpeg",
-    "source": "F1382219-911D-48FE-95DC-FB4F98523C56.jpeg",
-    "bytes": 373553,
-    "exact_bytes": true
-  },
-  {
-    "destination": "assets/covers/tomb-raider-iii-ps1.jpg",
-    "source": "BCD75D43-D61A-488B-8558-820D6BEFF170.jpeg",
-    "bytes": 44140,
-    "exact_bytes": true
-  }
-]
+  "records": [
+    {
+      "id": "GM-0148",
+      "title": "WALL-E",
+      "platform": "PlayStation Portable",
+      "edition": "Standard",
+      "cover": "assets/covers/wall-e-psp.webp",
+      "archive": "assets/archive/wall-e-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0149",
+      "title": "FIFA 11",
+      "platform": "PlayStation Portable",
+      "edition": "Standard",
+      "cover": "assets/covers/fifa-11-psp.jpeg",
+      "archive": "assets/archive/fifa-11-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0150",
+      "title": "Gangs of London",
+      "platform": "PlayStation Portable",
+      "edition": "Platinum",
+      "cover": "assets/covers/gangs-of-london-platinum-psp.jpeg",
+      "archive": "assets/archive/gangs-of-london-platinum-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0151",
+      "title": "Grand Theft Auto: Liberty City Stories",
+      "platform": "PlayStation Portable",
+      "edition": "Standard",
+      "cover": "assets/covers/grand-theft-auto-liberty-city-stories-psp.webp",
+      "archive": "assets/archive/grand-theft-auto-liberty-city-stories-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0152",
+      "title": "Grand Theft Auto: Vice City Stories",
+      "platform": "PlayStation Portable",
+      "edition": "Platinum",
+      "cover": "assets/covers/grand-theft-auto-vice-city-stories-platinum-psp.jpeg",
+      "archive": "assets/archive/grand-theft-auto-vice-city-stories-platinum-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0153",
+      "title": "Harry Potter and the Goblet of Fire",
+      "platform": "PlayStation Portable",
+      "edition": "Standard",
+      "cover": "assets/covers/harry-potter-and-the-goblet-of-fire-psp.webp",
+      "archive": "assets/archive/harry-potter-and-the-goblet-of-fire-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0154",
+      "title": "Test Drive Unlimited",
+      "platform": "PlayStation Portable",
+      "edition": "Standard",
+      "cover": "assets/covers/test-drive-unlimited-psp.webp",
+      "archive": "assets/archive/test-drive-unlimited-psp-original.jpeg"
+    },
+    {
+      "id": "GM-0155",
+      "title": "FIFA 13",
+      "platform": "PlayStation Vita",
+      "edition": "Standard",
+      "cover": "assets/covers/fifa-13-ps-vita.jpeg",
+      "archive": "assets/archive/fifa-13-ps-vita-original.jpeg"
+    },
+    {
+      "id": "GM-0156",
+      "title": "Need for Speed: Most Wanted (2012)",
+      "platform": "PlayStation Vita",
+      "edition": "Standard",
+      "cover": "assets/covers/need-for-speed-most-wanted-2012-ps-vita.jpeg",
+      "archive": "assets/archive/need-for-speed-most-wanted-2012-ps-vita-original.jpeg"
+    }
+  ],
+  "image_policy": "Exact user-supplied bytes copied unchanged. No redraw, reconstruction, cleanup, conversion or AI generation."
+}
