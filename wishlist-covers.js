@@ -18,6 +18,8 @@
   };
   const normal=value=>String(value||'').trim().toLowerCase().replace(/\s+/g,' ');
 
+  const GHOSTS_XBOX_ONE_COVER='./assets/covers/call-of-duty-ghosts-standard-xbox-one.webp';
+
   const covers=[
     {platform:'Xbox 360',titles:['Need for Speed: Most Wanted (2005) Standard','Need for Speed: Most Wanted (2005)'],image:'./assets/covers/need-for-speed-most-wanted-2005-xbox-360.jpg',edition:'Standard'},
     {platform:'Nintendo DS',titles:['The Simpsons Game'],image:'./assets/covers/the-simpsons-game-nintendo-ds.jpg'},
@@ -55,6 +57,7 @@
     {platform:'Xbox 360',titles:['Call of Duty: Advanced Warfare'],image:'./assets/covers/call-of-duty-advanced-warfare-xbox-360.jpg'},
     {platform:'Xbox 360',titles:['Call of Duty: Black Ops III'],image:'./assets/covers/call-of-duty-black-ops-iii-xbox-360.jpg'},
     {platform:'Xbox 360',titles:['The Simpsons Game'],image:'./assets/covers/the-simpsons-game-xbox-360.jpg'},
+    {platform:'Xbox One',titles:['Call of Duty: Ghosts Standard Edition','Call of Duty: Ghosts'],image:GHOSTS_XBOX_ONE_COVER,edition:'Standard'},
     {platform:'Xbox One',titles:['Far Cry 4'],image:'./assets/covers/far-cry-4-xbox-one.jpg'}
   ];
 
@@ -69,6 +72,89 @@
     });
   }
 
+  function isXboxOneGhostsGame(game){
+    if(!game)return false;
+    return canonicalPlatform(game.platform)==='Xbox One' &&
+      (String(game.id||'')==='GM-0025' || normal(game.title)==='call of duty: ghosts' || normal(game.title)==='call of duty ghosts');
+  }
+
+  function isXboxOneGhostsWish(item){
+    if(!item)return false;
+    const title=normal(item.title).replace(':','');
+    return canonicalPlatform(item.platform)==='Xbox One' &&
+      (title==='call of duty ghosts' || title==='call of duty ghosts standard edition');
+  }
+
+  function applyGhostsCorrection(data){
+    if(!data||typeof data!=='object')return false;
+    data.games ||= [];
+    data.wishlist ||= [];
+    let changed=false;
+
+    const before=data.games.length;
+    data.games=data.games.filter(game=>!isXboxOneGhostsGame(game));
+    if(data.games.length!==before)changed=true;
+
+    let wish=data.wishlist.find(isXboxOneGhostsWish);
+    if(!wish){wish={};data.wishlist.push(wish);changed=true;}
+    const desired={
+      order:'Shelf',
+      platform:'Xbox One',
+      title:'Call of Duty: Ghosts Standard Edition',
+      edition:'Standard',
+      type:'Shelf Completion',
+      reason:'The owned Xbox One copy is Limited Edition; a Standard Edition is required for the Main Shelf.',
+      status:'Missing',
+      image:GHOSTS_XBOX_ONE_COVER
+    };
+    Object.entries(desired).forEach(([key,value])=>{if(wish[key]!==value){wish[key]=value;changed=true;}});
+
+    let kept=false;
+    data.wishlist=data.wishlist.filter(item=>{
+      if(!isXboxOneGhostsWish(item))return true;
+      if(item===wish&&!kept){kept=true;return true;}
+      changed=true;
+      return false;
+    });
+    apply(data);
+    return changed;
+  }
+
+  function patchGhostsEverywhere(){
+    try{if(window.MUSEUM_SEED)applyGhostsCorrection(window.MUSEUM_SEED);}catch(_){}
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        const key=localStorage.key(i);
+        if(!key||!key.startsWith('theGameMuseumV'))continue;
+        const raw=localStorage.getItem(key);if(!raw)continue;
+        const data=JSON.parse(raw);
+        if(applyGhostsCorrection(data))localStorage.setItem(key,JSON.stringify(data));
+      }
+    }catch(_){}
+    try{if(typeof state!=='undefined'&&applyGhostsCorrection(state)&&typeof save==='function')save();}catch(_){}
+  }
+
+  function ghostsCoverReady(){
+    return new Promise(resolve=>{
+      const image=new Image();
+      image.onload=()=>resolve(true);
+      image.onerror=()=>resolve(false);
+      image.src=`${GHOSTS_XBOX_ONE_COVER}?museumGhostsStandard=1`;
+    });
+  }
+
+  async function bootGhostsCorrection(){
+    if(!(await ghostsCoverReady()))return;
+    patchGhostsEverywhere();
+    try{if(typeof render==='function')render();}catch(_){}
+    try{if(typeof dashboard==='function')dashboard();}catch(_){}
+    try{if(typeof collection==='function')collection();}catch(_){}
+    setTimeout(()=>{
+      patchGhostsEverywhere();
+      try{if(typeof render==='function')render();}catch(_){}
+    },250);
+  }
+
   apply(window.MUSEUM_SEED);
   ['theGameMuseumV353','theGameMuseumV352','theGameMuseumV35','theGameMuseumV34','theGameMuseumV33','theGameMuseumV32'].forEach(key=>{
     try{
@@ -79,6 +165,10 @@
       localStorage.setItem(key,JSON.stringify(data));
     }catch(_){}
   });
+
+  document.getElementById('resetBtn')?.addEventListener('click',()=>setTimeout(bootGhostsCorrection,180));
+  document.getElementById('importFile')?.addEventListener('change',()=>setTimeout(bootGhostsCorrection,500));
+  setTimeout(bootGhostsCorrection,80);
 
   window.MUSEUM_WISHLIST_COVERS=covers;
 })();
