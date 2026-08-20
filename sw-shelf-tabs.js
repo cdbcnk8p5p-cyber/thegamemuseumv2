@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v9';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v10';
 const CORE=[
   './',
   './index.html',
@@ -15,8 +15,7 @@ const CORE=[
   './data-integrity.js?v=1',
   './filter-order.js?v=3',
   './collection-platform-filter.js?v=2',
-  './shelf-sections.js?v=1',
-  './collection-shelf-naming.js?v=1',
+  './shelf-sections.js?v=2',
   './wishlist-gallery.js?v=1',
   './wishlist-gallery.css?v=1',
   './manifest.webmanifest',
