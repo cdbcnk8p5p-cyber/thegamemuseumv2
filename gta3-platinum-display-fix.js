@@ -1,11 +1,13 @@
 // The Game Museum — authoritative Collection recovery layer.
 // Keeps the modern shelf UI, Display Shelf classification and Collection Shelf badges stable.
 (() => {
-  if (window.__MUSEUM_COLLECTION_RECOVERY_V2__) return;
-  window.__MUSEUM_COLLECTION_RECOVERY_V2__ = true;
+  if (window.__MUSEUM_COLLECTION_RECOVERY_V3__) return;
+  window.__MUSEUM_COLLECTION_RECOVERY_V3__ = true;
 
   const STANDARD = 'Standard Shelf';
   const PLATINUM = 'PlayStation Platinum';
+  const TLOU_STEELBOOK_COVER = './assets/covers/the-last-of-us-steelbook-ps3.jpg';
+  const TLOU_STEELBOOK_ARCHIVE = './assets/archive/the-last-of-us-steelbook-ps3-original.jpg';
   const normal = value => String(value || '').trim().toLowerCase();
   const canonical = value => typeof window.MUSEUM_CANONICAL_PLATFORM === 'function'
     ? window.MUSEUM_CANONICAL_PLATFORM(value)
@@ -32,9 +34,92 @@
     'grand theft auto: vice city stories'
   ].includes(normal(game?.title));
 
-  function patch(data) {
+  const isWrongPs3TlouDisplay = game => String(game?.id || '') === 'GM-0176' || (
+    canonical(game?.platform) === 'PlayStation 3' &&
+    normal(game?.title) === 'the last of us' &&
+    (normal(game?.edition).includes('steelbook') || game?.category === 'Display Gallery' || normal(game?.display) === 'yes')
+  );
+
+  const isPs3TlouMain = game => String(game?.id || '') === 'GM-0108' || (
+    canonical(game?.platform) === 'PlayStation 3' &&
+    normal(game?.title) === 'the last of us' &&
+    !isWrongPs3TlouDisplay(game)
+  );
+
+  const isPs4Tlou2Steelbook = game => String(game?.id || '') === 'GM-0159' || (
+    canonical(game?.platform) === 'PlayStation 4' &&
+    normal(game?.title) === 'the last of us part ii' &&
+    normal(game?.edition).includes('steelbook')
+  );
+
+  function setValue(object, key, value) {
+    if (object[key] === value) return false;
+    object[key] = value;
+    return true;
+  }
+
+  function patchLastOfUsDisplay(data) {
     if (!data || !Array.isArray(data.games)) return false;
     let changed = false;
+
+    const wrongCopies = data.games.filter(isWrongPs3TlouDisplay);
+    const movedCover = wrongCopies.find(game => String(game?.image || '').trim())?.image || TLOU_STEELBOOK_COVER;
+    const movedArchive = wrongCopies.find(game => String(game?.archiveImage || '').trim())?.archiveImage || TLOU_STEELBOOK_ARCHIVE;
+
+    // The real PS3 copy remains a normal Main Shelf game and keeps all of its purchase metadata.
+    data.games.filter(isPs3TlouMain).forEach(game => {
+      changed = setValue(game, 'title', 'The Last of Us') || changed;
+      changed = setValue(game, 'platform', 'PlayStation 3') || changed;
+      changed = setValue(game, 'edition', 'Standard') || changed;
+      changed = setValue(game, 'category', 'Main Collection') || changed;
+      changed = setValue(game, 'series', 'The Last of Us') || changed;
+      changed = setValue(game, 'status', 'Owned') || changed;
+      changed = setValue(game, 'display', 'No') || changed;
+      if (game.shelfSection && game.shelfSection !== STANDARD) {
+        game.shelfSection = STANDARD;
+        changed = true;
+      }
+    });
+
+    // The steelbook artwork belongs to The Last of Us Part II on PS4.
+    let target = data.games.find(isPs4Tlou2Steelbook);
+    if (!target) {
+      target = {id:'GM-0159'};
+      data.games.push(target);
+      changed = true;
+    }
+    changed = setValue(target, 'id', 'GM-0159') || changed;
+    changed = setValue(target, 'title', 'The Last of Us Part II') || changed;
+    changed = setValue(target, 'platform', 'PlayStation 4') || changed;
+    changed = setValue(target, 'edition', 'Steelbook') || changed;
+    changed = setValue(target, 'category', 'Display Gallery') || changed;
+    changed = setValue(target, 'series', 'The Last of Us') || changed;
+    changed = setValue(target, 'status', 'Owned') || changed;
+    changed = setValue(target, 'display', 'Yes') || changed;
+    changed = setValue(target, 'image', movedCover) || changed;
+    changed = setValue(target, 'archiveImage', movedArchive) || changed;
+    if (target.shelfSection && target.shelfSection !== STANDARD) {
+      target.shelfSection = STANDARD;
+      changed = true;
+    }
+    if (!String(target.notes || '').trim() || normal(target.notes).includes('display-only steelbook')) {
+      const note = 'Display-only PS4 steelbook. Purchase details not recorded. Exact user-supplied steelbook artwork used for the Museum display; physical-copy photo preserved in the archive.';
+      changed = setValue(target, 'notes', note) || changed;
+    }
+
+    // Remove only the erroneous PS3 Display duplicate; never remove the genuine PS3 Main Shelf copy.
+    if (wrongCopies.length) {
+      const wrongSet = new Set(wrongCopies);
+      data.games = data.games.filter(game => !wrongSet.has(game));
+      changed = true;
+    }
+
+    return changed;
+  }
+
+  function patch(data) {
+    if (!data || !Array.isArray(data.games)) return false;
+    let changed = patchLastOfUsDisplay(data);
 
     data.games.forEach(game => {
       if (isTombRaider3(game)) {
@@ -143,7 +228,7 @@
     if (missingModernUi) {
       loadFreshScript(
         'museum-platform-recovery-script',
-        './platform-standard.js?recovery=20260820-2',
+        './platform-standard.js?recovery=20260820-3',
         () => setTimeout(recoverCollectionShelves, 120)
       );
     } else {
@@ -156,7 +241,7 @@
     if (!document.getElementById('shelfSectionWrap')) {
       loadFreshScript(
         'museum-shelf-recovery-script',
-        './shelf-sections.js?recovery=20260820-3',
+        './shelf-sections.js?recovery=20260820-4',
         () => setTimeout(authoritativeRefresh, 180)
       );
     }
