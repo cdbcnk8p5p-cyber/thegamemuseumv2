@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v13';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v14';
 const CORE=[
   './',
   './index.html',
@@ -18,6 +18,7 @@ const CORE=[
   './shelf-sections.js?v=2',
   './gta3-platinum-display-fix.js?v=1',
   './ps5-update.js?v=1',
+  './psp-vita-update.js?v=1',
   './wishlist-gallery.js?v=1',
   './wishlist-gallery.css?v=1',
   './manifest.webmanifest',
