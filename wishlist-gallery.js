@@ -1,3 +1,12 @@
+// Load the Xbox One Call of Duty: Ghosts standard-copy correction without touching the main Collection loader.
+(() => {
+  if (document.getElementById('museum-xbox-one-ghosts-standard-fix')) return;
+  const script=document.createElement('script');
+  script.id='museum-xbox-one-ghosts-standard-fix';
+  script.src='./xbox-one-ghosts-standard-fix.js?v=1';
+  document.head.appendChild(script);
+})();
+
 // Wishlist gallery and Platform -> Console filters.
 (() => {
   const clean=v=>String(v??'').trim();
