@@ -1,5 +1,5 @@
-// The Game Museum — context-aware Shelf Sections.
-// Keeps branded budget/re-release lines organised without adding more top-level shelf tabs.
+// The Game Museum — context-aware Collection Shelves.
+// Branded re-release lines stay as real physical shelves without adding more top-level Museum tabs.
 (() => {
   const STANDARD = 'Standard Shelf';
   const SECTION_ORDER = [
@@ -42,10 +42,8 @@
   function derivedSection(game) {
     if (!game) return STANDARD;
     if (game.shelfSection) return canonicalSection(game.shelfSection);
-    const platform = canonicalPlatform(game.platform);
-    const family = familyOf(platform);
+    const family = familyOf(game.platform);
     const text = normal([game.edition, game.title, game.notes].filter(Boolean).join(' '));
-
     if (family === 'PlayStation' && text.includes('platinum')) return 'PlayStation Platinum';
     if (family === 'PlayStation' && text.includes('essential')) return 'PlayStation Essentials';
     if (family === 'PlayStation' && (text.includes('playstation hits') || text.includes('ps hits'))) return 'PlayStation Hits';
@@ -55,23 +53,38 @@
     return STANDARD;
   }
 
+  // Keep the old internal API for compatibility, while exposing the new Museum terminology too.
   window.MUSEUM_SHELF_SECTION = derivedSection;
+  window.MUSEUM_COLLECTION_SHELF = derivedSection;
 
   function patchData(data) {
     if (!data || !Array.isArray(data.games)) return false;
     let changed = false;
+
     data.games.forEach(game => {
+      const platform = canonicalPlatform(game.platform);
+      const title = normal(game.title);
+
+      // PS1 Tomb Raider III is the Platinum physical copy.
+      if (String(game.id || '') === 'GM-0134' || (title === 'tomb raider iii' && platform === 'PlayStation 1')) {
+        if (game.edition !== 'Platinum') { game.edition = 'Platinum'; changed = true; }
+        if (game.shelfSection !== 'PlayStation Platinum') { game.shelfSection = 'PlayStation Platinum'; changed = true; }
+        if (game.category !== 'Main Collection') { game.category = 'Main Collection'; changed = true; }
+        if (game.display !== 'No') { game.display = 'No'; changed = true; }
+      }
+
       const section = derivedSection(game);
       if (section !== STANDARD && game.shelfSection !== section) {
         game.shelfSection = section;
         changed = true;
       }
 
-      // GTA III Platinum was previously classed as Display because Shelf Sections did not exist yet.
+      // GTA III Platinum was previously classed as Display because Collection Shelves did not exist yet.
       if (String(game.id || '') === 'GM-0175' || (
-          normal(game.title) === 'grand theft auto iii' &&
-          canonicalPlatform(game.platform) === 'PlayStation 2' &&
+          title === 'grand theft auto iii' &&
+          platform === 'PlayStation 2' &&
           section === 'PlayStation Platinum')) {
+        if (game.edition !== 'Platinum') { game.edition = 'Platinum'; changed = true; }
         if (game.shelfSection !== 'PlayStation Platinum') { game.shelfSection = 'PlayStation Platinum'; changed = true; }
         if (game.category !== 'Main Collection') { game.category = 'Main Collection'; changed = true; }
         if (game.display !== 'No') { game.display = 'No'; changed = true; }
@@ -79,9 +92,9 @@
 
       // Purchase-location correction supplied after the Display Shelf audit.
       if (String(game.id || '') === 'GM-0061' || (
-          normal(game.title).includes('need for speed') &&
-          normal(game.title).includes('most wanted') &&
-          canonicalPlatform(game.platform) === 'Xbox 360')) {
+          title.includes('need for speed') &&
+          title.includes('most wanted') &&
+          platform === 'Xbox 360')) {
         if (game.shop !== 'CEX - Livingston') { game.shop = 'CEX - Livingston'; changed = true; }
       }
     });
@@ -121,12 +134,7 @@
     return 'other';
   };
 
-  const sectionLabel = section => {
-    if (section === STANDARD) return 'Standard Shelf';
-    if (section === 'PlayStation Platinum') return 'PlayStation Platinum';
-    if (section === 'PlayStation Essentials') return 'PlayStation Essentials';
-    return section;
-  };
+  const sectionLabel = section => section === STANDARD ? 'Standard Shelf' : section;
 
   function injectStyles() {
     if (document.getElementById('museum-shelf-section-style')) return;
@@ -166,7 +174,8 @@
         let html = base(game);
         const section = derivedSection(game);
         if (section !== STANDARD) {
-          const badge = `<span class="badge shelf-section-badge ${sectionClass(section)}">${typeof esc === 'function' ? esc(sectionLabel(section)) : sectionLabel(section)}</span>`;
+          const text = typeof esc === 'function' ? esc(sectionLabel(section)) : sectionLabel(section);
+          const badge = `<span class="badge shelf-section-badge ${sectionClass(section)}">${text}</span>`;
           html = html.replace(/(<div class="badges">[\s\S]*?)(<\/div><h3>)/, `$1${badge}$2`);
         }
         return html;
@@ -189,7 +198,8 @@
           const row = document.createElement('div');
           row.className = 'detail';
           row.dataset.shelfSectionDetail = 'yes';
-          row.innerHTML = `<span>Shelf Section</span><strong>${typeof esc === 'function' ? esc(sectionLabel(derivedSection(game))) : sectionLabel(derivedSection(game))}</strong>`;
+          const value = typeof esc === 'function' ? esc(sectionLabel(derivedSection(game))) : sectionLabel(derivedSection(game));
+          row.innerHTML = `<span>Collection Shelf</span><strong>${value}</strong>`;
           const galleryRow = [...grid.children].find(child => child.querySelector('span')?.textContent === 'Gallery');
           if (galleryRow) galleryRow.insertAdjacentElement('afterend', row); else grid.appendChild(row);
         } catch (_) {}
@@ -231,13 +241,13 @@
       wrap = document.createElement('div');
       wrap.id = 'shelfSectionWrap';
       wrap.className = 'shelf-section-wrap';
-      wrap.innerHTML = '<div class="shelf-section-heading"><span>SHELF SECTION</span><small>Changes with platform & console</small></div><div id="shelfSectionTabs" class="shelf-section-tabs" role="group" aria-label="Choose shelf section"></div>';
+      wrap.innerHTML = '<div class="shelf-section-heading"><span>COLLECTION SHELF</span><small>Changes with platform & console</small></div><div id="shelfSectionTabs" class="shelf-section-tabs" role="group" aria-label="Choose collection shelf"></div>';
       row.insertAdjacentElement('afterend', wrap);
 
       const empty = document.createElement('div');
       empty.id = 'shelfSectionEmpty';
       empty.className = 'shelf-section-empty';
-      empty.textContent = 'No games found in this Shelf Section for the current filters.';
+      empty.textContent = 'No games found on this Collection Shelf for the current filters.';
       document.querySelector('#collection .results-line')?.insertAdjacentElement('afterend', empty);
     }
     return wrap;
@@ -332,7 +342,7 @@
     if (p === 'PlayStation 3') options.push('PlayStation Essentials');
     if (p === 'PlayStation 4') options.push('PlayStation Hits');
     if (['Xbox Original','Xbox 360'].includes(p)) options.push('Xbox Classics');
-    if (['Nintendo Wii'].includes(p)) options.push('Nintendo Selects');
+    if (p === 'Nintendo Wii') options.push('Nintendo Selects');
     return options;
   }
 
@@ -344,7 +354,7 @@
     if (!platformLabel) return;
 
     const label = document.createElement('label');
-    label.textContent = 'Shelf Section';
+    label.textContent = 'Collection Shelf';
     const select = document.createElement('select');
     select.id = 'addShelfSection';
     select.name = 'shelfSection';
@@ -384,7 +394,7 @@
     if (!button || button.dataset.shelfSectionCsv === 'yes') return;
     button.dataset.shelfSectionCsv = 'yes';
     button.onclick = () => {
-      const headers = ['ID','Game','Platform','Edition','Shelf Section','Series','Category','Shop','Price','Purchase Date','Display Copy','Notes','Image'];
+      const headers = ['ID','Game','Platform','Edition','Collection Shelf','Series','Category','Shop','Price','Purchase Date','Display Copy','Notes','Image'];
       const quote = value => `"${String(value ?? '').replaceAll('"','""')}"`;
       const rows = (state?.games || []).map(game => [
         game.id,game.title,game.platform,game.edition,sectionLabel(derivedSection(game)),game.series,game.category,game.shop,game.price,game.date,game.display,game.notes,game.image
