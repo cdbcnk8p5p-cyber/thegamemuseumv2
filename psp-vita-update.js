@@ -8,15 +8,15 @@
   const SENTINEL = './assets/covers/wall-e-psp.webp';
 
   const RECORDS = [
-    {id:'GM-PSP-WALLE', title:'WALL-E', aliases:['wall e','walle','disney pixar wall e'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'', image:'./assets/covers/wall-e-psp.webp', archiveImage:'./assets/archive/wall-e-psp-original.jpeg'},
-    {id:'GM-PSP-FIFA11', title:'FIFA 11', aliases:['fifa 11'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'FIFA / EA Sports FC', image:'./assets/covers/fifa-11-psp.jpeg', archiveImage:'./assets/archive/fifa-11-psp-original.jpeg'},
-    {id:'GM-PSP-GANGS-LONDON', title:'Gangs of London', aliases:['gangs of london'], platform:PSP, edition:'Platinum', shelfSection:PLATINUM, series:'', image:'./assets/covers/gangs-of-london-platinum-psp.jpeg', archiveImage:'./assets/archive/gangs-of-london-platinum-psp-original.jpeg'},
-    {id:'GM-PSP-GTA-LCS', title:'Grand Theft Auto: Liberty City Stories', aliases:['grand theft auto liberty city stories','gta liberty city stories'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'Grand Theft Auto', image:'./assets/covers/grand-theft-auto-liberty-city-stories-psp.webp', archiveImage:'./assets/archive/grand-theft-auto-liberty-city-stories-psp-original.jpeg'},
-    {id:'GM-PSP-GTA-VCS', title:'Grand Theft Auto: Vice City Stories', aliases:['grand theft auto vice city stories','gta vice city stories'], platform:PSP, edition:'Platinum', shelfSection:PLATINUM, series:'Grand Theft Auto', image:'./assets/covers/grand-theft-auto-vice-city-stories-platinum-psp.jpeg', archiveImage:'./assets/archive/grand-theft-auto-vice-city-stories-platinum-psp-original.jpeg'},
-    {id:'GM-PSP-HP-GOF', title:'Harry Potter and the Goblet of Fire', aliases:['harry potter and the goblet of fire','harry potter goblet of fire'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'Harry Potter', image:'./assets/covers/harry-potter-and-the-goblet-of-fire-psp.webp', archiveImage:'./assets/archive/harry-potter-and-the-goblet-of-fire-psp-original.jpeg'},
-    {id:'GM-PSP-TDU', title:'Test Drive Unlimited', aliases:['test drive unlimited'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'Test Drive', image:'./assets/covers/test-drive-unlimited-psp.webp', archiveImage:'./assets/archive/test-drive-unlimited-psp-original.jpeg'},
-    {id:'GM-VITA-FIFA13', title:'FIFA 13', aliases:['fifa 13'], platform:VITA, edition:'Standard', shelfSection:STANDARD, series:'FIFA / EA Sports FC', image:'./assets/covers/fifa-13-ps-vita.jpeg', archiveImage:'./assets/archive/fifa-13-ps-vita-original.jpeg'},
-    {id:'GM-VITA-NFS-MW2012', title:'Need for Speed: Most Wanted (2012)', aliases:['need for speed most wanted','need for speed most wanted 2012','nfs most wanted'], platform:VITA, edition:'Standard', shelfSection:STANDARD, series:'Need for Speed', image:'./assets/covers/need-for-speed-most-wanted-2012-ps-vita.jpeg', archiveImage:'./assets/archive/need-for-speed-most-wanted-2012-ps-vita-original.jpeg'}
+    {id:'GM-0148', title:'WALL-E', aliases:['wall e','walle','disney pixar wall e'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'', image:'./assets/covers/wall-e-psp.webp', archiveImage:'./assets/archive/wall-e-psp-original.jpeg'},
+    {id:'GM-0149', title:'FIFA 11', aliases:['fifa 11'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'FIFA / EA Sports FC', image:'./assets/covers/fifa-11-psp.jpeg', archiveImage:'./assets/archive/fifa-11-psp-original.jpeg'},
+    {id:'GM-0150', title:'Gangs of London', aliases:['gangs of london'], platform:PSP, edition:'Platinum', shelfSection:PLATINUM, series:'', image:'./assets/covers/gangs-of-london-platinum-psp.jpeg', archiveImage:'./assets/archive/gangs-of-london-platinum-psp-original.jpeg'},
+    {id:'GM-0151', title:'Grand Theft Auto: Liberty City Stories', aliases:['grand theft auto liberty city stories','gta liberty city stories'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'Grand Theft Auto', image:'./assets/covers/grand-theft-auto-liberty-city-stories-psp.webp', archiveImage:'./assets/archive/grand-theft-auto-liberty-city-stories-psp-original.jpeg'},
+    {id:'GM-0152', title:'Grand Theft Auto: Vice City Stories', aliases:['grand theft auto vice city stories','gta vice city stories'], platform:PSP, edition:'Platinum', shelfSection:PLATINUM, series:'Grand Theft Auto', image:'./assets/covers/grand-theft-auto-vice-city-stories-platinum-psp.jpeg', archiveImage:'./assets/archive/grand-theft-auto-vice-city-stories-platinum-psp-original.jpeg'},
+    {id:'GM-0153', title:'Harry Potter and the Goblet of Fire', aliases:['harry potter and the goblet of fire','harry potter goblet of fire'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'Harry Potter', image:'./assets/covers/harry-potter-and-the-goblet-of-fire-psp.webp', archiveImage:'./assets/archive/harry-potter-and-the-goblet-of-fire-psp-original.jpeg'},
+    {id:'GM-0154', title:'Test Drive Unlimited', aliases:['test drive unlimited'], platform:PSP, edition:'Standard', shelfSection:STANDARD, series:'Test Drive', image:'./assets/covers/test-drive-unlimited-psp.webp', archiveImage:'./assets/archive/test-drive-unlimited-psp-original.jpeg'},
+    {id:'GM-0155', title:'FIFA 13', aliases:['fifa 13'], platform:VITA, edition:'Standard', shelfSection:STANDARD, series:'FIFA / EA Sports FC', image:'./assets/covers/fifa-13-ps-vita.jpeg', archiveImage:'./assets/archive/fifa-13-ps-vita-original.jpeg'},
+    {id:'GM-0156', title:'Need for Speed: Most Wanted (2012)', aliases:['need for speed most wanted','need for speed most wanted 2012','nfs most wanted'], platform:VITA, edition:'Standard', shelfSection:STANDARD, series:'Need for Speed', image:'./assets/covers/need-for-speed-most-wanted-2012-ps-vita.jpeg', archiveImage:'./assets/archive/need-for-speed-most-wanted-2012-ps-vita-original.jpeg'}
   ];
 
   const norm = value => String(value || '').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
@@ -36,9 +36,8 @@
   }
 
   function applyRecord(game, record) {
-    const id = game.id || record.id;
     Object.assign(game, {
-      id,
+      id:record.id,
       title:record.title,
       platform:record.platform,
       edition:record.edition,
@@ -108,7 +107,7 @@
       const image = new Image();
       image.onload = () => resolve(true);
       image.onerror = () => resolve(false);
-      image.src = `${SENTINEL}?museumHandheldAudit=1`;
+      image.src = `${SENTINEL}?museumHandheldAudit=2`;
     });
   }
 
