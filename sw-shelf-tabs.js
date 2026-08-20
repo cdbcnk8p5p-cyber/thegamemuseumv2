@@ -20,7 +20,6 @@ const CORE=[
   './ps5-update.js?v=1',
   './psp-vita-update.js?v=1',
   './wishlist-gallery.js?v=1',
-  './xbox-one-ghosts-standard-fix.js?v=1',
   './wishlist-gallery.css?v=1',
   './manifest.webmanifest',
   './icon-192.png',
