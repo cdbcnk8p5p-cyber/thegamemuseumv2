@@ -46,17 +46,21 @@
     const wrap = document.getElementById('shelfSectionWrap');
     if (wrap) {
       const heading = wrap.querySelector('.shelf-section-heading span:first-child');
-      if (heading) heading.textContent = 'COLLECTION SHELF';
-      wrap.querySelector('#shelfSectionTabs')?.setAttribute('aria-label', 'Choose collection shelf');
+      if (heading && heading.textContent !== 'COLLECTION SHELF') heading.textContent = 'COLLECTION SHELF';
+      const tabs = wrap.querySelector('#shelfSectionTabs');
+      if (tabs && tabs.getAttribute('aria-label') !== 'Choose collection shelf') tabs.setAttribute('aria-label', 'Choose collection shelf');
     }
     const empty = document.getElementById('shelfSectionEmpty');
-    if (empty) empty.textContent = 'No games found on this Collection Shelf for the current filters.';
+    const emptyCopy = 'No games found on this Collection Shelf for the current filters.';
+    if (empty && empty.textContent !== emptyCopy) empty.textContent = emptyCopy;
 
     const addSelect = document.getElementById('addShelfSection');
     const addLabel = addSelect?.closest('label');
     if (addLabel) {
       [...addLabel.childNodes].forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) node.textContent = 'Collection Shelf';
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && node.textContent.trim() !== 'Collection Shelf') {
+          node.textContent = 'Collection Shelf';
+        }
       });
     }
 
