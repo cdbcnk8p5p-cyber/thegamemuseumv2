@@ -8,6 +8,28 @@
 #collection .results-line{position:relative!important;z-index:2!important}
 #collectionGrid{position:relative!important;z-index:1!important}
 
+/* Mobile bottom navigation stays attached to the viewport while the collection scrolls. */
+@media (max-width:719px){
+  .bottom-nav{
+    position:fixed!important;
+    inset:auto 0 0 0!important;
+    left:0!important;
+    right:0!important;
+    top:auto!important;
+    bottom:0!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    z-index:2800!important;
+    transform:none!important;
+    -webkit-transform:none!important;
+    display:flex!important;
+    justify-content:space-around!important;
+    padding:7px 4px calc(7px + env(safe-area-inset-bottom))!important;
+  }
+  main{padding-bottom:calc(105px + env(safe-area-inset-bottom))!important}
+}
+
 /* The navigation overlay must always win, even while a custom filter menu is open. */
 .scrim{z-index:2900!important}
 .drawer{z-index:3000!important}
