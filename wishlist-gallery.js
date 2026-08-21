@@ -137,3 +137,44 @@
   try{wishlist=renderWishlistGallery}catch(_){}
   window.addEventListener('DOMContentLoaded',setup);
 })();
+
+// Latest Acquisition should be based on purchase date, not catalogue-array position.
+// Same-day ties use the later Museum catalogue ID, which keeps the 12 Aug 2026 Celtic PES pickup ahead of FIFA 08.
+(() => {
+  const catalogueRank=game=>{
+    const match=String(game?.id||'').match(/(\d+)$/);
+    return match?Number(match[1]):-1;
+  };
+  const latestAcquisition=()=>{
+    if(typeof state==='undefined'||!Array.isArray(state.games))return null;
+    const dated=state.games.filter(game=>/^\d{4}-\d{2}-\d{2}$/.test(String(game?.date||'')));
+    if(!dated.length)return state.games[0]||null;
+    return dated.reduce((best,game)=>{
+      if(!best)return game;
+      const dateCompare=String(game.date).localeCompare(String(best.date));
+      if(dateCompare>0)return game;
+      if(dateCompare===0&&catalogueRank(game)>catalogueRank(best))return game;
+      return best;
+    },null);
+  };
+  const renderLatestAcquisition=()=>{
+    const latest=latestAcquisition();
+    if(!latest)return;
+    const latestCover=document.getElementById('latestCover');
+    const latestTitle=document.getElementById('latestTitle');
+    const latestMeta=document.getElementById('latestMeta');
+    const latestOpen=document.getElementById('latestOpen');
+    if(!latestCover||!latestTitle||!latestMeta||!latestOpen)return;
+    const art=artwork(latest);
+    latestCover.innerHTML=art?`<img src="${esc(art)}" alt="${esc(latest.title)} cover art" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="latest-fallback" style="display:none">${esc(initials(latest.title))}</span>`:`<span class="latest-fallback">${esc(initials(latest.title))}</span>`;
+    latestTitle.textContent=latest.title;
+    latestMeta.textContent=`${latest.platform} • ${latest.edition||'Standard'}${latest.price!=null?' • '+money(latest.price):''}`;
+    latestOpen.onclick=()=>openGame(latest.id);
+  };
+
+  if(typeof dashboard==='function'){
+    const originalDashboard=dashboard;
+    dashboard=function(){originalDashboard();renderLatestAcquisition()};
+  }
+  setTimeout(renderLatestAcquisition,0);
+})();
