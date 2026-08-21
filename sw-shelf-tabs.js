@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v23';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v24';
 const CORE=[
   './',
   './index.html',
@@ -22,6 +22,7 @@ const CORE=[
   './wishlist-gallery.js?v=1',
   './xbox-one-ghosts-standard-fix.js',
   './xbox-original-360-update.js?v=1',
+  './xbox-one-update.js?v=1',
   './wishlist-gallery.css?v=1',
   './manifest.webmanifest',
   './icon-192.png',
