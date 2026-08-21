@@ -35,18 +35,24 @@ const canonicalPlatform=v=>{
   const p=normal(v);return p==='xbox one'?'Xbox One':String(v||'').trim();
 };
 const sameTitle=(a,b)=>normal(a)===normal(b);
-function story(r,old,fresh){
-  const media='Exact user-supplied clean cover used for the Museum display; physical-copy photo preserved in the archive.';
-  const purchase=r.shop?`Bought from ${r.shop} for £${Number(r.price).toFixed(2)}. Purchase date unknown.`:(fresh?'Purchase details not recorded.':'');
-  return [r.explanation||'',purchase,(!r.shop&&!fresh?old.notes:''),media].filter(Boolean).join(' ');
+const MEDIA_NOTE='Exact user-supplied clean cover used for the Museum display; physical-copy photo preserved in the archive.';
+function preservedNotes(r,notes){
+  let text=String(notes||'').trim();
+  for(const generated of [MEDIA_NOTE,r.explanation||'','Purchase details not recorded.'])if(generated)text=text.split(generated).join(' ');
+  return text.replace(/\s+/g,' ').trim();
+}
+function story(r,old){
+  const priorPurchase=Boolean(old.shop||old.price!=null||old.date);
+  const purchase=r.shop?`Bought from ${r.shop} for £${Number(r.price).toFixed(2)}.${old.date?' Purchase date preserved from the existing Museum record.':' Purchase date unknown.'}`:(!priorPurchase?'Purchase details not recorded.':'');
+  return [r.explanation||'',purchase,preservedNotes(r,old.notes),MEDIA_NOTE].filter(Boolean).join(' ');
 }
 function apply(game,r,fresh){
   const old={shop:String(game.shop||'').trim(),date:String(game.date||'').trim(),price:game.price==null?null:game.price,notes:String(game.notes||'').trim(),series:String(game.series||'').trim()};
   Object.assign(game,{id:r.id,title:r.title,platform:'Xbox One',edition:r.edition,category:'Main Collection',series:r.series||old.series,status:'Owned',display:'No',shelfSection:'Standard Shelf',image:r.cover,archiveImage:r.archive});
-  if(r.shop){game.shop=r.shop;game.price=r.price;game.date=''}
+  if(r.shop){game.shop=r.shop;game.price=r.price;game.date=old.date||''}
   else if(fresh){game.shop='';game.price=null;game.date=''}
   else {game.shop=old.shop;game.price=old.price;game.date=old.date}
-  game.notes=story(r,old,fresh);
+  game.notes=story(r,old);
 }
 function patch(data){
   if(!data||!Array.isArray(data.games))return false;
