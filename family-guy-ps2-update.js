@@ -2,7 +2,7 @@
 // Exact supplied cover = Museum artwork. Physical-copy photo + receipt = archive evidence.
 (()=>{
   const RECORD={
-    id:'GM-0172',
+    id:'GM-PS2-FAMILY-GUY',
     title:'Family Guy: Video Game!',
     platform:'PlayStation 2',
     edition:'Standard',
