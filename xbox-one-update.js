@@ -38,7 +38,12 @@ const sameTitle=(a,b)=>normal(a)===normal(b);
 const MEDIA_NOTE='Exact user-supplied clean cover used for the Museum display; physical-copy photo preserved in the archive.';
 function preservedNotes(r,notes){
   let text=String(notes||'').trim();
-  for(const generated of [MEDIA_NOTE,r.explanation||'','Purchase details not recorded.'])if(generated)text=text.split(generated).join(' ');
+  const generated=[MEDIA_NOTE,r.explanation||'','Purchase details not recorded.'];
+  if(r.shop){
+    const prefix=`Bought from ${r.shop} for £${Number(r.price).toFixed(2)}.`;
+    generated.push(`${prefix} Purchase date unknown.`,`${prefix} Purchase date preserved from the existing Museum record.`);
+  }
+  for(const item of generated)if(item)text=text.split(item).join(' ');
   return text.replace(/\s+/g,' ').trim();
 }
 function story(r,old){
