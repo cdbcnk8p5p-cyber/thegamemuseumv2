@@ -90,3 +90,12 @@ document.getElementById('resetBtn')?.addEventListener('click',()=>setTimeout(boo
 document.getElementById('importFile')?.addEventListener('change',()=>setTimeout(boot,450));
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+// Final Xbox audit loader. Kept here to avoid touching completed Ghosts/wishlist compatibility logic.
+(()=>{
+  if(document.getElementById('museum-xbox-final-update'))return;
+  const script=document.createElement('script');
+  script.id='museum-xbox-final-update';
+  script.src='./xbox-final-update.js?v=1';
+  document.head.appendChild(script);
+})();
