@@ -18,7 +18,7 @@
   };
   const normal=value=>String(value||'').trim().toLowerCase().replace(/\s+/g,' ');
 
-  const GHOSTS_XBOX_ONE_COVER='./assets/covers/call-of-duty-ghosts-standard-xbox-one.webp';
+  const GHOSTS_XBOX_ONE_COVER='./assets/covers/call-of-duty-ghosts-standard-xbox-one.jpg';
 
   const covers=[
     {platform:'Xbox 360',titles:['Need for Speed: Most Wanted (2005) Standard','Need for Speed: Most Wanted (2005)'],image:'./assets/covers/need-for-speed-most-wanted-2005-xbox-360.jpg',edition:'Standard'},
@@ -139,8 +139,58 @@
       const image=new Image();
       image.onload=()=>resolve(true);
       image.onerror=()=>resolve(false);
-      image.src=`${GHOSTS_XBOX_ONE_COVER}?museumGhostsStandard=1`;
+      image.src=`${GHOSTS_XBOX_ONE_COVER}?museumGhostsStandard=2`;
     });
+  }
+
+  function refreshLatestAcquisition(){
+    try{
+      if(typeof state==='undefined'||!state||!Array.isArray(state.games)||!state.games.length)return;
+      let latest=null;
+      state.games.forEach(game=>{
+        const date=String(game.date||'').trim();
+        if(!date)return;
+        if(!latest||date>=String(latest.date||''))latest=game;
+      });
+      if(!latest)latest=state.games[0];
+      if(!latest)return;
+
+      const latestCover=document.getElementById('latestCover');
+      const latestTitle=document.getElementById('latestTitle');
+      const latestMeta=document.getElementById('latestMeta');
+      const latestOpen=document.getElementById('latestOpen');
+      if(!latestCover||!latestTitle||!latestMeta||!latestOpen)return;
+
+      const art=(typeof artwork==='function'?artwork(latest):(latest.image||''));
+      latestCover.innerHTML='';
+      if(art){
+        const img=document.createElement('img');
+        img.src=art;
+        img.alt=`${latest.title} cover art`;
+        img.onerror=()=>{
+          img.remove();
+          const fallback=document.createElement('span');
+          fallback.className='latest-fallback';
+          fallback.textContent=typeof initials==='function'?initials(latest.title):String(latest.title||'').slice(0,3).toUpperCase();
+          latestCover.appendChild(fallback);
+        };
+        latestCover.appendChild(img);
+      }else{
+        const fallback=document.createElement('span');
+        fallback.className='latest-fallback';
+        fallback.textContent=typeof initials==='function'?initials(latest.title):String(latest.title||'').slice(0,3).toUpperCase();
+        latestCover.appendChild(fallback);
+      }
+      latestTitle.textContent=latest.title;
+      const price=latest.price!=null?(typeof money==='function'?money(latest.price):`£${Number(latest.price).toFixed(2)}`):'';
+      latestMeta.textContent=`${latest.platform} • ${latest.edition||'Standard'}${price?' • '+price:''}`;
+      latestOpen.onclick=()=>{try{if(typeof openGame==='function')openGame(latest.id);}catch(_){}};
+    }catch(_){}
+  }
+
+  function scheduleLatestAcquisitionFix(){
+    setTimeout(refreshLatestAcquisition,140);
+    setTimeout(refreshLatestAcquisition,700);
   }
 
   async function bootGhostsCorrection(){
@@ -152,6 +202,7 @@
     setTimeout(()=>{
       patchGhostsEverywhere();
       try{if(typeof render==='function')render();}catch(_){}
+      refreshLatestAcquisition();
     },250);
   }
 
@@ -166,9 +217,11 @@
     }catch(_){}
   });
 
-  document.getElementById('resetBtn')?.addEventListener('click',()=>setTimeout(bootGhostsCorrection,180));
-  document.getElementById('importFile')?.addEventListener('change',()=>setTimeout(bootGhostsCorrection,500));
+  document.getElementById('resetBtn')?.addEventListener('click',()=>{setTimeout(bootGhostsCorrection,180);scheduleLatestAcquisitionFix();});
+  document.getElementById('importFile')?.addEventListener('change',()=>{setTimeout(bootGhostsCorrection,500);scheduleLatestAcquisitionFix();});
+  document.getElementById('addForm')?.addEventListener('submit',scheduleLatestAcquisitionFix);
   setTimeout(bootGhostsCorrection,80);
+  scheduleLatestAcquisitionFix();
 
   window.MUSEUM_WISHLIST_COVERS=covers;
 })();
