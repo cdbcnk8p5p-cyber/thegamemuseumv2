@@ -1,0 +1,65 @@
+/* The Game Museum — neutral graphite palette tune.
+   Keeps the working light/dark theme system and gold accents, while removing the warm brown cast. */
+:root{
+  --bg:#f2f3f4;
+  --surface:#fcfcfc;
+  --surface2:#e8eaed;
+  --ink:#181a1d;
+  --text:#181a1d;
+  --muted:#6a7078;
+  --navy:#1a1d21;
+  --navy2:#292d33;
+  --line:#d4d8dd;
+  --line-strong:#b8bec6;
+  --shadow:0 14px 36px rgba(17,24,32,.10);
+  --chrome:#fcfcfc;
+  --chrome2:#eef0f2;
+  --chrome-glass:rgba(252,252,252,.96);
+  --chrome-ink:#16191d;
+  --chrome-muted:#6a7078;
+  --input:#ffffff;
+  --card-info:#f4f5f6;
+  --menu:#fcfcfc;
+  --menu-line:#c7ccd2;
+  --overlay:rgba(13,15,18,.42);
+  --hero1:#1a1d21;
+  --hero2:#292d33;
+  --detail-stage1:#e5e7ea;
+  --detail-stage2:#cdd1d6;
+}
+body.dark{
+  --bg:#0d0f12;
+  --surface:#171a1e;
+  --surface2:#22262b;
+  --ink:#f4f5f6;
+  --text:#f4f5f6;
+  --muted:#a5abb3;
+  --navy:#14171b;
+  --navy2:#292d33;
+  --line:#30353b;
+  --line-strong:#444b53;
+  --shadow:0 16px 40px rgba(0,0,0,.40);
+  --chrome:#121417;
+  --chrome2:#1b1e22;
+  --chrome-glass:rgba(18,20,23,.96);
+  --chrome-ink:#f5f6f7;
+  --chrome-muted:#a5abb3;
+  --input:#171a1e;
+  --card-info:#1c2025;
+  --menu:#171a1e;
+  --menu-line:#3a4047;
+  --overlay:rgba(0,0,0,.68);
+  --hero1:#1a1d21;
+  --hero2:#292d33;
+  --detail-stage1:#24282d;
+  --detail-stage2:#101215;
+}
+.ambient{
+  background:radial-gradient(circle at 80% 5%,rgba(196,147,45,.11),transparent 30%),radial-gradient(circle at 10% 70%,rgba(90,103,117,.08),transparent 35%);
+}
+body.dark .ambient{
+  background:radial-gradient(circle at 78% 5%,rgba(224,184,78,.07),transparent 28%),radial-gradient(circle at 12% 75%,rgba(73,85,99,.10),transparent 38%);
+}
+.topbar{box-shadow:0 6px 25px rgba(17,24,32,.08)}
+.platform-ribbon{background:rgba(10,12,15,.84)}
+.detail-hero:after{background:linear-gradient(transparent,rgba(8,10,13,.90))}
