@@ -8,9 +8,9 @@
 
   const neutralise = element => {
     if (!element) return;
-    element.style.setProperty('background', 'var(--surface2)', 'important');
-    element.style.setProperty('border-color', 'var(--line-strong)', 'important');
-    element.style.setProperty('color', 'var(--ink)', 'important');
+    element.style.setProperty('background', 'var(--surface2)');
+    element.style.setProperty('border-color', 'var(--line-strong)');
+    element.style.setProperty('color', 'var(--ink)');
   };
 
   const syncNeutralControls = () => {
