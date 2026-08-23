@@ -1,19 +1,38 @@
-/* The Game Museum — subtle gold separation for coloured platform filters.
-   Neutral/default controls keep their existing theme border. */
+/* The Game Museum — gold outline system for Collection filters.
+   Every Collection filter control keeps a constant Museum-gold edge; PlayStation Platinum stays silver.
+   Wishlist platform outlines from the previous pass are retained unchanged. */
 
-/* Collection: coloured family + console choices get the Museum gold outline. */
-#collection .museum-custom-family .museum-custom-option:not([data-value=""]),
-#collection .museum-custom-console .museum-custom-option:not([data-value=""]){
-  border-color:var(--gold)!important;
-}
-#collection .museum-filter-controls:has(#familyFilter option:checked:not([value=""])) .museum-custom-family .museum-custom-select-trigger,
-#collection .museum-filter-controls:has(#familyFilter option:checked:not([value=""])) .museum-custom-console .museum-custom-select-trigger,
-#collection .museum-filter-controls:has(#familyFilter option:checked:not([value=""])) .museum-custom-console .museum-custom-option,
-#collection .museum-filter-controls:has(#platformFilter option:checked:not([value=""])) .museum-custom-console .museum-custom-select-trigger{
+/* Collection search + sort stay gold-outlined at all times. */
+#collection #searchInput,
+#collection #sortFilter{
   border-color:var(--gold)!important;
 }
 
-/* Wishlist: same platform-family treatment; Wishlist Type colours are untouched. */
+/* Main Shelf / Display Shelf / All Games tabs all keep the gold edge. */
+#collection .shelf-selector .shelf-tab{
+  border-color:var(--gold)!important;
+}
+
+/* Platform family + console triggers and every menu option keep the gold edge,
+   including the neutral "All" choices. Platform fill colours remain untouched. */
+#collection .museum-custom-family .museum-custom-select-trigger,
+#collection .museum-custom-console .museum-custom-select-trigger,
+#collection .museum-custom-family .museum-custom-option,
+#collection .museum-custom-console .museum-custom-option{
+  border-color:var(--gold)!important;
+}
+
+/* Contextual Collection Shelf choices use gold except the Platinum shelf,
+   which deliberately keeps its silver/platinum identity. */
+#collection .shelf-section-tab:not(.platinum){
+  border-color:var(--gold)!important;
+}
+#collection .shelf-section-tab.platinum{
+  border-color:#e1e7ec!important;
+}
+
+/* Wishlist: retain the existing gold separation on coloured platform choices only.
+   Wishlist Type colours and neutral/default styling stay as they were. */
 #wishlist .wishlist-museum-family .museum-custom-option:not([data-value=""]),
 #wishlist .wishlist-museum-console .museum-custom-option:not([data-value=""]){
   border-color:var(--gold)!important;
