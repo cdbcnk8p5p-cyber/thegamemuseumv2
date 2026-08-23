@@ -1,9 +1,9 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v34';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v35';
 const CORE=[
   './',
   './index.html',
   './styles.css?v=2',
-  './theme-palette.css?v=1',
+  './theme-palette.css?v=2',
   './drawer-layer-fix.css?v=1',
   './app.js',
   './data.js',
@@ -24,7 +24,7 @@ const CORE=[
   './wishlist-expansion-2026-08-23.js?v=1',
   './wishlist-gallery.js?v=1',
   './wishlist-collection-filter-style.js?v=1',
-  './theme-sync.js?v=1',
+  './theme-sync.js?v=2',
   './xbox-one-ghosts-standard-fix.js',
   './xbox-original-360-update.js?v=1',
   './xbox-one-update.js?v=1',

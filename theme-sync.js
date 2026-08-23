@@ -1,7 +1,7 @@
 // The Game Museum — keep browser/PWA chrome and neutral Museum controls aligned with the saved theme.
 (() => {
-  const LIGHT = '#f2f3f4';
-  const DARK = '#0d0f12';
+  const LIGHT = '#f4f5f7';
+  const DARK = '#24282f';
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   const appleStatus = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
   const themeButton = document.getElementById('themeBtn');
