@@ -1,1 +1,26 @@
-/* placeholder */
+/* The Game Museum — subtle gold separation for coloured platform filters.
+   Neutral/default controls keep their existing theme border. */
+
+/* Collection: coloured family + console choices get the Museum gold outline. */
+#collection .museum-custom-family .museum-custom-option:not([data-value=""]),
+#collection .museum-custom-console .museum-custom-option:not([data-value=""]){
+  border-color:var(--gold)!important;
+}
+#collection .museum-filter-controls:has(#familyFilter option:checked:not([value=""])) .museum-custom-family .museum-custom-select-trigger,
+#collection .museum-filter-controls:has(#familyFilter option:checked:not([value=""])) .museum-custom-console .museum-custom-select-trigger,
+#collection .museum-filter-controls:has(#familyFilter option:checked:not([value=""])) .museum-custom-console .museum-custom-option,
+#collection .museum-filter-controls:has(#platformFilter option:checked:not([value=""])) .museum-custom-console .museum-custom-select-trigger{
+  border-color:var(--gold)!important;
+}
+
+/* Wishlist: same platform-family treatment; Wishlist Type colours are untouched. */
+#wishlist .wishlist-museum-family .museum-custom-option:not([data-value=""]),
+#wishlist .wishlist-museum-console .museum-custom-option:not([data-value=""]){
+  border-color:var(--gold)!important;
+}
+#wishlist .wishlist-filter-shelf:has(#wishFamilyFilter option:checked:not([value=""])) .wishlist-museum-family .museum-custom-select-trigger,
+#wishlist .wishlist-filter-shelf:has(#wishFamilyFilter option:checked:not([value=""])) .wishlist-museum-console .museum-custom-select-trigger,
+#wishlist .wishlist-filter-shelf:has(#wishFamilyFilter option:checked:not([value=""])) .wishlist-museum-console .museum-custom-option,
+#wishlist .wishlist-filter-shelf:has(#wishConsoleFilter option:checked:not([value=""])) .wishlist-museum-console .museum-custom-select-trigger{
+  border-color:var(--gold)!important;
+}
