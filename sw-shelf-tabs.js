@@ -24,7 +24,7 @@ const CORE=[
   './wishlist-expansion-2026-08-23.js?v=1',
   './wishlist-gallery.js?v=1',
   './wishlist-collection-filter-style.js?v=1',
-  './theme-sync.js?v=1',
+  './theme-sync.js?v=2',
   './xbox-one-ghosts-standard-fix.js',
   './xbox-original-360-update.js?v=1',
   './xbox-one-update.js?v=1',
