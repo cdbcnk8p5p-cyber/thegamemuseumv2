@@ -11,8 +11,9 @@
     'Priority Acquisition':{background:'#b85d0b',border:'#e99834'},
     'Shelf Completion':{background:'#9b7414',border:'#d7aa38'},
     'Generation Crossover':{background:'#087f9f',border:'#37bdd8'},
-    'Simpsons Collection':{background:'#b59b00',border:'#e7cf36'},
-    'Saints Row Collection':{background:'#6b3aa8',border:'#9a63d4'}
+    'Simpsons Collection':{background:'#ffd90f',border:'#fff36a',text:'#17202a'},
+    'Saints Row Collection':{background:'#6b3aa8',border:'#9a63d4'},
+    'Lower Priority':{background:'#84e600',border:'#b7ff53',text:'#17202a'}
   };
   const NEUTRAL={background:'#24384b',border:'#536a80'};
   const clean=v=>String(v??'').trim();
@@ -109,7 +110,7 @@
       const c=colours||NEUTRAL;
       el.style.background=c.background;
       el.style.borderColor=c.border;
-      el.style.color='#fff';
+      el.style.color=c.text||'#fff';
     };
     const sync=()=>{
       const selected=select.options[select.selectedIndex]||select.options[0];
