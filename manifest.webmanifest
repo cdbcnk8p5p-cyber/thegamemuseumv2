@@ -5,8 +5,8 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f2f0ec",
-  "theme_color": "#f2f0ec",
+  "background_color": "#f2f3f4",
+  "theme_color": "#f2f3f4",
   "description": "Grant's premium physical video game museum with real cover artwork.",
   "icons": [
     {
