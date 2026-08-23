@@ -7,6 +7,13 @@
     Sega:{background:'#111111',border:'#4c5965'},
     Xbox:{background:'#16811e',border:'#4dbb54'}
   };
+  const TYPE_PALETTE={
+    'Priority Acquisition':{background:'#b85d0b',border:'#e99834'},
+    'Shelf Completion':{background:'#9b7414',border:'#d7aa38'},
+    'Generation Crossover':{background:'#087f9f',border:'#37bdd8'},
+    'Simpsons Collection':{background:'#b59b00',border:'#e7cf36'},
+    'Saints Row Collection':{background:'#6b3aa8',border:'#9a63d4'}
+  };
   const NEUTRAL={background:'#24384b',border:'#536a80'};
   const clean=v=>String(v??'').trim();
   const canonical=v=>typeof window.MUSEUM_CANONICAL_PLATFORM==='function'?window.MUSEUM_CANONICAL_PLATFORM(v):clean(v);
@@ -19,6 +26,7 @@
     return'';
   };
   const coloursFor=family=>PALETTE[family]||NEUTRAL;
+  const typeColoursFor=value=>TYPE_PALETTE[clean(value)]||NEUTRAL;
   const closeAll=except=>document.querySelectorAll('#wishlist .wishlist-museum-select.open').forEach(control=>{
     if(control===except)return;
     control.classList.remove('open');
@@ -85,18 +93,20 @@
     control.append(trigger,menu);
     select.insertAdjacentElement('afterend',control);
 
-    const familyForOption=option=>{
-      if(kind==='family')return option.value||'';
-      if(kind==='console')return option.value?familyOf(option.value):(familySelect?.value||'');
-      return'';
+    const coloursForOption=option=>{
+      if(kind==='family')return coloursFor(option.value||'');
+      if(kind==='console')return coloursFor(option.value?familyOf(option.value):(familySelect?.value||''));
+      if(kind==='type')return typeColoursFor(option.value);
+      return NEUTRAL;
     };
-    const triggerFamily=()=>{
-      if(kind==='family')return select.value||'';
-      if(kind==='console')return familySelect?.value||familyOf(select.value);
-      return'';
+    const triggerColours=()=>{
+      if(kind==='family')return coloursFor(select.value||'');
+      if(kind==='console')return coloursFor(familySelect?.value||familyOf(select.value));
+      if(kind==='type')return typeColoursFor(select.value);
+      return NEUTRAL;
     };
-    const paint=(el,fam)=>{
-      const c=coloursFor(fam);
+    const paint=(el,colours)=>{
+      const c=colours||NEUTRAL;
       el.style.background=c.background;
       el.style.borderColor=c.border;
       el.style.color='#fff';
@@ -104,7 +114,7 @@
     const sync=()=>{
       const selected=select.options[select.selectedIndex]||select.options[0];
       valueText.textContent=selected?.textContent||'';
-      paint(trigger,triggerFamily());
+      paint(trigger,triggerColours());
       [...menu.querySelectorAll('.museum-custom-option')].forEach(button=>{
         const chosen=button.dataset.value===select.value;
         button.classList.toggle('selected',chosen);
@@ -127,7 +137,7 @@
         tick.className='museum-custom-option-tick';
         tick.textContent='✓';
         button.append(label,tick);
-        paint(button,familyForOption(option));
+        paint(button,coloursForOption(option));
         button.addEventListener('click',event=>{
           event.preventDefault();
           event.stopPropagation();
