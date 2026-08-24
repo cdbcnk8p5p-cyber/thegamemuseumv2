@@ -1,0 +1,39 @@
+// The Game Museum — CEX Mode 2.0
+// Read-only shopping assistant over the existing Collection and Wishlist data.
+(() => {
+  const ensureStyles=()=>{if(document.getElementById('museum-cex-mode-v2-style'))return;const link=document.createElement('link');link.id='museum-cex-mode-v2-style';link.rel='stylesheet';link.href='./cex-mode-v2.css?v=1';document.head.appendChild(link)};
+  ensureStyles();
+  const clean=v=>String(v??'').trim(), lower=v=>clean(v).toLowerCase();
+  const titleKey=v=>lower(v).replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').replace(/\bstandard edition\b/g,'').replace(/\s+/g,' ').trim();
+  const canonical=v=>typeof window.MUSEUM_CANONICAL_PLATFORM==='function'?window.MUSEUM_CANONICAL_PLATFORM(v):clean(v);
+  const shelfFor=g=>typeof window.MUSEUM_COLLECTION_SHELF==='function'?window.MUSEUM_COLLECTION_SHELF(g):(g?.shelfSection||((g?.category==='Display Gallery'||lower(g?.display)==='yes')?'Display Shelf':'Standard Shelf'));
+  const isDisplay=g=>g?.category==='Display Gallery'||lower(g?.display)==='yes';
+  const activeWishlist=()=>typeof state!=='undefined'&&Array.isArray(state.wishlist)?state.wishlist.filter(x=>lower(x?.status)!=='purchased'):[];
+  const games=()=>typeof state!=='undefined'&&Array.isArray(state.games)?state.games:[];
+  const sameTarget=(g,w)=>titleKey(g?.title)===titleKey(w?.title)&&canonical(g?.platform)===canonical(w?.platform);
+  const safe=v=>typeof esc==='function'?esc(v):clean(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const initialsFor=t=>typeof initials==='function'?initials(t):clean(t).split(/\s+/).slice(0,3).map(p=>p[0]||'').join('').toUpperCase();
+  const artFor=x=>x?.image||(typeof artwork==='function'?artwork(x):'')||'';
+  const TYPE_PALETTE={
+    'Priority Acquisition':{background:'#b85d0b',border:'#e99834',text:'#fff'},
+    'Shelf Completion':{background:'#9b7414',border:'#d7aa38',text:'#fff'},
+    'Generation Crossover':{background:'#087f9f',border:'#37bdd8',text:'#fff'},
+    'Simpsons Collection':{background:'#ffd90f',border:'#fff36a',text:'#17202a'},
+    'Saints Row Collection':{background:'#6b3aa8',border:'#9a63d4',text:'#fff'},
+    'Lower Priority':{background:'#84e600',border:'#b7ff53',text:'#17202a'}
+  };
+  const typeChip=type=>{const label=clean(type)||'Wishlist',c=TYPE_PALETTE[label]||{background:'var(--surface2)',border:'var(--line-strong)',text:'var(--ink)'};return `<span class="cex-type-chip" style="--cex-chip-bg:${c.background};--cex-chip-border:${c.border};--cex-chip-text:${c.text}">${safe(label)}</span>`};
+  const cover=item=>{const art=artFor(item);return `<div class="cex-v2-cover">${art?`<img src="${safe(art)}" alt="${safe(item?.title||'Game')} cover art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="cex-v2-fallback" style="display:none">${safe(initialsFor(item?.title||'Game'))}</span>`:`<span class="cex-v2-fallback">${safe(initialsFor(item?.title||'Game'))}</span>`}</div>`};
+  const STATUS={
+    owned:{eyebrow:'OWNERSHIP CHECK',heading:'Already preserved',icon:'✓',note:'This physical release is already catalogued in the Museum.'},
+    wishlist:{eyebrow:'WISHLIST MATCH',heading:'Museum target',icon:'★',note:'This exact platform target is still on the Wishlist.'},
+    'display-needed':{eyebrow:'SHELF COMPLETION',heading:'Display copy — Standard still needed',icon:'!',note:'A display or special copy is preserved, but the Standard Main Shelf target is still missing.'}
+  };
+  function ownedResult(g){const w=activeWishlist().find(x=>sameTarget(g,x));if(isDisplay(g)&&w)return{kind:'display-needed',title:w.title||g.title,platform:canonical(w.platform||g.platform),edition:w.edition||'Standard',shelf:'Standard Shelf target',item:w,wish:w,owned:g,sort:1};return{kind:'owned',title:g.title,platform:canonical(g.platform),edition:g.edition||'Standard',shelf:shelfFor(g),item:g,owned:g,sort:0}}
+  function collect(query){const q=titleKey(query);if(!q)return[];const own=games().filter(g=>titleKey(g?.title).includes(q)),wish=activeWishlist().filter(w=>titleKey(w?.title).includes(q)),results=own.map(ownedResult);wish.forEach(w=>{const exact=own.find(g=>sameTarget(g,w));if(exact){if(isDisplay(exact)&&!results.some(r=>r.kind==='display-needed'&&r.owned===exact))results.push(ownedResult(exact));return}results.push({kind:'wishlist',title:w.title,platform:canonical(w.platform),edition:w.edition||'Standard',shelf:'Wishlist target',item:w,wish:w,sort:2})});const seen=new Set();return results.filter(r=>{const key=[r.kind,titleKey(r.title),lower(r.platform),lower(r.edition)].join('|');if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>a.sort-b.sort||a.title.localeCompare(b.title,undefined,{numeric:true,sensitivity:'base'})||a.platform.localeCompare(b.platform,undefined,{numeric:true,sensitivity:'base'}))}
+  function card(r){const s=STATUS[r.kind],w=r.wish,g=r.owned,extra=r.kind==='display-needed'&&g?`<div class="cex-v2-detail"><span>Display copy owned</span><strong>${safe(g.edition||'Special / display edition')}</strong></div>`:'',reason=w?.reason?`<p class="cex-v2-reason">${safe(w.reason)}</p>`:'',action=g&&typeof openGame==='function'?`<button type="button" class="cex-v2-open" data-cex-open="${safe(g.id)}">View Museum record →</button>`:'';return `<article class="cex-v2-card ${r.kind}">${cover(r.item)}<div class="cex-v2-content"><div class="cex-v2-status"><span class="cex-v2-status-icon">${s.icon}</span><div><span class="eyebrow">${s.eyebrow}</span><h2>${s.heading}</h2></div></div><h3>${safe(r.title)}</h3><p class="cex-v2-meta">${safe(r.platform)} • ${safe(r.edition)}</p><div class="cex-v2-detail"><span>Collection shelf</span><strong>${safe(r.shelf)}</strong></div>${w?typeChip(w.type||w.order):''}${extra}${reason}<p class="cex-v2-note">${s.note}</p>${action}</div></article>`}
+  function renderTargets(){const mini=document.getElementById('cexWishlist');if(!mini)return;const items=activeWishlist().slice(0,6);mini.innerHTML=items.map(w=>`<article class="cex-v2-target"><div><strong>${safe(w.title)}</strong><span>${safe(canonical(w.platform))}${w.edition?` • ${safe(w.edition)}`:''}</span></div>${typeChip(w.type||w.order)}</article>`).join('')||'<p class="muted">No active Wishlist targets.</p>'}
+  function render(){renderTargets();const input=document.getElementById('cexSearch'),box=document.getElementById('cexResult');if(!input||!box)return;const query=clean(input.value);if(!query){box.innerHTML='<div class="cex-v2-idle"><span>🛒</span><strong>Ready for the shelf check</strong><p>Type a title to check the Collection and Wishlist together.</p></div>';return}const results=collect(query);if(!results.length){box.innerHTML=`<article class="cex-v2-empty"><span class="eyebrow">CATALOGUE CHECK</span><h2>Not catalogued</h2><p>No Collection or Wishlist match was found for “${safe(query)}”. Check the title before buying if you are unsure.</p></article>`;return}box.innerHTML=`<div class="cex-v2-summary"><strong>${results.length} ${results.length===1?'Museum match':'Museum matches'}</strong><span>Collection + Wishlist check</span></div><div class="cex-v2-results">${results.map(card).join('')}</div>`;box.querySelectorAll('[data-cex-open]').forEach(b=>b.addEventListener('click',()=>{try{openGame(b.dataset.cexOpen)}catch(_){}}))}
+  function setup(attempt=0){const input=document.getElementById('cexSearch'),result=document.getElementById('cexResult');if(!input||!result||typeof state==='undefined'){if(attempt<15)setTimeout(()=>setup(attempt+1),80);return}input.placeholder='Type a game title…';input.oninput=render;try{cex=render}catch(_){}window.MUSEUM_CEX_V2_RENDER=render;document.querySelectorAll('[data-page="cex"]').forEach(button=>button.addEventListener('click',()=>setTimeout(render,0)));render()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setup(),{once:true});else setup();
+})();

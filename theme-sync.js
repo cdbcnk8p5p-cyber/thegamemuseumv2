@@ -75,3 +75,12 @@
   setTimeout(syncThemeChrome, 300);
   setTimeout(syncThemeChrome, 900);
 })();
+
+// CEX Mode 2.0 stays isolated from the main catalogue code and loads after the Museum runtime is ready.
+(() => {
+  if (document.getElementById('museum-cex-mode-v2-script')) return;
+  const script = document.createElement('script');
+  script.id = 'museum-cex-mode-v2-script';
+  script.src = './cex-mode-v2.js?v=1';
+  document.body.appendChild(script);
+})();

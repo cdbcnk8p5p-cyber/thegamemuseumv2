@@ -1,0 +1,23 @@
+/* The Game Museum — CEX Mode 2.0 */
+#cex .mega-search{border-color:var(--gold);box-shadow:inset 0 0 0 1px rgba(215,170,56,.18),var(--shadow)}
+#cexResult{margin-top:14px}
+.cex-v2-idle,.cex-v2-empty{border:1px solid var(--line-strong);background:var(--surface);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.cex-v2-idle{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;color:var(--muted)}
+.cex-v2-idle>span{grid-row:1/3;font-size:28px}.cex-v2-idle strong{color:var(--ink);font-size:15px}.cex-v2-idle p,.cex-v2-empty p{margin:3px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.cex-v2-empty{border-color:var(--line-strong)}.cex-v2-empty h2{margin:5px 0 0;font-size:21px}
+.cex-v2-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 3px 10px;color:var(--muted);font-size:12px}.cex-v2-summary strong{color:var(--ink);font-size:13px}
+.cex-v2-results{display:grid;gap:12px}
+.cex-v2-card{display:grid;grid-template-columns:112px minmax(0,1fr);overflow:hidden;border:1px solid var(--line-strong);border-left:4px solid var(--line-strong);border-radius:18px;background:var(--surface);box-shadow:var(--shadow)}
+.cex-v2-card.owned{border-left-color:#2ea65a}.cex-v2-card.wishlist{border-left-color:var(--gold)}.cex-v2-card.display-needed{border-left-color:#e99834}
+.cex-v2-cover{width:100%;height:100%;min-height:168px;background:var(--surface2);display:grid;place-items:center;overflow:hidden;border-right:1px solid var(--line)}
+.cex-v2-cover img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:var(--surface2)}
+.cex-v2-fallback{display:grid;place-items:center;width:100%;height:100%;min-height:168px;padding:12px;text-align:center;font-weight:950;font-size:24px;color:var(--muted);background:linear-gradient(145deg,var(--surface2),var(--surface))}
+.cex-v2-content{padding:14px 15px;min-width:0}.cex-v2-status{display:flex;align-items:center;gap:9px;margin-bottom:9px}.cex-v2-status-icon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-weight:950;background:var(--surface2);border:1px solid var(--line-strong);color:var(--ink)}
+.cex-v2-card.owned .cex-v2-status-icon{background:#173b26;border-color:#2ea65a;color:#baf2ca}.cex-v2-card.display-needed .cex-v2-status-icon{background:#3b2a16;border-color:#e99834;color:#ffd69a}.cex-v2-card.wishlist .cex-v2-status-icon{background:#3a3017;border-color:var(--gold);color:var(--gold2)}
+body:not(.dark) .cex-v2-card.owned .cex-v2-status-icon{background:#e5f5e9;color:#176d37}.cex-v2-status h2{margin:2px 0 0;font-size:16px;line-height:1.15}.cex-v2-content>h3{margin:0;font-size:18px;line-height:1.18}.cex-v2-meta{margin:5px 0 10px;color:var(--muted);font-size:12px;font-weight:750}
+.cex-v2-detail{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:11px}.cex-v2-detail span{color:var(--muted)}.cex-v2-detail strong{text-align:right;color:var(--ink)}
+.cex-type-chip{display:inline-flex;align-items:center;max-width:100%;margin-top:9px;padding:6px 9px;border-radius:999px;background:var(--cex-chip-bg);border:1px solid var(--cex-chip-border);color:var(--cex-chip-text);font-size:9px;font-weight:950;line-height:1.1}
+.cex-v2-reason,.cex-v2-note{font-size:11px;line-height:1.45}.cex-v2-reason{margin:9px 0 0;color:var(--ink)}.cex-v2-note{margin:8px 0 0;color:var(--muted)}
+.cex-v2-open{margin-top:10px;padding:0;border:0;background:none;color:var(--gold);font-weight:900;font-size:12px;cursor:pointer}
+#cex .wish-mini{gap:8px}#cex .cex-v2-target{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--surface2)}#cex .cex-v2-target>div{min-width:0}#cex .cex-v2-target strong{display:block;font-size:12px;line-height:1.25}#cex .cex-v2-target span:not(.cex-type-chip){display:block;margin-top:4px;font-size:10px;color:var(--muted)}#cex .cex-v2-target .cex-type-chip{margin-top:0;flex:0 0 auto;max-width:46%;text-align:center}
+@media(max-width:430px){.cex-v2-card{grid-template-columns:96px minmax(0,1fr)}.cex-v2-cover,.cex-v2-fallback{min-height:150px}.cex-v2-content{padding:12px}.cex-v2-status h2{font-size:14px}.cex-v2-content>h3{font-size:16px}.cex-v2-status-icon{width:27px;height:27px}.cex-v2-detail{display:block}.cex-v2-detail strong{display:block;margin-top:2px;text-align:left}#cex .cex-v2-target{display:block}#cex .cex-v2-target .cex-type-chip{max-width:100%;margin-top:8px}}
