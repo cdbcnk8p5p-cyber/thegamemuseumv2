@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v45';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v46';
 const CORE=[
   './',
   './index.html',
@@ -6,6 +6,7 @@ const CORE=[
   './theme-palette.css?v=4',
   './platform-filter-gold-outline.css?v=2',
   './drawer-layer-fix.css?v=1',
+  './bottom-nav-safe-area.css?v=1',
   './app.js',
   './data.js',
   './platform-standard.js?v=1',
