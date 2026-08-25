@@ -157,21 +157,15 @@ main{
   padding-top:calc(env(safe-area-inset-top) + 96px);
 }
 
-/* Games and CEX use stronger line icons so they carry the same visual weight as the emoji tabs. */
-.museum-bottom-nav-icon{
-  width:24px;
-  height:24px;
-  display:block;
-  margin:0 auto 1px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:2.35;
-  stroke-linecap:round;
-  stroke-linejoin:round;
+/* Keep the original colourful emoji nav in dark mode, but lift each glyph off the graphite chrome. */
+body.dark .bottom-nav button{
+  text-shadow:0 0 1px rgba(255,255,255,.72),0 0 7px rgba(255,255,255,.20);
 }
-body.dark .bottom-nav button[data-page="collection"]:not(.active) .museum-bottom-nav-icon,
-body.dark .bottom-nav button[data-page="cex"]:not(.active) .museum-bottom-nav-icon{
-  color:#edf0f3;
+body.dark .bottom-nav button.active{
+  text-shadow:0 0 1px rgba(255,255,255,.76),0 0 8px rgba(215,170,56,.26);
+}
+body.dark .bottom-nav button span{
+  text-shadow:none;
 }
 
 .platform-ribbon{background:rgba(10,12,15,.84)}

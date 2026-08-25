@@ -6,20 +6,6 @@
   const appleStatus = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
   const themeButton = document.getElementById('themeBtn');
 
-  const installBottomNavIcons = () => {
-    const icons = {
-      collection: '<svg class="museum-bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.2 7.2h9.6a4.5 4.5 0 0 1 4.3 3.2l1.2 3.8a3 3 0 0 1-5.5 2.4l-1.2-2H8.4l-1.2 2a3 3 0 0 1-5.5-2.4l1.2-3.8a4.5 4.5 0 0 1 4.3-3.2Z"/><path d="M7 10v4M5 12h4"/><path d="M16.4 10.6h.1M18.5 12.5h.1"/></svg>',
-      cex: '<svg class="museum-bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h2l1.6 8.4a2.4 2.4 0 0 0 2.4 2h7.8a2.4 2.4 0 0 0 2.3-1.7L21 8H6"/><circle cx="9.5" cy="19.3" r="1.25"/><circle cx="18" cy="19.3" r="1.25"/></svg>'
-    };
-
-    Object.entries(icons).forEach(([page, icon]) => {
-      const button = document.querySelector(`.bottom-nav button[data-page="${page}"]`);
-      if (!button || button.querySelector('.museum-bottom-nav-icon')) return;
-      [...button.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).forEach(node => node.remove());
-      button.insertAdjacentHTML('afterbegin', icon);
-    });
-  };
-
   const neutralise = element => {
     if (!element) return;
     element.style.setProperty('background', 'var(--surface2)');
@@ -84,7 +70,6 @@
   const uiObserver = new MutationObserver(() => setTimeout(syncNeutralControls, 0));
   uiObserver.observe(document.body, {childList:true, subtree:true});
 
-  installBottomNavIcons();
   syncThemeChrome();
   setTimeout(syncThemeChrome, 80);
   setTimeout(syncThemeChrome, 300);

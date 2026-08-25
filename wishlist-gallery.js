@@ -41,6 +41,7 @@
     Xbox:['Xbox Original','Xbox 360','Xbox One','Xbox Series X/S','Xbox Cross Generation']
   };
   const familyFor=p=>Object.keys(families).find(f=>families[f].includes(canonical(p)))||'';
+  const typesFor=w=>[...new Set([clean(w?.type),...(Array.isArray(w?.types)?w.types.map(clean):[])].filter(Boolean))];
   const coverHtml=w=>{
     const image=w.image||'';
     return `<div class="game-cover">${image?`<img src="${esc(image)}" alt="${esc(w.title)} cover art" loading="lazy"><div class="initials" style="display:none">${esc(initials(w.title))}</div>`:`<div class="initials">${esc(initials(w.title))}</div>`}</div>`;
@@ -60,11 +61,11 @@
     const typeValue=type.value;
     let items=(state.wishlist||[]).filter(w=>lower(w.status)!=='purchased').filter(w=>{
       const p=canonical(w.platform);
-      const hay=lower([w.title,p,w.reason,w.order,w.type,w.edition].join(' '));
+      const hay=lower([w.title,p,w.reason,w.order,...typesFor(w),w.edition].join(' '));
       return (!q||hay.includes(q))&&
         (!familyValue||familyFor(p)===familyValue)&&
         (!consoleValue||p===consoleValue)&&
-        (!typeValue||lower(w.type)===lower(typeValue));
+        (!typeValue||typesFor(w).some(t=>lower(t)===lower(typeValue)));
     }).sort((a,b)=>alpha(a.title,b.title)||alpha(canonical(a.platform),canonical(b.platform)));
 
     const count=document.getElementById('wishResultCount');
@@ -75,7 +76,7 @@
       <div class="game-info">
         <span class="platform ${platformClass(canonical(w.platform))}">${esc(canonical(w.platform))}</span>
         <h3>${esc(w.title)}</h3>
-        <p class="wishlist-card-meta">${esc([w.edition,w.type||w.order].filter(Boolean).join(' • '))}</p>
+        <p class="wishlist-card-meta">${esc([w.edition,...typesFor(w)].filter(Boolean).join(' • '))}</p>
         ${w.reason?`<div class="wishlist-reason">${esc(w.reason)}</div>`:''}
       </div>
     </article>`).join('')||'<article class="panel">No wishlist targets found.</article>';
@@ -121,7 +122,7 @@
     family.innerHTML='<option value="">All platforms</option>'+presentFamilies.map(f=>`<option value="${esc(f)}">${esc(f)}</option>`).join('');
 
     const preferred=['Priority Acquisition','Shelf Completion','Generation Crossover','Simpsons Collection'];
-    const actual=[...new Set((state.wishlist||[]).map(w=>clean(w.type)).filter(Boolean))];
+    const actual=[...new Set((state.wishlist||[]).flatMap(w=>typesFor(w)))];
     const types=[...preferred.filter(x=>actual.includes(x)),...actual.filter(x=>!preferred.includes(x)).sort(alpha)];
     type.innerHTML='<option value="">All priorities</option>'+types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
 
