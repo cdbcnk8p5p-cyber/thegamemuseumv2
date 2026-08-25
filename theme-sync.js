@@ -8,8 +8,8 @@
 
   const installBottomNavIcons = () => {
     const icons = {
-      collection: '<svg class="museum-bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 6h7a4.5 4.5 0 0 1 4.2 2.9l1.7 4.5a3.4 3.4 0 0 1-6 3.1L14 14h-4l-1.4 2.5a3.4 3.4 0 0 1-6-3.1l1.7-4.5A4.5 4.5 0 0 1 8.5 6Z"/><path d="M7 10v4M5 12h4"/><circle cx="16.5" cy="10.5" r="1"/><circle cx="18.5" cy="12.5" r="1"/></svg>',
-      cex: '<svg class="museum-bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 1.9-1.4L21 8H6"/><circle cx="10" cy="19" r="1.5"/><circle cx="18" cy="19" r="1.5"/></svg>'
+      collection: '<svg class="museum-bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.2 7.2h9.6a4.5 4.5 0 0 1 4.3 3.2l1.2 3.8a3 3 0 0 1-5.5 2.4l-1.2-2H8.4l-1.2 2a3 3 0 0 1-5.5-2.4l1.2-3.8a4.5 4.5 0 0 1 4.3-3.2Z"/><path d="M7 10v4M5 12h4"/><path d="M16.4 10.6h.1M18.5 12.5h.1"/></svg>',
+      cex: '<svg class="museum-bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h2l1.6 8.4a2.4 2.4 0 0 0 2.4 2h7.8a2.4 2.4 0 0 0 2.3-1.7L21 8H6"/><circle cx="9.5" cy="19.3" r="1.25"/><circle cx="18" cy="19.3" r="1.25"/></svg>'
     };
 
     Object.entries(icons).forEach(([page, icon]) => {
