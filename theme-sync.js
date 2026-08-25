@@ -81,6 +81,6 @@
   if (document.getElementById('museum-cex-mode-v2-script')) return;
   const script = document.createElement('script');
   script.id = 'museum-cex-mode-v2-script';
-  script.src = './cex-mode-v2.js?v=2';
+  script.src = './cex-mode-v2.js?v=3';
   document.body.appendChild(script);
 })();
