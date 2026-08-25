@@ -1,7 +1,2 @@
-/* The Game Museum — iOS/PWA bottom-nav safe-area guard.
-   CEX search can leave WebKit reporting an oversized bottom inset after keyboard/viewport changes.
-   Cap only CEX Mode's nav inset to a normal iPhone home-indicator allowance. */
-body:has(#cex.page.active) .bottom-nav{
-  bottom:0!important;
-  padding-bottom:calc(7px + min(env(safe-area-inset-bottom),34px))!important;
-}
+/* Retired workaround.
+   CEX bottom-nav correction is now handled by cex-mode-v2.js using the normal-page nav padding measured at runtime. */
