@@ -1,7 +1,7 @@
 // The Game Museum — CEX Mode 2.0
 // Read-only shopping assistant over the existing Collection and Wishlist data.
 (() => {
-  const ensureStyles=()=>{if(document.getElementById('museum-cex-mode-v2-style'))return;const link=document.createElement('link');link.id='museum-cex-mode-v2-style';link.rel='stylesheet';link.href='./cex-mode-v2.css?v=1';document.head.appendChild(link)};
+  const ensureStyles=()=>{if(document.getElementById('museum-cex-mode-v2-style'))return;const link=document.createElement('link');link.id='museum-cex-mode-v2-style';link.rel='stylesheet';link.href='./cex-mode-v2.css?v=2';document.head.appendChild(link)};
   ensureStyles();
   const clean=v=>String(v??'').trim(), lower=v=>clean(v).toLowerCase();
   const titleKey=v=>lower(v).replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').replace(/\bstandard edition\b/g,'').replace(/\s+/g,' ').trim();
@@ -14,37 +14,6 @@
   const safe=v=>typeof esc==='function'?esc(v):clean(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const initialsFor=t=>typeof initials==='function'?initials(t):clean(t).split(/\s+/).slice(0,3).map(p=>p[0]||'').join('').toUpperCase();
   const artFor=x=>x?.image||(typeof artwork==='function'?artwork(x):'')||'';
-
-  // iOS/PWA can inflate the fixed nav's bottom padding after focusing the CEX search field.
-  // Capture the working padding from a normal Museum page and force that exact value only while CEX is active.
-  let normalNavPadding='';
-  function syncCexBottomNav(){
-    const nav=document.querySelector('.bottom-nav'),page=document.getElementById('cex');
-    if(!nav||!page)return;
-    if(page.classList.contains('active')){
-      if(!normalNavPadding)normalNavPadding='41px';
-      nav.style.setProperty('bottom','0','important');
-      nav.style.setProperty('padding-bottom',normalNavPadding,'important');
-    }else{
-      nav.style.removeProperty('bottom');
-      nav.style.removeProperty('padding-bottom');
-      if(!normalNavPadding)normalNavPadding=getComputedStyle(nav).paddingBottom||'41px';
-    }
-  }
-  function setupNavGuard(){
-    const nav=document.querySelector('.bottom-nav'),page=document.getElementById('cex');
-    if(!nav||!page)return;
-    if(page.dataset.cexNavGuard==='1'){syncCexBottomNav();return}
-    if(!page.classList.contains('active'))normalNavPadding=getComputedStyle(nav).paddingBottom||'41px';
-    page.dataset.cexNavGuard='1';
-    new MutationObserver(syncCexBottomNav).observe(page,{attributes:true,attributeFilter:['class']});
-    if(window.visualViewport){
-      window.visualViewport.addEventListener('resize',syncCexBottomNav,{passive:true});
-      window.visualViewport.addEventListener('scroll',syncCexBottomNav,{passive:true});
-    }
-    syncCexBottomNav();
-  }
-
   const TYPE_PALETTE={
     'Priority Acquisition':{background:'#b85d0b',border:'#e99834',text:'#fff'},
     'Shelf Completion':{background:'#9b7414',border:'#d7aa38',text:'#fff'},
@@ -65,6 +34,6 @@
   function card(r){const s=STATUS[r.kind],w=r.wish,g=r.owned,extra=r.kind==='display-needed'&&g?`<div class="cex-v2-detail"><span>Display copy owned</span><strong>${safe(g.edition||'Special / display edition')}</strong></div>`:'',reason=w?.reason?`<p class="cex-v2-reason">${safe(w.reason)}</p>`:'',action=g&&typeof openGame==='function'?`<button type="button" class="cex-v2-open" data-cex-open="${safe(g.id)}">View Museum record →</button>`:'';return `<article class="cex-v2-card ${r.kind}">${cover(r.item)}<div class="cex-v2-content"><div class="cex-v2-status"><span class="cex-v2-status-icon">${s.icon}</span><div><span class="eyebrow">${s.eyebrow}</span><h2>${s.heading}</h2></div></div><h3>${safe(r.title)}</h3><p class="cex-v2-meta">${safe(r.platform)} • ${safe(r.edition)}</p><div class="cex-v2-detail"><span>Collection shelf</span><strong>${safe(r.shelf)}</strong></div>${w?typeChip(w.type||w.order):''}${extra}${reason}<p class="cex-v2-note">${s.note}</p>${action}</div></article>`}
   function renderTargets(){const mini=document.getElementById('cexWishlist');if(!mini)return;const items=activeWishlist().slice(0,6);mini.innerHTML=items.map(w=>`<article class="cex-v2-target"><div><strong>${safe(w.title)}</strong><span>${safe(canonical(w.platform))}${w.edition?` • ${safe(w.edition)}`:''}</span></div>${typeChip(w.type||w.order)}</article>`).join('')||'<p class="muted">No active Wishlist targets.</p>'}
   function render(){renderTargets();const input=document.getElementById('cexSearch'),box=document.getElementById('cexResult');if(!input||!box)return;const query=clean(input.value);if(!query){box.innerHTML='<div class="cex-v2-idle"><span>🛒</span><strong>Ready for the shelf check</strong><p>Type a title to check the Collection and Wishlist together.</p></div>';return}const results=collect(query);if(!results.length){box.innerHTML=`<article class="cex-v2-empty"><span class="eyebrow">CATALOGUE CHECK</span><h2>Not catalogued</h2><p>No Collection or Wishlist match was found for “${safe(query)}”. Check the title before buying if you are unsure.</p></article>`;return}box.innerHTML=`<div class="cex-v2-summary"><strong>${results.length} ${results.length===1?'Museum match':'Museum matches'}</strong><span>Collection + Wishlist check</span></div><div class="cex-v2-results">${results.map(card).join('')}</div>`;box.querySelectorAll('[data-cex-open]').forEach(b=>b.addEventListener('click',()=>{try{openGame(b.dataset.cexOpen)}catch(_){}}))}
-  function setup(attempt=0){const input=document.getElementById('cexSearch'),result=document.getElementById('cexResult');if(!input||!result||typeof state==='undefined'){if(attempt<15)setTimeout(()=>setup(attempt+1),80);return}input.placeholder='Type a game title…';input.oninput=render;try{cex=render}catch(_){}window.MUSEUM_CEX_V2_RENDER=render;setupNavGuard();document.querySelectorAll('[data-page="cex"]').forEach(button=>button.addEventListener('click',()=>setTimeout(render,0)));render()}
+  function setup(attempt=0){const input=document.getElementById('cexSearch'),result=document.getElementById('cexResult');if(!input||!result||typeof state==='undefined'){if(attempt<15)setTimeout(()=>setup(attempt+1),80);return}input.placeholder='Type a game title…';input.oninput=render;try{cex=render}catch(_){}window.MUSEUM_CEX_V2_RENDER=render;document.querySelectorAll('[data-page="cex"]').forEach(button=>button.addEventListener('click',()=>setTimeout(render,0)));render()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setup(),{once:true});else setup();
 })();
