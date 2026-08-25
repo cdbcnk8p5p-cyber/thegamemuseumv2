@@ -1,9 +1,9 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v50';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v51';
 const CORE=[
   './',
   './index.html',
   './styles.css?v=2',
-  './theme-palette.css?v=4',
+  './theme-palette.css?v=5',
   './platform-filter-gold-outline.css?v=2',
   './drawer-layer-fix.css?v=1',
   './bottom-nav-safe-area.css?v=1',
@@ -24,9 +24,10 @@ const CORE=[
   './psp-vita-update.js?v=1',
   './family-guy-ps2-update.js?v=1',
   './wishlist-expansion-2026-08-23.js?v=1',
-  './wishlist-gallery.js?v=1',
+  './wishlist-dual-membership.js?v=1',
+  './wishlist-gallery.js?v=2',
   './wishlist-collection-filter-style.js?v=1',
-  './theme-sync.js?v=2',
+  './theme-sync.js?v=3',
   './cex-mode-v2.js?v=3',
   './cex-mode-v2.css?v=2',
   './xbox-one-ghosts-standard-fix.js',
