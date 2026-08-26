@@ -157,14 +157,31 @@ main{
   padding-top:calc(env(safe-area-inset-top) + 96px);
 }
 
-/* Keep the original colourful emoji nav in dark mode, but lift each glyph off the graphite chrome. */
-body.dark .bottom-nav button{
-  text-shadow:0 0 1px rgba(255,255,255,.72),0 0 7px rgba(255,255,255,.20);
+/* Preserve the colourful emoji nav in light mode; dark mode adds a restrained Museum-gold frame and white labels. */
+.bottom-nav .museum-nav-emoji{
+  display:block;
+  width:max-content;
+  margin:0 auto;
+  font-size:19px;
+  line-height:normal;
 }
-body.dark .bottom-nav button.active{
-  text-shadow:0 0 1px rgba(255,255,255,.76),0 0 8px rgba(215,170,56,.26);
+body.dark .bottom-nav .museum-nav-emoji{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 2px;
+  border:1px solid var(--gold);
+  border-radius:9px;
+  background:rgba(224,184,78,.05);
+  box-shadow:0 0 0 1px rgba(224,184,78,.06);
 }
-body.dark .bottom-nav button span{
+body.dark .bottom-nav button.active .museum-nav-emoji{
+  background:rgba(224,184,78,.12);
+  box-shadow:0 0 8px rgba(224,184,78,.24);
+}
+body.dark .bottom-nav .museum-nav-label{
+  color:#fff;
   text-shadow:none;
 }
 
