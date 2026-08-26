@@ -6,6 +6,20 @@
   const appleStatus = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
   const themeButton = document.getElementById('themeBtn');
 
+  const installBottomNavEmojiFrames = () => {
+    document.querySelectorAll('.bottom-nav button').forEach(button => {
+      if (button.querySelector('.museum-nav-emoji')) return;
+      const emojiNode = [...button.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+      if (!emojiNode) return;
+      const emoji = document.createElement('span');
+      emoji.className = 'museum-nav-emoji';
+      emoji.textContent = emojiNode.textContent.trim();
+      emojiNode.replaceWith(emoji);
+      const label = [...button.children].find(child => child.tagName === 'SPAN' && !child.classList.contains('museum-nav-emoji'));
+      if (label) label.classList.add('museum-nav-label');
+    });
+  };
+
   const neutralise = element => {
     if (!element) return;
     element.style.setProperty('background', 'var(--surface2)');
@@ -70,6 +84,7 @@
   const uiObserver = new MutationObserver(() => setTimeout(syncNeutralControls, 0));
   uiObserver.observe(document.body, {childList:true, subtree:true});
 
+  installBottomNavEmojiFrames();
   syncThemeChrome();
   setTimeout(syncThemeChrome, 80);
   setTimeout(syncThemeChrome, 300);
