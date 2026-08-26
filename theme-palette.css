@@ -157,7 +157,7 @@ main{
   padding-top:calc(env(safe-area-inset-top) + 96px);
 }
 
-/* Preserve the colourful emoji nav in light mode; dark mode adds a restrained Museum-gold frame and white labels. */
+/* Preserve the colourful emoji nav in light mode; dark mode adds a restrained Museum-gold frame and clearer labels. */
 .bottom-nav .museum-nav-emoji{
   display:block;
   width:max-content;
@@ -182,7 +182,14 @@ body.dark .bottom-nav button.active .museum-nav-emoji{
 }
 body.dark .bottom-nav .museum-nav-label{
   color:#fff;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.05;
   text-shadow:none;
+}
+body.dark .bottom-nav button.active .museum-nav-label{
+  color:var(--gold);
+  font-weight:800;
 }
 
 .platform-ribbon{background:rgba(10,12,15,.84)}
