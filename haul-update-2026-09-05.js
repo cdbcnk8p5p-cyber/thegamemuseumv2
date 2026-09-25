@@ -1,4 +1,4 @@
-// The Game Museum — CEX Glasgow Forge haul, 5 September 2026.
+// The Game Museum — CEX Glasgow Forge haul (5 September) and FC 27 release-day pickup (25 September 2026).
 // Existing user-supplied wishlist covers become Museum display art; supplied physical-copy photos + receipt are archive evidence.
 (()=>{
   const RECEIPT='./assets/archive/cex-glasgow-forge-haul-receipt-2026-09-05.jpeg';
@@ -26,6 +26,12 @@
       image:'./assets/covers/club-football-liverpool-ps2.jpeg',archiveImage:'./assets/archive/club-football-liverpool-ps2-2026-09-05.jpeg',receiptImage:RECEIPT,
       shop:'CEX Glasgow Forge',price:2.50,date:'2026-09-05',
       notes:'Bought from CEX Glasgow Forge for £2.50 on 5 September 2026. Exact user-supplied clean cover used for the Museum display without alteration; physical-copy photograph and receipt preserved as archive evidence.'
+    },
+    {
+      id:'GM-XSX-FC27-2026-09-25',title:'EA Sports FC 27',platform:'Xbox Series X',edition:'Standard',category:'Main Collection',series:'FIFA / EA Sports FC',status:'Owned',display:'No',shelfSection:'Standard Shelf',
+      image:'./assets/covers/ea-sports-fc-27-xbox-series-x.jpeg',archiveImage:'./assets/archive/ea-sports-fc-27-xbox-series-x-2026-09-25.jpeg',
+      shop:'Smyths Toys, Glasgow Fort',price:58.99,date:'2026-09-25',
+      notes:'Bought on release day, 25 September 2026, from Smyths Toys at Glasgow Fort for £58.99. One physical Xbox Series X / Xbox One game disc; one Main Shelf catalogue record, not two platform copies. Exact user-supplied clean cover used for the Museum display without alteration; physical-copy photograph preserved as archive evidence. No receipt supplied for this purchase.'
     }
   ];
 
@@ -42,7 +48,7 @@
     return map[key]||clean(v);
   };
 
-  const sameGame=(game,record)=>game&&canonicalPlatform(game.platform)===record.platform&&normal(game.title)===normal(record.title);
+  const sameGame=(game,record)=>game&&canonicalPlatform(game.platform)===canonicalPlatform(record.platform)&&normal(game.title)===normal(record.title);
   const isGhostsXboxOne=game=>game&&canonicalPlatform(game.platform)==='Xbox One'&&normal(game.title)==='call of duty ghosts';
   const wishlistTargets=[
     {platform:'PlayStation 4',titles:['FIFA 21']},
