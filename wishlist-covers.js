@@ -89,6 +89,12 @@
     if(!data||typeof data!=='object')return false;
     data.games ||= [];
     data.wishlist ||= [];
+    // A purchased Standard copy supersedes the old Limited Edition wishlist workaround.
+    // Do not erase the actual CEX Glasgow Forge Standard acquisition on future app boots.
+    if(data.games.some(game=>isXboxOneGhostsGame(game)&&normal(game.edition)==='standard'&&Boolean(game.date||game.price!=null||game.archiveImage))){
+      apply(data);
+      return false;
+    }
     let changed=false;
 
     const before=data.games.length;
