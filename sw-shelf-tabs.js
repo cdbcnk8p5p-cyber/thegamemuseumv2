@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v54';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v55';
 const CORE=[
   './',
   './index.html',
@@ -14,7 +14,7 @@ const CORE=[
   './nintendo-ds-update.js',
   './nintendo-sega-update.js?v=1',
   './ps2-update.js?v=1',
-  './wishlist-covers.js?v=2',
+  './wishlist-covers.js?v=3',
   './data-integrity.js?v=1',
   './filter-order.js?v=3',
   './collection-platform-filter.js?v=2',
@@ -25,7 +25,7 @@ const CORE=[
   './family-guy-ps2-update.js?v=1',
   './wishlist-expansion-2026-08-23.js?v=1',
   './wishlist-dual-membership.js?v=1',
-  './haul-update-2026-09-05.js?v=1',
+  './haul-update-2026-09-05.js?v=2',
   './wishlist-gallery.js?v=2',
   './wishlist-collection-filter-style.js?v=1',
   './theme-sync.js?v=3',
