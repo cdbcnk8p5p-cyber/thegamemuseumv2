@@ -1,4 +1,4 @@
-const CACHE='game-museum-v3-5-3-shelf-tabs-v55';
+const CACHE='game-museum-v3-5-3-shelf-tabs-v56';
 const CORE=[
   './',
   './index.html',
@@ -25,7 +25,7 @@ const CORE=[
   './family-guy-ps2-update.js?v=1',
   './wishlist-expansion-2026-08-23.js?v=1',
   './wishlist-dual-membership.js?v=1',
-  './haul-update-2026-09-05.js?v=2',
+  './haul-update-2026-09-05.js?v=3',
   './wishlist-gallery.js?v=2',
   './wishlist-collection-filter-style.js?v=1',
   './theme-sync.js?v=3',
