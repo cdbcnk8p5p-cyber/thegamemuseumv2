@@ -28,7 +28,7 @@
       notes:'Bought from CEX Glasgow Forge for £2.50 on 5 September 2026. Exact user-supplied clean cover used for the Museum display without alteration; physical-copy photograph and receipt preserved as archive evidence.'
     },
     {
-      id:'GM-XSX-FC27-2026-09-25',title:'EA Sports FC 27',platform:'Xbox Series X',edition:'Standard',category:'Main Collection',series:'FIFA / EA Sports FC',status:'Owned',display:'No',shelfSection:'Standard Shelf',
+      id:'GM-XSX-FC27-2026-09-25',title:'EA Sports FC 27',platform:'Xbox Cross Generation',edition:'Standard',category:'Main Collection',series:'FIFA / EA Sports FC',status:'Owned',display:'No',shelfSection:'Standard Shelf',
       image:'./assets/covers/ea-sports-fc-27-xbox-series-x.jpeg',archiveImage:'./assets/archive/ea-sports-fc-27-xbox-series-x-2026-09-25.jpeg',
       shop:'Smyths Toys, Glasgow Fort',price:58.99,date:'2026-09-25',
       notes:'Bought on release day, 25 September 2026, from Smyths Toys at Glasgow Fort for £58.99. One physical Xbox Series X / Xbox One game disc; one Main Shelf catalogue record, not two platform copies. Exact user-supplied clean cover used for the Museum display without alteration; physical-copy photograph preserved as archive evidence. No receipt supplied for this purchase.'
