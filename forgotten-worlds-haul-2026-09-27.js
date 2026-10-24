@@ -3,9 +3,9 @@
 (()=>{
   const PURCHASE={shop:'Forgotten Worlds, Stewarton',date:'2026-09-27'};
   const TARGETS=[
-    {id:'GM-FW-20260927-CELTIC',platform:'PlayStation 2',title:'Club Football 2005',series:'Club Football',edition:'Standard',price:10},
-    {id:'GM-FW-20260927-GHOSTS360',platform:'Xbox 360',title:'Call of Duty: Ghosts',series:'Call of Duty',edition:'Standard',price:2},
-    {id:'GM-FW-20260927-BF4PS3',platform:'PlayStation 3',title:'Battlefield 4',series:'Battlefield',edition:'Standard',price:1}
+    {id:'GM-FW-20260927-CELTIC',platform:'PlayStation 2',title:'Club Football 2005',series:'Club Football',edition:'Standard',price:10,archiveImage:'./assets/archive/club-football-2005-ps2-forgotten-worlds-2026-09-27.jpeg'},
+    {id:'GM-FW-20260927-GHOSTS360',platform:'Xbox 360',title:'Call of Duty: Ghosts',series:'Call of Duty',edition:'Standard',price:2,archiveImage:'./assets/archive/call-of-duty-ghosts-xbox-360-forgotten-worlds-2026-09-27.jpeg'},
+    {id:'GM-FW-20260927-BF4PS3',platform:'PlayStation 3',title:'Battlefield 4',series:'Battlefield',edition:'Standard',price:1,archiveImage:'./assets/archive/battlefield-4-ps3-forgotten-worlds-2026-09-27.jpeg'}
   ];
   const clean=v=>String(v??'').trim();
   const normal=v=>clean(v).toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -27,7 +27,7 @@
       const desired={
         id:existing?.id||t.id,title:t.title,platform:t.platform,series:t.series,edition:t.edition,
         category:'Main Collection',status:'Owned',display:'No',shelfSection:'Standard Shelf',
-        shop:PURCHASE.shop,price:t.price,date:PURCHASE.date
+        shop:PURCHASE.shop,price:t.price,date:PURCHASE.date,archiveImage:t.archiveImage,receiptImage:'./assets/archive/forgotten-worlds-receipt-2026-09-27.jpeg'
       };
       if(image)desired.image=image;
       const before=JSON.stringify(game);
